@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>QLKL</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+	<script src="js/common.js"></script>
+</head>
+
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Quản lý Khóa luận, chuyên đề tốt nghiệp</h1>
+                                    </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user"
+                                                id="username1" aria-describedby="emailHelp"
+                                                placeholder="Username"
+												value="CTI061" onchange="changeEmail()"
+												>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="password1" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+											<button id="login" class="btn btn-primary btn-user btn-block">Login</a>
+                                        </div>
+
+                                        <hr>
+										<div class="form-group">
+											<button id="giangVienDangKy" class="btn btn-primary btn-user btn-block">Giảng viên Đăng ký</a>
+										</div>
+										<div class="form-group">
+											<button id="sinhVienDangKy" class="btn btn-primary btn-user btn-block">Sinh viên Đăng ký</a>
+										</div>
+                                    <hr>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+	<!-- Modal -->
+		<div class="modal fade" id="frm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width: 630px">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title" id="modal-title">Edit Account</h4>
+		      </div>
+		      <div class="modal-body">
+		          <div id="frm-content"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+		        <button type="button" class="btn btn-primary" id="Save" value="">Ghi lại</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+	
+	<script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+	<script src="js/bootstrap-table.min.js"></script>
+
+	
+</body>
+<script>
+function changeEmail(){
+	username=$('#username').val();
+	$('#email').val(username+'@thanglong.edu.vn')
+}
+$("#login").click(function(){
+	username=$('#username1').val();
+	password=$('#password1').val();
+	data = {username: username,password: password};
+	console.log(data);
+	$.ajax({
+			url 		: '/taikhoan/login',
+			type		: 'POST',
+			dataType	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			data 		:  JSON.stringify(data),
+			success : function(resp) {
+				code ='';
+				try{
+					code = resp.code;
+				} catch(e){}
+				if (code == 1000){
+					alert('Sai username hoặc password')
+				} else {					
+					localStorage.setItem('taiKhoan', JSON.stringify(resp));
+					$.ajax({
+							url 		: 'giangvien/listAll',
+							type		: 'get',
+							data 		: {action: 'list'},
+							success : function(resp) {
+								localStorage.setItem('cfgGiangVien', JSON.stringify(resp));
+								window.location.href = "dashboard.html";
+							}
+					});
+				}
+			}
+		});	
+}); 
+</script>
+<script>
+	them = '';
+</script>
+<script>
+$("#giangVienDangKy").click(function(){
+	frmAddGiangVien();
+	them='GiangVien';
+}); 
+$("#sinhVienDangKy").click(function(){
+	frmAddSinhVien();
+	them='SinhVien';
+}); 
+</script>
+<script>
+	$("#Save").click(function() {
+		if (them == 'GiangVien'){
+			saveGiangVien();
+		} else {
+			saveSinhVien();
+		}
+	});
+</script>	
+<script>
+	$("#Save").click(function() {
+		
+	});
+</script>
+<script>
+function saveSinhVien() {
+		username 	= $('#username').val();
+		tenSinhVien = $('#tenSinhVien').val();
+		lop 		= $('#lop').val();
+		mobile 		= $('#mobile').val();
+		maChuyenNganh	= $('#maChuyenNganh').val();	
+		khoa 		= $('#khoa').val();	
+		ghiChu 		= $('#ghiChu').val();
+		email 		= $('#email').val();
+		trangThai 	= $('#trangThai').val();
+		if (username == ''){
+			alert('Bạn chưa nhập username');
+			$('#username').focus();
+			return;
+		} else if (tenSinhVien == ''){
+			alert('Bạn chưa nhập tenSinhVien')
+			$('#username').focus();
+			return;
+		} else if (maChuyenNganh == ''){
+					alert('Bạn chưa chọn mã chuyên ngành')
+					$('#maChuyenNganh').focus();
+					return;
+		} else if (mobile == ''){
+			alert('Bạn chưa nhập số điện thoại')
+			$('#username').focus();
+			return;
+		} else if (email ==''){
+			alert('Bạn chưa nhập email');
+			$('#email').focus();
+			return;
+		}
+		data = '';
+		trangThai = $('#trangThai').is(":checked");
+		trangThai = trangThai == trangThai ? 1 : 0;
+		api  = ''
+		if (action == 'edit') {
+			id = $('#id').val();
+			data = {username: username,tenSinhVien: tenSinhVien,mobile: mobile, khoa: khoa, maChuyenNganh: maChuyenNganh, ghiChu: ghiChu, lop: lop, email: email, trangThai: trangThai, id: id};
+			api  = 'sinhvien/update';
+			type = 'PUT'
+		} else {
+			data = {username: username,tenSinhVien: tenSinhVien,mobile: mobile, khoa: khoa, maChuyenNganh: maChuyenNganh, ghiChu: ghiChu, lop: lop, email: email, trangThai: trangThai};	
+			api  = 'sinhvien/add';
+			type = 'POST'
+		}
+		console.log(data)
+		$.ajax({
+			url 		: api,
+			type		: type,
+			dataType	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			data 		:  JSON.stringify(data),
+			success : function(resp) {
+				data = resp;
+				alert(data.message);
+				if (data.code==1000){
+					$('#frm').modal('hide');
+					$('#username').val(username);
+					$('#username').focus();
+				}
+			}
+		});	
+	}
+	
+</script>
+<script>
+	function saveGiangVien(){
+		username 	= $('#username').val();
+		tenGiangVien 	= $('#tenGiangVien').val();
+		maChuyenNganh 	= $('#maChuyenNganh').val();	
+		chucDanh 		= $('#chucDanh').val();
+		donVi 			= $('#donVi').val();
+		hocHamHocVi		= $('#hocHamHocVi').val();
+		mobile 			= $('#mobile').val();
+		email 			= $('#email').val();
+		ghiChu			= $('#ghiChu').val();
+		if (username == ''){
+			alert('Bạn chưa nhập username');
+			$('#username').focus();
+			return;
+		} else if (tenGiangVien == ''){
+			alert('Bạn chưa nhập password')
+			$('#tenGiangVien').focus();
+			return;
+		} else if (mobile == ''){
+			alert('Bạn chưa nhập số điện thoại')
+			$('#mobile').focus();
+			return;
+		} else if (maChuyenNganh == ''){
+			alert('Bạn chưa chọn nguyên ngành')
+			$('#maChuyenNganh').focus();
+			return;
+		} else if (email ==''){
+			alert('Bạn chưa nhập email');
+			$('#email').focus();
+			return;
+		}
+		data = '';
+		khoa 			= $('#khoa').is(":checked");
+		quanTri			= $('#quanTri').is(":checked");
+		taoDeTai		= $('#taoDeTai').is(":checked");
+		duyetDeTai		= $('#duyetDeTai').is(":checked");
+		thanhLapHoiDong	= $('#thanhLapHoiDong').is(":checked");
+		khoa 			= khoa  	== true ? 1 : 0;
+		quanTri			= quanTri 	== true ? 1 : 0;
+		taoDeTai		= taoDeTai 	== true ? 1 : 0;
+		duyetDeTai		= duyetDeTai== true ? 1 : 0;
+		thanhLapHoiDong	= thanhLapHoiDong== true ? 1 : 0;
+		api  = ''
+		
+			data = 		{username: username,
+							tenGiangVien: tenGiangVien,
+							chucDanh:chucDanh,
+							hocHamHocVi: hocHamHocVi,
+							maChuyenNganh:maChuyenNganh, 
+							donVi:donVi, 
+							email: email, 
+							ghiChu: ghiChu,
+							mobile: mobile, 
+							khoa: khoa, 
+							duyetDeTai: duyetDeTai, 
+							taoDeTai: taoDeTai, 
+							thanhLapHoiDong: thanhLapHoiDong
+						}	
+			api  = 'giangvien/add';
+			type = 'POST'
+		console.log(data)
+		$.ajax({
+			url 		: api,
+			type		: type,
+			dataType	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			data 		:  JSON.stringify(data),
+			success : function(resp) {
+				data = resp;
+				alert(data.message);
+				if (data.code==1000){
+					$('#frm').modal('hide');
+					$('#username').val(username);
+					$('#username').focus();
+				}
+			}
+		});	
+	}
+</script>
+</html>
