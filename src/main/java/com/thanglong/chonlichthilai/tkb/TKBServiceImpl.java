@@ -32,7 +32,8 @@ public class TKBServiceImpl implements TKBService {
     @Override
     public TKB update(TKB e, Long Id) {
         TKB userDB= repository.findById(Id).get(); 
-        return repository.save(e);
+        userDB = e;
+        return repository.save(userDB);
     }
     // Delete operation
     @Override
