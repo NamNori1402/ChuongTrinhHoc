@@ -21,6 +21,7 @@ public class LoginSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/favicon.ico","/tkb/*","/tkb").permitAll()
                         .requestMatchers(HttpMethod.POST, "/*").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
