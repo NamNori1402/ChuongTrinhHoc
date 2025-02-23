@@ -351,8 +351,8 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: 'users',
-		type		: 'get',
+		url 		: '/ky',
+		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
 			DATA = resp;
@@ -368,93 +368,65 @@ function list() {
     	               			return (index + 1);
     	                    }
 	                    },{
-			           		field: 'userCode',
-			             	title: 'userCode',
+			           		field: 'maKy',
+			             	title: 'Mã Kỳ',
 			             	valign: 'middle'
 			            },{
-			           		field: 'academic',
-			             	title: 'H.hàm/H.vị',
+			           		field: 'tenKy',
+			             	title: 'Tên kỳ',
 			             	valign: 'middle'
 			            },{
-			           		field: 'userName',
-			             	title: 'UserName',
+			           		field: 'maNam',
+			             	title: 'Năm học',
 			             	valign: 'middle'
 			            },{
-   			           		field: 'mobile',
-   			             	title: 'Điện thoại',
+   			           		field: 'batDauKyHoc',
+   			             	title: 'Thời gian bắt đầu kì học',
    			             	valign: 'middle',
    			             	align: 'left'
 						},{
-   			           		field: 'admin',
-   			             	title: 'Admin',
+   			           		field: 'ketThucKyHoc',
+   			             	title: 'Thời gian kết thúc kì học',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+							
 						},{
-   			           		field: 'admin',
-   			             	title: 'G.Viên',
+   			           		field: 'batDauLapLich',
+   			             	title: 'Thời gian bắt đầu lập lịch',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+						
 						},{
-   			           		field: 'admin',
-   			             	title: 'Thư ký',
+   			           		field: 'ketThucLapLich',
+   			             	title: 'Thời gian kết thúc chọn lịch',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+							
 						},{
-							field: 'X',
-							title: 'Khóa',
+							field: 'batDauChonLich',
+							title: 'Thời gian bắt đầu chọn lịch',
 							align: 'center',
 							valign: 'center',
-							clickToSelect: false,
-							formatter : function(value,row,index) {
-								str = '';
-								if (row.active==true){
-									return '<button class="btn btn-primary btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" >x</button>';
-								}
-								return str;
-							}
-						},{
+			
+						},	{
    							field: 'B',
    							title: 'Sửa',
    							align: 'center',
    							valign: 'middle',
    							clickToSelect: false,
    							formatter : function(value,row,index) {
-   	return '<button value="'+row.id+'" class="btn btn-info btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="frmEditGiangVien(this)">o</button>';
+   	return '<button id="'+row.id+'" class="btn btn-info btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="frmEditKyHoc(this)">o</button>';
    							   }
-   						},{
-						field: 'X',
-						title: 'Xóa',
-						align: 'center',
-						valign: 'middle',
-						clickToSelect: false,
-						formatter : function(value,row,index) {
-return '<button id="'+row.id+'" class="btn btn-danger btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="del(this)">x</button>';
+   							},{
+							field: 'X',
+							title: 'Xóa',
+							align: 'center',
+							valign: 'middle',
+							clickToSelect: false,
+							formatter : function(value,row,index) {
+	return '<button id="'+row.id+'" class="btn btn-danger btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="del(this)">x</button>';
+							}
 						}
-					}
 					],
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
@@ -471,7 +443,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: 'giangvien/delete?id='+ts.id,
+		url 		: '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -490,48 +462,59 @@ $("#Save").click(function() {
 	maKy 	= $('#maKy').val();
 	tenKy 	= $('#tenKy').val();
 	maNam 	= $('#maNam').val();
-	batDauKyHoc 	= $('#batDauKyHoc').val();
-	ketThucKyHoc	= $('#ketThucKyHoc').val();
-	batDauTaoLich		= $('#batDauTaoLich').val();
-	ketThucTaoLich 		= $('#ketThucTaoLich').val();
+	alert($('#batDauKyHoc').val())
+	batDauKyHoc 		= $('#batDauKyHoc').val();
+	ketThucKyHoc		= $('#ketThucKyHoc').val();
+	batDauLapLich		= $('#batDauLapLich').val();
+	ketThucLapLich 		= $('#ketThucLapLich').val();
 	batDauChonLich 		= $('#batDauChonLich').val();	
 	ketThucChonLich 		= $('#ketThucChonLich').val();
 
-
+	batDauKyHoc  = batDauKyHoc +' 00:00:00'
+	ketThucKyHoc = ketThucKyHoc +' 00:00:00'
+	
+	batDauLapLich  = batDauLapLich +' 00:00:00'
+	ketThucLapLich = batDauLapLich +' 00:00:00'
+		
+	batDauChonLich  = batDauChonLich +' 00:00:00'
+	ketThucChonLich = ketThucChonLich +' 00:00:00'
+		
+	
+	
 	api  = ''
 	if (action == 'edit') {
 		id = $('#id').val();
 		data = 		{	
-			id   		:id        ,
-			maKy 	:maKy  ,
-			tenKy 	:tenKy  ,
-			maNam 	:maNam ,
-			batDauHoc 	:batDauHoc,
-			ketThucHoc	:ketThucKyHoc  ,
-			batDauLapLich 		:batDauLapLich     ,
-			ketThucLapLich  	:ketThucLapLich    ,
-			batDauChonLichThiLai  	:batDauChonLichThiLai    ,
-			ketThucChonLichThiLai  		:ketThucChonLichThiLai  
+			id   					:id        ,
+			maKy 					:maKy  ,
+			tenKy 					:tenKy  ,
+			maNam 					:maNam ,
+			batDauHoc 				:batDauHoc,
+			ketThucHoc				:ketThucKyHoc  ,
+			batDauLapLich 			:batDauLapLich     ,
+			ketThucLapLich  		:ketThucLapLich    ,
+			batDauChonLichThiLai 	:batDauChonLichThiLai    ,
+			ketThucChonLichThiLai  	:ketThucChonLichThiLai  
 					}
-		api  = 'Ky/'+id;
+		api  = 'ky/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
-			id   		:id        ,
-			maKy 	:maKy  ,
-			tenKy 	:tenKy  ,
-			maNam 	:maNam ,
-			batDauHoc 	:batDauHoc,
-			ketThucHoc	:ketThucKyHoc  ,
+			maKy 				:maKy  ,
+			tenKy 				:tenKy  ,
+			maNam 				:maNam ,
+			batDauKyHoc 		:batDauKyHoc,
+			ketThucKyHoc		:ketThucKyHoc  ,
 			batDauLapLich 		:batDauLapLich     ,
 			ketThucLapLich  	:ketThucLapLich    ,
-			batDauChonLichThiLai  	:batDauChonLichThiLai    ,
-			ketThucChonLichThiLai  		:ketThucChonLichThiLai 
-					}	
-		api  = 'Ky/add';
+			batDauChonLich  	:batDauChonLich    ,
+			ketThucChonLich  	:ketThucChonLich 
+			}	
+		api  = '/ky';
 		type = 'POST'
 	}
 	console.log(data)
+	alert(api)
 	$.ajax({
 		url 		: api,
 		type		: type,
@@ -551,85 +534,12 @@ $("#Save").click(function() {
 </script>
 <script>list()</script>
 <script>
-	function frmEditGiangVien(this_) {
-		record=getRecordFromID(DATA,this_.value);
-		html = '';
-		html = '<table>';
-		html = html + '<tr><td>ID</td><td><input type="text" id="id" value="'+record.id+'" readonly/></td><tr>'
-		html = html + '<tr><td>Mã khoản</td><td><input type="text" id="userName" value="'+record.userName+'" readonly/></td><tr>'
-		html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="userCode" value="'+record.userCode+'" /></td><tr>'
-		html = html + '<tr><td>Họ và tên đệm</td><td><input type="text" id="givenName" value="'+record.givenName+'" /></td><tr>'
-		html = html + '<tr><td>Tên</td><td><input type="text" id="familyName" value="'+record.familyName+'" /></td><tr>'
-		html = html + '<tr><td>Học hàm/học vị</td><td>';
-		html = html + '<Select id="academic"/>'
-		for (i = 0; i < cfgHocHamHocVi.length; i++){
-			if (cfgHocHamHocVi[i]=='ThS'){
-				html = html + '<option value="'+cfgHocHamHocVi[i]+'" Selected>'+cfgHocHamHocVi[i]+'</option>'
-			} else {
-				html = html + '<option value="'+cfgHocHamHocVi[i]+'">'+cfgHocHamHocVi[i]+'</option>'
-			}
-		}
-		html = html + '</Select>'
-		html = html + '</td><tr>'
-		html = html + '<tr><td>Chức danh</td><td><input type="text" id="title" value="'+record.title+'" /></td><tr>'
-
-		html = html + '<tr><td>Chuyên ngành</td>'
-		html = html + '<td>';
-		html = html + '<select id="majorId">';
-		for(i=0; i < cfgKhoa.length; i++){
-			html = html + '<option value="" disable>Khoa '+cfgKhoa[i].tenKhoa+'</option>'
-			for(j=0; j < cfgKhoa[i].chuyenNganh.length; j++){
-				if (cfgKhoa[i].chuyenNganh[j].maChuyenNganh == record.maChuyenNganh){
-					html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'" selected>+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'				
-				} else {
-					html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'">+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'
-				}
-			}
-		}
-		html = html + '</select>'
-		html = html + '</td><tr>'	
-		
-		html = html + '<tr><td>Đơn vị</td><td><input type="text" id="unitId" value="'+record.unitId+'" /></td><tr>'
-		html = html + '<tr><td>Điện thoại</td><td><input type="text" id="mobile" value="'+record.mobile+'" /></td><tr>'
-		html = html + '<tr><td>Email</td><td><input type="text" id="email" value="'+record.email+'" /></td><tr>'
-
-		html = html + '<tr><td>Ghi chú</td><td><input type="text" id="note" value="'+record.note+'" /></td><tr>'
-		if (record.active==true){
-			html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="active" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="active" /></td><tr>'
-		}
-		if (record.admin==true){
-			html = html + '<tr><td>Admin</td><td><input type="checkbox" id="admin" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Admin</td><td><input type="checkbox" id="admin" /></td><tr>'
-		}
-		if (record.secretary==true){
-			html = html + '<tr><td>Thư ký</td><td><input type="checkbox" id="secretary" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Thư ký</td><td><input type="checkbox" id="secretary" /></td><tr>'
-		}
-		if (record.lecturer==true){
-			html = html + '<tr><td>Giảng viên</td><td><input type="checkbox" id="lecturer" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Giảng viên</td><td><input type="checkbox" id="lecturer" /></td><tr>'
-		}
-		html = html + '</table>'
-		$('#modal-title').html("Sửa Giảng viên");
-		$('#frm-content').html(html);
-		$('#frm').modal('show');
-		action = "edit";
-	}	
-	
-</script>
-
-<script>
 	function frmAddKyHoc() {
 		action = "add";
 		html = '';
 		html = '<table>';
-		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="CTI061"/></td><tr>'
-		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Nguyễn Xuân Thanh"/></td><tr>'
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="2425K1N1"/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Kỳ 1 Nhóm 1 2024 - 2025"/></td><tr>'
 		html = html + '<tr><td>Năm học</td><td>'
 		html = html + '		<Select id="maNam">'
 		html = html + '			<option value="2023-2024">2023-2024</option>'
@@ -639,20 +549,91 @@ $("#Save").click(function() {
 		html = html + '			<option value="2027-2028">2027-2028</option>'	
 		html = html + '		</Select>'
 		html = html + '</td><tr>'
-		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauHoc" value="Nguyễn Xuân Thanh"/></td><tr>'
-		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucHoc" value="Nguyễn Xuân Thanh"/></td><tr>'
-		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" value="Nguyễn Xuân Thanh"/></td><tr>'
-		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" value="Nguyễn Xuân Thanh"/></td><tr>'
-		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLichThiLai" value="Nguyễn Xuân Thanh"/></td><tr>'
-		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLichThiLai" value="Nguyễn Xuân Thanh"/></td><tr>'
-
+		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" /></td><tr>'
 		$('#modal-title').html("Chi tiết cấu hình kỳ học");
 		$('#frm-content').html(html);
 		$('#frm').modal('show');
+		setTimeout(function(){ 
+			var now = new Date();
+			now.setDate(now.getDate() + 0);
+			day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth()+1)).slice(-2);
+			var today = (now.getFullYear()) +"-"+(month)+"-"+(day) ;
+			//
+			var d7 = new Date();
+			d7.setDate(d7.getDate() + 30);
+			day1 = ("0" + d7.getDate()).slice(-2);
+			var month1 = ("0" + (d7.getMonth()+1)).slice(-2);
+			var t7 = (d7.getFullYear()) +"-"+(month1)+"-"+(day1) ;
+			//
+			
+			$("#batDauKyHoc").val(today);
+			$("#ketThucKyHoc").val(t7);
+			$("#batDauLapLich").val(today);
+			$("#ketThucLapLich").val(t7);
+			$("#batDauHoc").val(today);
+			$("#batDauChonLich").val(today);
+			$("#ketThucChonLich").val(t7);
+		 }, 1000);  
 	}
 	
 </script>
 
+<script>
+	function frmEditKyHoc(ts) {
+		var record;
+		for(i = 0; i < DATA.length; i++){
+			console.log(ts.id + ", " + DATA[i].id)
+			if (ts.id == DATA[i].id){
+				record = DATA[i]
+			}
+		}
+		console.log("Ban ghi la: " + record)
+		action = "edit";
+		html = '';
+		html = '<table>';
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="'+record.maKy+'" disabled/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Kỳ 1 Nhóm 1 2024 - 2025"/></td><tr>'
+		html = html + '<tr><td>Năm học</td><td>'
+		html = html + '		<Select id="maNam">'
+		html = html + '			<option value="2023-2024">2023-2024</option>'
+		html = html + '			<option value="2024-2025">2024-2025</option>'	
+		html = html + '			<option value="2025-2026">2025-2026</option>'	
+		html = html + '			<option value="2026-2027">2026-2027</option>'	
+		html = html + '			<option value="2027-2028">2027-2028</option>'	
+		html = html + '		</Select>'
+		html = html + '</td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" /></td><tr>'
+		$('#modal-title').html("Chi tiết cấu hình kỳ học");
+		$('#frm-content').html(html);
+		$('#frm').modal('show');
+		setTimeout(function(){ 
+			var now = new Date();
+			now.setDate(now.getDate() + 0);
+			day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth()+1)).slice(-2);
+			var today = (now.getFullYear()) +"-"+(month)+"-"+(day) ;
+			//
+			var d7 = new Date();
+			d7.setDate(d7.getDate() + 30);
+			day1 = ("0" + d7.getDate()).slice(-2);
+			var month1 = ("0" + (d7.getMonth()+1)).slice(-2);
+			var t7 = (d7.getFullYear()) +"-"+(month1)+"-"+(day1) ;
+			//
+		 }, 1000);  
+	}
+	
+</script>
 
 <script>includeHTML();</script> 
 <script>

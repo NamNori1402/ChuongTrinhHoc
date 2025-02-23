@@ -24,19 +24,19 @@ import lombok.NoArgsConstructor;
 public class Ky {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    
     private Long id;
+    
     private String maKy;
     private String tenKy;
     private String maNam;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date batDauHoc;
+    private Date batDauKyHoc;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date ketThucHoc;
+    private Date ketThucKyHoc;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date batDauChonLichThiLai;
+    private Date batDauChonLich;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date ketThucChonLichThiLai;
+    private Date ketThucChonLich;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date batDauLapLich;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -60,29 +60,35 @@ public class Ky {
 	public void setTenKy(String tenKy) {
 		this.tenKy = tenKy;
 	}
-	public Date getBatDauHoc() {
-		return batDauHoc;
+	public String getMaNam() {
+		return maNam;
 	}
-	public void setBatDauHoc(Date batDauHoc) {
-		this.batDauHoc = batDauHoc;
+	public void setMaNam(String maNam) {
+		this.maNam = maNam;
 	}
-	public Date getKetThucHoc() {
-		return ketThucHoc;
+	public Date getBatDauKyHoc() {
+		return batDauKyHoc;
 	}
-	public void setKetThucHoc(Date ketThucHoc) {
-		this.ketThucHoc = ketThucHoc;
+	public void setBatDauKyHoc(Date batDauKyHoc) {
+		this.batDauKyHoc = batDauKyHoc;
 	}
-	public Date getBatDauChonLichThiLai() {
-		return batDauChonLichThiLai;
+	public Date getKetThucKyHoc() {
+		return ketThucKyHoc;
 	}
-	public void setBatDauChonLichThiLai(Date batDauChonLichThiLai) {
-		this.batDauChonLichThiLai = batDauChonLichThiLai;
+	public void setKetThucKyHoc(Date ketThucKyHoc) {
+		this.ketThucKyHoc = ketThucKyHoc;
 	}
-	public Date getKetThucChonLichThiLai() {
-		return ketThucChonLichThiLai;
+	public Date getBatDauChonLich() {
+		return batDauChonLich;
 	}
-	public void setKetThucChonLichThiLai(Date ketThucChonLichThiLai) {
-		this.ketThucChonLichThiLai = ketThucChonLichThiLai;
+	public void setBatDauChonLich(Date batDauChonLich) {
+		this.batDauChonLich = batDauChonLich;
+	}
+	public Date getKetThucChonLich() {
+		return ketThucChonLich;
+	}
+	public void setKetThucChonLich(Date ketThucChonLich) {
+		this.ketThucChonLich = ketThucChonLich;
 	}
 	public Date getBatDauLapLich() {
 		return batDauLapLich;
@@ -102,10 +108,6 @@ public class Ky {
 	public void setLastModify(Date lastModify) {
 		this.lastModify = lastModify;
 	}
-	public String getMaNam() {
-		return maNam;
-	}
-	public void setMaNam(String maNam) {
-		this.maNam = maNam;
-	}
+	
+	
 }
