@@ -66,7 +66,7 @@ public class DangNhapController {
     			message.setContent("sinhVien");
     		} else {
 //    			GiangVienEntity giangVien = service.findByUserName(userName);
-    			if (userName.equals("thanhnx")) {
+    			if (userName.equals("thanhnx2")) {
         			session.setUserName(userName);
         			session.setDsQuyen("quanTri");
         			message.setCode(0);
