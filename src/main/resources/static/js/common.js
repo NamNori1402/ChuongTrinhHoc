@@ -240,49 +240,7 @@ function eraseCookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-function frmAddGiangVien() {
-	action = "add";
-	html = '';
-	html = '<table>';
-	html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="userName" value="CTI061"/></td><tr>'
-	html = html + '<tr><td>Họ và tên đệm</td><td><input type="text" id="familyName" value="Nguyễn Xuân Thanh"/></td><tr>'
-	html = html + '<tr><td>Tên giảng viên</td><td><input type="text" id="givenName" value="Nguyễn Xuân Thanh"/></td><tr>'
-	html = html + '<tr><td>Học hàm/học vị</td><td>';
-	html = html + '<Select id="hocHamHocVi"/>'
-	for (i = 0; i < cfgHocHamHocVi.length; i++){
-		if (cfgHocHamHocVi[i]=='ThS'){
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'" Selected>'+cfgHocHamHocVi[i]+'</option>'
-		} else {
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'">'+cfgHocHamHocVi[i]+'</option>'
-		}
-	}
-	html = html + '</Select>'
-	html = html + '</td><tr>'
-	html = html + '<tr><td>Chức danh</td><td><input type="text" id="chucDanh" value="Giảng viên"/></td><tr>'
-	html = html + '<tr><td>Chuyên ngành</td>'
-	html = html + '<td>';
-	html = html + '<select id="maChuyenNganh">';
-	for(i=0; i < cfgKhoa.length; i++){
-		html = html + '<option value="" disable>Khoa '+cfgKhoa[i].tenKhoa+'</option>'
-		for(j=0; j < cfgKhoa[i].chuyenNganh.length; j++){
-			html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'">+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'
-		}
-	}
-	html = html + '</select>'
-	html = html + '</td><tr>'
-	html = html + '<tr><td>Đơn vị</td><td><input type="text" id="donVi" value="Trường Đại học Thăng Long"/></td><tr>'
-	html = html + '<tr><td>Điện thoại</td><td><input type="text" id="mobile" value="0904222294"/></td><tr>'
-	html = html + '<tr><td>Email</td><td><input type="email" id="email" value="thanhnx@thanglong.edu.vn"/></td><tr>'
-	html = html + '<tr><td>Ghi chú</td><td><input type="text" id="ghiChu"/></td><tr>'
-	html = html + '</table>'
-	html = html + '<input hidden type="checkbox" id="khoa"/>'
-	html = html + '<input hidden type="checkbox" id="taoDeTai" checked/></td><tr>'
-	html = html + '<input hidden type="checkbox" id="duyetDeTai"/></td><tr>'
-	html = html + '<input hidden type="checkbox" id="thanhLapHoiDong"/></td><tr>'
-	$('#modal-title').html("Thêm Giảng viên");
-	$('#frm-content').html(html);
-	$('#frm').modal('show');
-}
+
 
 function frmAddSinhVien() {
 	action = "add";

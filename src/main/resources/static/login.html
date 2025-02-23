@@ -121,6 +121,9 @@ function changeEmail(){
 $("#login").click(function(){
 	userName=$('#userName').val();
 	password=$('#password').val();
+	console.log(userName);
+	alert(userName);
+	
 	if (userName !='' && password !=''){
 		data = {userName: userName, password: password}
 		$.ajax({
