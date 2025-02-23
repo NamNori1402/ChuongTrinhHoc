@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 // Class 
-public class GiangVien {
+public class GiangVien
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

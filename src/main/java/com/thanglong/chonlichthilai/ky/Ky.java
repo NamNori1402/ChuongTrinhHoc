@@ -1,6 +1,8 @@
-package com.thanglong.chonlichthilai.tkb;
+package com.thanglong.chonlichthilai.ky;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,13 +24,23 @@ import lombok.NoArgsConstructor;
 public class Ky {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    
     private Long id;
     private String maKy;
     private String tenKy;
+    private String maNam;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date batDauHoc;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ketThucHoc;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date batDauChonLichThiLai;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ketThucChonLichThiLai;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date batDauLapLich;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date ketThucLapLich;
     private Date lastModify;
 	public Long getId() {
 		return id;
@@ -72,10 +84,28 @@ public class Ky {
 	public void setKetThucChonLichThiLai(Date ketThucChonLichThiLai) {
 		this.ketThucChonLichThiLai = ketThucChonLichThiLai;
 	}
+	public Date getBatDauLapLich() {
+		return batDauLapLich;
+	}
+	public void setBatDauLapLich(Date batDauLapLich) {
+		this.batDauLapLich = batDauLapLich;
+	}
+	public Date getKetThucLapLich() {
+		return ketThucLapLich;
+	}
+	public void setKetThucLapLich(Date ketThucLapLich) {
+		this.ketThucLapLich = ketThucLapLich;
+	}
 	public Date getLastModify() {
 		return lastModify;
 	}
 	public void setLastModify(Date lastModify) {
 		this.lastModify = lastModify;
+	}
+	public String getMaNam() {
+		return maNam;
+	}
+	public void setMaNam(String maNam) {
+		this.maNam = maNam;
 	}
 }
