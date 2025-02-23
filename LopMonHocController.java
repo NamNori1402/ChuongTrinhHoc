@@ -14,21 +14,21 @@ import jakarta.validation.Valid;
 public class LMHController {
  
     // Annotation
-    @Autowired private KyService kyService;
+    @Autowired private LMHService lmhService;
  
     // Save operation
     @PostMapping("/ky/add")
-    public Ky saveKy(@Valid @RequestBody Ky ky)  {
-        return kyService.saveKy(ky);
+    public LMH saveKy(@Valid @RequestBody LMH lmh )  {
+        return lmhService.saveLMH(lmh);
     }
  
     // Read operation
-    @GetMapping("/ky")
-    public List<Ky> fetchKyList()  {
-        return kyService.fetchKyList();
+    @GetMapping("/lmh")
+    public List<lmh> fetchLMHList()  {
+        return lmhService.fetchLMHList();
     }
-    @GetMapping("/ky/{id}")
-    public Ky getKyId(@PathVariable("id") Long kyId)  {
+    @GetMapping("/lmh/{id}")
+    public LMH getLMHId(@PathVariable("id") Long kyId)  {
         return kyService.findKyById(kyId);
     }
     @GetMapping("/ky/search")

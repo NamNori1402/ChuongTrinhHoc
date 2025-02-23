@@ -1,4 +1,4 @@
-package com.thanglong.chonlichthilai.ky;
+package com.thanglong.chonlichthilai.lopmonhoc;
 
 import java.util.Optional;
 
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 
 //Interface
 
-public interface KyRepository extends JpaRepository<Ky, Long> {
-    Optional<Ky> findByMaKy(String maKy); // Fetch user by username
+public interface LopMonHocRepository extends JpaRepository<LopMonHoc, Long> {
+    Optional<LopMonHoc> findByMaHocKy(String maHocKy); // Fetch user by username
 }
 
 

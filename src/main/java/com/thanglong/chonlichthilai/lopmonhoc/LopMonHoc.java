@@ -1,6 +1,8 @@
-package com.thanglong.chonlichthilai.lopmohoc;
+package com.thanglong.chonlichthilai.lopmonhoc;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +31,7 @@ public class LopMonHoc {
  private String gio;
  private String phong;
  private String maGiaoVien;
+ @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
  private Date lastModify;
 public Long getId() {
 	return id;
