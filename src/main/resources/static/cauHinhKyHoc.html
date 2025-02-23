@@ -351,8 +351,8 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: 'users',
-		type		: 'get',
+		url 		: 'ky',
+		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
 			DATA = resp;
@@ -368,93 +368,47 @@ function list() {
     	               			return (index + 1);
     	                    }
 	                    },{
-			           		field: 'userCode',
-			             	title: 'userCode',
+			           		field: 'maKy',
+			             	title: 'Mã Kỳ',
 			             	valign: 'middle'
 			            },{
-			           		field: 'academic',
+			           		field: 'tenKy',
 			             	title: 'H.hàm/H.vị',
 			             	valign: 'middle'
 			            },{
-			           		field: 'userName',
-			             	title: 'UserName',
+			           		field: 'maNam',
+			             	title: 'Năm học',
 			             	valign: 'middle'
 			            },{
-   			           		field: 'mobile',
-   			             	title: 'Điện thoại',
+   			           		field: 'batDauHoc',
+   			             	title: 'Thời gian bắt đầu kì học',
    			             	valign: 'middle',
    			             	align: 'left'
 						},{
-   			           		field: 'admin',
-   			             	title: 'Admin',
+   			           		field: 'ketThucHoc',
+   			             	title: 'Thời gian kết thúc kì học',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+							
 						},{
-   			           		field: 'admin',
-   			             	title: 'G.Viên',
+   			           		field: 'batDauLapLich',
+   			             	title: 'Thời gian bắt đầu lập lịch',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+						
 						},{
-   			           		field: 'admin',
-   			             	title: 'Thư ký',
+   			           		field: 'ketThucLapLich',
+   			             	title: 'Thời gian kết thúc chọn lịch',
    			             	valign: 'left',
    			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
+							
 						},{
-							field: 'X',
-							title: 'Khóa',
+							field: 'batDauChonLich',
+							title: 'Thời gian bắt đầu chọn lịch',
 							align: 'center',
 							valign: 'center',
-							clickToSelect: false,
-							formatter : function(value,row,index) {
-								str = '';
-								if (row.active==true){
-									return '<button class="btn btn-primary btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" >x</button>';
-								}
-								return str;
-							}
-						},{
-   							field: 'B',
-   							title: 'Sửa',
-   							align: 'center',
-   							valign: 'middle',
-   							clickToSelect: false,
-   							formatter : function(value,row,index) {
-   	return '<button value="'+row.id+'" class="btn btn-info btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="frmEditGiangVien(this)">o</button>';
-   							   }
-   						},{
-						field: 'X',
-						title: 'Xóa',
-						align: 'center',
-						valign: 'middle',
-						clickToSelect: false,
-						formatter : function(value,row,index) {
-return '<button id="'+row.id+'" class="btn btn-danger btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="del(this)">x</button>';
+			
 						}
-					}
 					],
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
