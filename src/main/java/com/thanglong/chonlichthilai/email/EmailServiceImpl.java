@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
 
     // Method 1
     // To send a simple email
-    public String sendSimpleMail(EmailDetails details)
+    public int sendSimpleMail(EmailDetails details)
     {
 
         // Try block to check for exceptions
@@ -41,12 +41,13 @@ public class EmailServiceImpl implements EmailService {
 
             // Sending the mail
             javaMailSender.send(mailMessage);
-            return "Mail Sent Successfully...";
+            return 1;
         }
 
         // Catch block to handle the exceptions
         catch (Exception e) {
-            return "Error while Sending Mail";
+        	e.printStackTrace();
+            return 0;
         }
     }
 
@@ -68,8 +69,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
             mimeMessageHelper.setText(details.getMsgBody());
-            mimeMessageHelper.setSubject(
-                details.getSubject());
+            mimeMessageHelper.setSubject(details.getSubject());
 
             // Adding the attachment
             FileSystemResource file

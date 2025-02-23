@@ -30,4 +30,58 @@ public class LopMonHoc {
  private String phong;
  private String maGiaoVien;
  private Date lastModify;
+public Long getId() {
+	return id;
+}
+public void setId(Long id) {
+	this.id = id;
+}
+public String getMaHocKy() {
+	return maHocKy;
+}
+public void setMaHocKy(String maHocKy) {
+	this.maHocKy = maHocKy;
+}
+public String getMaLop() {
+	return maLop;
+}
+public void setMaLop(String maLop) {
+	this.maLop = maLop;
+}
+public String getTenLop() {
+	return tenLop;
+}
+public void setTenLop(String tenLop) {
+	this.tenLop = tenLop;
+}
+public String getThu() {
+	return thu;
+}
+public void setThu(String thu) {
+	this.thu = thu;
+}
+public String getGio() {
+	return gio;
+}
+public void setGio(String gio) {
+	this.gio = gio;
+}
+public String getPhong() {
+	return phong;
+}
+public void setPhong(String phong) {
+	this.phong = phong;
+}
+public String getMaGiaoVien() {
+	return maGiaoVien;
+}
+public void setMaGiaoVien(String maGiaoVien) {
+	this.maGiaoVien = maGiaoVien;
+}
+public Date getLastModify() {
+	return lastModify;
+}
+public void setLastModify(Date lastModify) {
+	this.lastModify = lastModify;
+}
 }

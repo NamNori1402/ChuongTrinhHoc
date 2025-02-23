@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 //Interface
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUserName(String userName); // Fetch user by username
+public interface TaiKhoanRepository extends JpaRepository<GiangVien, Long> {
+    Optional<GiangVien> findByUserName(String userName);
 }
 

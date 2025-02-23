@@ -31,7 +31,7 @@ public class TKBServiceImpl implements TKBService {
     // Update operation
     @Override
     public TKB update(TKB e, Long Id) {
-        TKB tkb= repository.findById(Id).get(); 
+    	TKB tkb= repository.findById(Id).get(); 
         tkb.setTenLop(e.getTenLop());
         return repository.save(tkb);
     }

@@ -44,4 +44,76 @@ public class TKB {
     protected void onUpdate() {
         lastModify = new Date();
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Integer getTt() {
+		return tt;
+	}
+
+	public void setTt(Integer tt) {
+		this.tt = tt;
+	}
+
+	public String getMaKy() {
+		return maKy;
+	}
+
+	public void setMaKy(String maKy) {
+		this.maKy = maKy;
+	}
+
+	public String getMaMon() {
+		return maMon;
+	}
+
+	public void setMaMon(String maMon) {
+		this.maMon = maMon;
+	}
+
+	public String getTenLop() {
+		return tenLop;
+	}
+
+	public void setTenLop(String tenLop) {
+		this.tenLop = tenLop;
+	}
+
+	public String getTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
+
+	public String getMaGiangVien() {
+		return maGiangVien;
+	}
+
+	public void setMaGiangVien(String maGiangVien) {
+		this.maGiangVien = maGiangVien;
+	}
+
+	public String getMaNguoiNhap() {
+		return maNguoiNhap;
+	}
+
+	public void setMaNguoiNhap(String maNguoiNhap) {
+		this.maNguoiNhap = maNguoiNhap;
+	}
+
+	public Date getLastModify() {
+		return lastModify;
+	}
+
+	public void setLastModify(Date lastModify) {
+		this.lastModify = lastModify;
+	}
 }
