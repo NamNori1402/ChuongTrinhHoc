@@ -351,7 +351,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: 'ky',
+		url 		: '/ky',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -373,19 +373,19 @@ function list() {
 			             	valign: 'middle'
 			            },{
 			           		field: 'tenKy',
-			             	title: 'H.hàm/H.vị',
+			             	title: 'Tên kỳ',
 			             	valign: 'middle'
 			            },{
 			           		field: 'maNam',
 			             	title: 'Năm học',
 			             	valign: 'middle'
 			            },{
-   			           		field: 'batDauHoc',
+   			           		field: 'batDauKyHoc',
    			             	title: 'Thời gian bắt đầu kì học',
    			             	valign: 'middle',
    			             	align: 'left'
 						},{
-   			           		field: 'ketThucHoc',
+   			           		field: 'ketThucKyHoc',
    			             	title: 'Thời gian kết thúc kì học',
    			             	valign: 'left',
    			             	align: 'center',
@@ -408,6 +408,24 @@ function list() {
 							align: 'center',
 							valign: 'center',
 			
+						},	{
+   							field: 'B',
+   							title: 'Sửa',
+   							align: 'center',
+   							valign: 'middle',
+   							clickToSelect: false,
+   							formatter : function(value,row,index) {
+   	return '<button id="'+row.id+'" class="btn btn-info btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="frmEditKyHoc(this)">o</button>';
+   							   }
+   							},{
+							field: 'X',
+							title: 'Xóa',
+							align: 'center',
+							valign: 'middle',
+							clickToSelect: false,
+							formatter : function(value,row,index) {
+	return '<button id="'+row.id+'" class="btn btn-danger btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="del(this)">x</button>';
+							}
 						}
 					],
 			    data: DATA,
@@ -425,7 +443,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: 'giangvien/delete?id='+ts.id,
+		url 		: '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -566,6 +584,56 @@ $("#Save").click(function() {
 	
 </script>
 
+<script>
+	function frmEditKyHoc(ts) {
+		var record;
+		for(i = 0; i < DATA.length; i++){
+			console.log(ts.id + ", " + DATA[i].id)
+			if (ts.id == DATA[i].id){
+				record = DATA[i]
+			}
+		}
+		console.log("Ban ghi la: " + record)
+		action = "edit";
+		html = '';
+		html = '<table>';
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="'+record.maKy+'" disabled/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Kỳ 1 Nhóm 1 2024 - 2025"/></td><tr>'
+		html = html + '<tr><td>Năm học</td><td>'
+		html = html + '		<Select id="maNam">'
+		html = html + '			<option value="2023-2024">2023-2024</option>'
+		html = html + '			<option value="2024-2025">2024-2025</option>'	
+		html = html + '			<option value="2025-2026">2025-2026</option>'	
+		html = html + '			<option value="2026-2027">2026-2027</option>'	
+		html = html + '			<option value="2027-2028">2027-2028</option>'	
+		html = html + '		</Select>'
+		html = html + '</td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" /></td><tr>'
+		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" /></td><tr>'
+		$('#modal-title').html("Chi tiết cấu hình kỳ học");
+		$('#frm-content').html(html);
+		$('#frm').modal('show');
+		setTimeout(function(){ 
+			var now = new Date();
+			now.setDate(now.getDate() + 0);
+			day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth()+1)).slice(-2);
+			var today = (now.getFullYear()) +"-"+(month)+"-"+(day) ;
+			//
+			var d7 = new Date();
+			d7.setDate(d7.getDate() + 30);
+			day1 = ("0" + d7.getDate()).slice(-2);
+			var month1 = ("0" + (d7.getMonth()+1)).slice(-2);
+			var t7 = (d7.getFullYear()) +"-"+(month1)+"-"+(day1) ;
+			//
+		 }, 1000);  
+	}
+	
+</script>
 
 <script>includeHTML();</script> 
 <script>
