@@ -528,7 +528,6 @@ $("#Save").click(function() {
 		type = 'PUT'
 	} else {
 		data = 		{
-			id   				:id        ,
 			maKy 				:maKy  ,
 			tenKy 				:tenKy  ,
 			maNam 				:maNam ,
@@ -539,11 +538,11 @@ $("#Save").click(function() {
 			batDauChonLich  	:batDauChonLich    ,
 			ketThucChonLich  	:ketThucChonLich 
 			}	
-		api  = 'ky/add';
+		api  = '/ky';
 		type = 'POST'
 	}
 	console.log(data)
-	return;
+	alert(api)
 	$.ajax({
 		url 		: api,
 		type		: type,
@@ -567,8 +566,8 @@ $("#Save").click(function() {
 		action = "add";
 		html = '';
 		html = '<table>';
-		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="CTI061"/></td><tr>'
-		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Nguyễn Xuân Thanh"/></td><tr>'
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="2425K1N1"/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Kỳ 1 Nhóm 1 2024 - 2025"/></td><tr>'
 		html = html + '<tr><td>Năm học</td><td>'
 		html = html + '		<Select id="maNam">'
 		html = html + '			<option value="2023-2024">2023-2024</option>'

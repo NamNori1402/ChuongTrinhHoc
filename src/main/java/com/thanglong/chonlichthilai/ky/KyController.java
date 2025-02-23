@@ -17,7 +17,8 @@ public class KyController {
     @Autowired private KyService kyService;
  
     // Save operation
-    @PostMapping("/ky/")
+    @CrossOrigin(origins = "*") 
+    @PostMapping("/ky")
     public Ky saveKy(@Valid @RequestBody Ky ky)  {
         return kyService.saveKy(ky);
     }
