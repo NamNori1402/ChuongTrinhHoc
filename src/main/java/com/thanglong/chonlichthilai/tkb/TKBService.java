@@ -11,7 +11,7 @@ public interface TKBService {
 	TKB save(TKB e);
 
  // Read operation //Select
-	List<TKB> fetchList();
+	List<TKB> findAll();
 
  // Update operation //Update
 	TKB update(TKB e, Long Id);

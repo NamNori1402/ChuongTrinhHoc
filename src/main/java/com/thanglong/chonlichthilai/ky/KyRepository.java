@@ -1,22 +1,23 @@
 package com.thanglong.chonlichthilai.ky;
 
+import java.util.List;
 import java.util.Optional;
 
-//Java Program to Illustrate DepartmentRepository File
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-
-//Annotation
 @Repository
-
-//Interface
-
 public interface KyRepository extends JpaRepository<Ky, Long> {
-    Optional<Ky> findByMaKy(String maKy); // Fetch user by username
+    Optional<Ky> findByMaKy(String maKy); // Lấy theo maKy
+
+    List<Ky> findAllByOrderByMacDinhDescIdDesc(); // Lấy danh sách sắp xếp theo id giảm dần
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Ky u set u.macDinh = ?1")
+    void updateInBulkByMacDinh(long macDinh);
+    
 }
-
-
-

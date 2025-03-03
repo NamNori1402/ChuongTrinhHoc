@@ -1,3 +1,74 @@
+var CFG_KY_MAC_DINH='2526K2';
+var TAB_GIANG_VIEN = '';
+var TAB_HOC_PHAN = '';
+var CFG_NAM_HOC_MAC_DINH='';
+var CFG_PHONG = ['A701','A702','A703','A704','A705','A706','A7071','A708','A709','A710']
+
+
+
+function formatDate(date, daysToAdd = 0) {
+    let d = new Date(date);
+    d.setDate(d.getDate() + daysToAdd);
+    let day = ("0" + d.getDate()).slice(-2);
+    let month = ("0" + (d.getMonth() + 1)).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+}
+
+
+var CFG_NAM_HOC = [
+	{
+		"namHoc": "2024-2025",
+		"kyHoc": [
+			{
+				"maKy": "2425K1N1",
+				"tenKy": "Kỳ 1 Nhóm 1"
+			},{
+				"maKy": "2425K1N2",
+				"tenKy": "Kỳ 1 Nhóm 2"				
+			},{
+				"maKy": "2425K1N3",
+				"tenKy": "Kỳ 1 Nhóm 3"		
+			},{
+				"maKy": "0",
+				"tenKy": "---------------"
+			},{
+				"maKy": "2425K2N1",
+				"tenKy": "Kỳ 2 Nhóm 1"
+			},{
+				"maKy": "2425K2N2",
+				"tenKy": "Kỳ 2 Nhóm 2"				
+			},{
+				"maKy": "2425K2N3",
+				"tenKy": "Kỳ 2 Nhóm 3"		
+			},{
+				"maKy": "0",
+				"tenKy": "---------------"
+			},{		
+				"maKy": "2425K3N1",
+				"tenKy": "Kỳ 2 Nhóm 1"
+			},{
+				"maKy": "2425K3N2",
+				"tenKy": "Kỳ 2 Nhóm 2"				
+			},{
+				"maKy": "2425K3N3",
+				"tenKy": "Kỳ 2 Nhóm 3"				
+			}
+		]
+	},{
+		"namHoc": "2025-2026",
+		"kyHoc": [
+			{
+			"maKy": "2526K1",
+			"tenKy": "Kỳ 1"
+			},{
+			"maKy": "2526K2",
+			"tenKy": "Kỳ 2"
+			},			
+		]
+	}
+];
+
+
 var DATA_IDX;
 cfgHoiDong = [
 	{
@@ -218,6 +289,7 @@ function getQueryString() {
 }
 
 function setCookie(name,value,days) {
+	alert(name)
     var expires = "";
     if (days) {
         var date = new Date();
@@ -227,6 +299,7 @@ function setCookie(name,value,days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 function getCookie(name) {
+	alert(name)
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for(var i=0;i < ca.length;i++) {
@@ -655,4 +728,11 @@ function tinhDiem(this_, record_){
 	}
 	$('#'+arr[0]).html(tong);
 }
+
+
+var loading ='			<div class="progress" style="text-align:center;size:20pt">'
+		loading =loading + '	<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">'
+		loading =loading + '		<span class="sr-only">45% Complete</span>'
+		loading =loading + '	</div>'
+		loading =loading + '</div>'
 

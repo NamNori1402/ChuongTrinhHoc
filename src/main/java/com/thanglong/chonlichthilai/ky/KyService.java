@@ -10,18 +10,22 @@ import java.util.List;
 public interface KyService {
 
 	 // Save operation
-		Ky saveKy(Ky ky);
+		Ky save(Ky e);
 
 	 // Read operation
-		List<Ky> fetchKyList();
+		List<Ky> findAll();
 
 	 // Update operation
-		Ky updateKy(Ky ky, Long id);
+		Ky update(Ky e, Long id);
 		
-		Ky findKyById(Long id);
+		Ky findById(Long id);
 		
-		Ky findKyByMaKy(String maKy);
+		Ky findByMaKy(String e);
+		
+		List<Ky> findAllByOrderByMacDinhDescIdDesc();
 		
 	 // Delete operation
-		void deleteKyById(Long id);
+		void deleteById(Long id);
+		void updateInBulkByMacDinh(Long macDinh);
+
 	}

@@ -1,4 +1,4 @@
-package com.thanglong.chonlichthilai.taikhoan;
+package com.thanglong.chonlichthilai.giangvien;
 
 //Importing required classes
 import java.util.List;
@@ -10,14 +10,14 @@ public interface GiangVienService {
 	GiangVien save(GiangVien e);
 
  // Read TaiKhoan
-	List<GiangVien> fetchList();
+	List<GiangVien> findAll();
 
  // Update operation
 	GiangVien update(GiangVien e, Long id);
 	
 	GiangVien findById(Long id);
 	
-	GiangVien findByUserName(String userName);
+	GiangVien findByMaGiangVien(String maGiangVien);
 	
  // Delete operation
 	void deleteById(Long id);

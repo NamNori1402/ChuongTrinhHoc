@@ -1,4 +1,4 @@
-package com.thanglong.chonlichthilai.taikhoan;
+package com.thanglong.chonlichthilai.giangvien;
 
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 //Interface
-public interface TaiKhoanRepository extends JpaRepository<GiangVien, Long> {
-    Optional<GiangVien> findByUserName(String userName);
+public interface GiangVienRepository extends JpaRepository<GiangVien, Long> {
+    Optional<GiangVien> findByMaGiangVien(String maGiangVien);
 }
 

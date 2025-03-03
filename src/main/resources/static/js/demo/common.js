@@ -245,7 +245,7 @@ function frmAddGiangVien() {
 	html = '';
 	html = '<table>';
 	html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="username" value="CTI061"/></td><tr>'
-	html = html + '<tr><td>Tên giảng viên</td><td><input type="text" id="tenGiangVien" value="Nguyễn Xuân Thanh"/></td><tr>'
+	html = html + '<tr><td>Tên giảng viên</td><td><input type="text" id="tenGiangVien" value="Nguyễn Xuân Thanh22"/></td><tr>'
 	html = html + '<tr><td>Học hàm/học vị</td><td>';
 	html = html + '<Select id="hocHamHocVi"/>'
 	for (i = 0; i < cfgHocHamHocVi.length; i++){

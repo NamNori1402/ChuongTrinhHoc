@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Quản lý đề tài</title>
+    <title>Chọn lịch thi</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,7 +33,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_left.html"></div> 
+		<div w3-include-html="_menuThuKy.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -254,10 +254,8 @@
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
 								<table width="100%" border="0"><tr><td>Giảng viên</td>
-								<td align="right">
-									<button class="btn btn-primary btn-icon-split" onclick="frmAddGiangVien();">
-										<span class="text">Thêm mới</span>
-									</button>
+								<td align="right" id="btn_InsertUpdate">
+									
 								</td>
 								</tr></table>
 							</h6>
@@ -322,14 +320,24 @@
 		  <div class="modal-dialog" style="width: 630px">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h4 class="modal-title" id="modal-title">Edit Account</h4>
+				<table width=100%">
+					<tr>
+						<td>
+							<h4 class="modal-title" id="modal-title">Edit Account</h4>
+						</td>
+						<td style="text-align: right;">						
+							  <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+							  <button type="button" class="btn btn-primary" id="Save1" value="">Ghi lại</button>
+						</td>
+					</tr>
+				</table>
 		      </div>
 		      <div class="modal-body">
 		          <div id="frm-content"></div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
-		        <button type="button" class="btn btn-primary" id="Save" value="">Ghi lại</button>
+		        <button type="button" class="btn btn-primary" id="Save2" value="">Ghi lại</button>
 		      </div>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -351,111 +359,93 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: 'users',
-		type		: 'get',
-		data 		: {action: 'list'},
+		url 		: '/giangvien',
+		type		: 'GET',
 		success : function(resp) {
-			DATA = resp;
+			if (resp == -9){
+				alert("Phiên truy cập không hợp lệ")
+				window.location.replace("login.html");
+				return;
+			}
+			DATA = JSON.parse(JSON.stringify(resp), (key, value) => {
+			    return value === null ? '' : value;
+			});
 			console.log(DATA)
+			var cols = [];
+			cols.push({ 
+			    title: 'STT',
+			    valign: 'middle',
+			    align: 'center',
+			    formatter: function(value, row, index) {
+			        return index + 1;
+			    }
+			});
+			// Cot 1
+			cols.push({ 
+				field: 'maGiangVien',
+				title: 'Mã Kỳ',
+				valign: 'middle'
+			});
+			// Cot 2
+			cols.push({ 
+				field: 'maNam',
+				title: 'Tên',
+				valign: 'middle',
+				formatter : function(value,row,index) {
+					var txt = row.hocHam + row.hocVi + '.' + row.hoTenDem + ' ' + row.ten
+					txt = txt.split('. ').join('.')
+					return txt
+				}
+			});
+			// Cot 3
+			cols.push({ 
+				field: 'dienThoai',
+				title: 'Điện thoại',
+				valign: 'middle',
+				align: 'center'
+			});
+			// Cot 4
+			cols.push({ 
+				field: 'email1',
+				title: 'Email',
+				valign: 'middle',
+				align: 'left'
+			});
+			//
+			cols.push({ 
+				field: 'donVi',
+				title: 'Đơn vị',
+				valign: 'middle',
+				align: 'left'
+			});
+			// Cot 5
+			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+				cols.push({ 
+					field: 'B',
+					title: 'Sửa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+							return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+					   }
+					}
+				});
+				cols.push({ 
+					field: 'X',
+					title: 'Xóa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						return '<button id="'+row.id+'" class="btn btn-danger btn-xs"  title="'+row.id+'" onclick="del(this)">x</button>';
+					}							
+				});
+			}
 			$('#dataTable').bootstrapTable("destroy");
 			$('#dataTable').bootstrapTable({
-				 columns: [
-				 		{
-							title: 'STT',
-	                     	valign: 'middle',
-	                     	align: 'center',
-    	             		formatter : function(value,row,index) {
-    	               			return (index + 1);
-    	                    }
-	                    },{
-			           		field: 'userCode',
-			             	title: 'userCode',
-			             	valign: 'middle'
-			            },{
-			           		field: 'academic',
-			             	title: 'H.hàm/H.vị',
-			             	valign: 'middle'
-			            },{
-			           		field: 'userName',
-			             	title: 'UserName',
-			             	valign: 'middle'
-			            },{
-   			           		field: 'mobile',
-   			             	title: 'Điện thoại',
-   			             	valign: 'middle',
-   			             	align: 'left'
-						},{
-   			           		field: 'admin',
-   			             	title: 'Admin',
-   			             	valign: 'left',
-   			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
-						},{
-   			           		field: 'admin',
-   			             	title: 'G.Viên',
-   			             	valign: 'left',
-   			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
-						},{
-   			           		field: 'admin',
-   			             	title: 'Thư ký',
-   			             	valign: 'left',
-   			             	align: 'center',
-							formatter : function(value,row,index) {
-								if (row.admin==true){
-									str = 'x';
-								} else {
-									str = ''
-								}
-								return str;
-							}
-						},{
-							field: 'X',
-							title: 'Khóa',
-							align: 'center',
-							valign: 'center',
-							clickToSelect: false,
-							formatter : function(value,row,index) {
-								str = '';
-								if (row.active==true){
-									return '<button class="btn btn-primary btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" >x</button>';
-								}
-								return str;
-							}
-						},{
-   							field: 'B',
-   							title: 'Sửa',
-   							align: 'center',
-   							valign: 'middle',
-   							clickToSelect: false,
-   							formatter : function(value,row,index) {
-   	return '<button value="'+row.id+'" class="btn btn-info btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="frmEditGiangVien(this)">o</button>';
-   							   }
-   						},{
-						field: 'X',
-						title: 'Xóa',
-						align: 'center',
-						valign: 'middle',
-						clickToSelect: false,
-						formatter : function(value,row,index) {
-return '<button id="'+row.id+'" class="btn btn-danger btn-xs" style="font-family:Courier New; font-size:8px" title="'+row.id+'" onclick="del(this)">x</button>';
-						}
-					}
-					],
+				columns: cols,
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
 			    pageSize: 15,
@@ -471,7 +461,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: 'giangvien/delete?id='+ts.id,
+		url 		: '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -485,69 +475,68 @@ function del(ts) {
 
 </script>
 <script>
-$("#Save").click(function() {
-	id 			= $('#id').val();
-	userName 	= $('#userName').val();
-	userCode 	= $('#userCode').val();
-	givenName 	= $('#givenName').val();
-	familyName 	= $('#familyName').val();
-	academic	= $('#academic').val();
-	title		= $('#title').val();
-	unitId 		= $('#unitId').val();
-	mobile 		= $('#mobile').val();	
-	email 		= $('#email').val();
-	note		= $('#note').val();
+$('#Save1,#Save2').click(function() {
+	id 		= $('#maKy').val();
+	maKy 	= $('#maKy').val();
+	tenKy 	= $('#tenKy').val();
+	maNam 	= $('#maNam').val();
+	batDauKyHoc 		= $('#batDauKyHoc').val();
+	ketThucKyHoc		= $('#ketThucKyHoc').val();
+	batDauLapLich		= $('#batDauLapLich').val();
+	ketThucLapLich 		= $('#ketThucLapLich').val();
+	batDauChonLich 		= $('#batDauChonLich').val();	
+	ketThucChonLich 	= $('#ketThucChonLich').val();
+
+	batDauKyHoc  		= batDauKyHoc +' 00:00:00'
+	ketThucKyHoc 		= ketThucKyHoc +' 00:00:00'
 	
-	data = '';
-	active 			= $('#active').is(":checked");
-	admin			= $('#admin').is(":checked");
-	secretary		= $('#secretary').is(":checked");
-	lecturer		= $('#lecturer').is(":checked");
-
-	active 			= active  	== true ? 1 : 0;
-	admin			= admin 	== true ? 1 : 0;
-	secretary		= secretary == true ? 1 : 0;
-	lecturer		= lecturer  == true ? 1 : 0;
-
+	batDauLapLich  		= batDauLapLich +' 00:00:00'
+	ketThucLapLich 		= ketThucLapLich +' 00:00:00'
+		
+	batDauChonLich  	= batDauChonLich +' 00:00:00'
+	ketThucChonLich 	= ketThucChonLich +' 00:00:00'
+	
+	macDinh				= $('#macDinh').val() == 'on'? 1: 0;
+	
 	api  = ''
-	if (action == 'edit') {
+
+	if (action == 'update') {
 		id = $('#id').val();
 		data = 		{	
-			id   		:id        ,
-			userName 	:userName  ,
-			userCode 	:userCode  ,
-			givenName 	:givenName ,
-			familyName 	:familyName,
-			academic	:academic  ,
-			title 		:title     ,
-			unitId  	:unitId    ,
-			mobile  	:mobile    ,
-			email  		:email     ,
-			note 		:note      ,
-			active   	:active    ,
-			admin  		:admin     ,
-			secretary 	:secretary ,
-			lecturer	:lecturer  
+			id   				:id        ,
+			maKy 				:maKy  ,
+			tenKy 				:tenKy  ,
+			maNam 				:maNam ,
+
+			batDauKyHoc			: batDauKyHoc,
+			ketThucKyHoc		: ketThucKyHoc  ,
+			
+			batDauLapLich 		:batDauLapLich     ,
+			ketThucLapLich  	:ketThucLapLich    ,
+
+			batDauChonLich 		:batDauChonLich    ,
+			ketThucChonLich  	:ketThucChonLich  ,
+			macDinh				: macDinh
 					}
-		api  = 'users/'+id;
+		api  = 'ky/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
-			username: username,
-						tenGiangVien: tenGiangVien,
-						chucDanh:chucDanh,
-						hocHamHocVi: hocHamHocVi,
-						maChuyenNganh:maChuyenNganh, 
-						donVi:donVi, 
-						email: email, 
-						ghiChu: ghiChu,
-						mobile: mobile, 
-						khoa: khoa, 
-						duyetDeTai: duyetDeTai, 
-						taoDeTai: taoDeTai, 
-						thanhLapHoiDong: thanhLapHoiDong
-					}	
-		api  = 'giangvien/add';
+			maKy 				:maKy  ,
+			tenKy 				:tenKy  ,
+			maNam 				:maNam ,
+			
+			batDauKyHoc 		:batDauKyHoc,
+			ketThucKyHoc		:ketThucKyHoc  ,
+			
+			batDauLapLich 		:batDauLapLich     ,
+			ketThucLapLich  	:ketThucLapLich    ,
+			
+			batDauChonLich  	:batDauChonLich    ,
+			ketThucChonLich  	:ketThucChonLich ,
+			macDinh				: macDinh
+			}	
+		api  = '/ky';
 		type = 'POST'
 	}
 	console.log(data)
@@ -570,80 +559,91 @@ $("#Save").click(function() {
 </script>
 <script>list()</script>
 <script>
-	function frmEditGiangVien(this_) {
-		record=getRecordFromID(DATA,this_.value);
+	function formatDate(date, daysToAdd = 0) {
+	    let d = new Date(date);
+	    d.setDate(d.getDate() + daysToAdd);
+	    let day = ("0" + d.getDate()).slice(-2);
+	    let month = ("0" + (d.getMonth() + 1)).slice(-2);
+	    return `${d.getFullYear()}-${month}-${day}`;
+	}
+</script>
+<script>
+	function frmInsertUpdate(act) {
+		var record = {};
+		if (act == 'insert') {
+			action = 'insert';
+		    let today = formatDate(new Date(), 0);
+		    let t7 = formatDate(new Date(), 30);
+
+		    record.maKy = '2425K1';
+		    record.tenKy = 'Kỳ 1';
+		    record.ma_nam = '2024-2025';
+		    record.mac_dinh = 0;
+
+		    record.batDauKyHoc = today;
+		    record.ketThucKyHoc = t7;
+
+		    record.batDauLapLich = today;
+		    record.ketThucLapLich = t7;
+
+		    record.batDauChonLich = today;
+		    record.ketThucChonLich = t7;
+		} else {
+			action = 'update';
+		    for (let i = 0; i < DATA.length; i++) {
+		        if (act.id == DATA[i].id) {
+		            record = DATA[i];
+					record.batDauKyHoc 		= record.batDauKyHoc?.split(" 00:00:00").join("") || "";
+					record.ketThucKyHoc 	= record.ketThucKyHoc?.split(" 00:00:00").join("") || "";
+					record.batDauLapLich 	= record.batDauLapLich?.split(" 00:00:00").join("") || "";
+					record.ketThucLapLich	= record.ketThucLapLich?.split(" 00:00:00").join("") || "";
+					record.batDauChonLich 	= record.batDauChonLich?.split(" 00:00:00").join("") || "";
+					record.ketThucChonLich 	= record.ketThucChonLich?.split(" 00:00:00").join("") || "";
+					record.macDinh			= record.macDinh == 1 ? "checked" : "";
+		        }
+		    }
+		}
 		html = '';
 		html = '<table>';
-		html = html + '<tr><td>ID</td><td><input type="text" id="id" value="'+record.id+'" readonly/></td><tr>'
-		html = html + '<tr><td>Mã khoản</td><td><input type="text" id="userName" value="'+record.userName+'" readonly/></td><tr>'
-		html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="userCode" value="'+record.userCode+'" /></td><tr>'
-		html = html + '<tr><td>Họ và tên đệm</td><td><input type="text" id="givenName" value="'+record.givenName+'" /></td><tr>'
-		html = html + '<tr><td>Tên</td><td><input type="text" id="familyName" value="'+record.familyName+'" /></td><tr>'
-		html = html + '<tr><td>Học hàm/học vị</td><td>';
-		html = html + '<Select id="academic"/>'
-		for (i = 0; i < cfgHocHamHocVi.length; i++){
-			if (cfgHocHamHocVi[i]=='ThS'){
-				html = html + '<option value="'+cfgHocHamHocVi[i]+'" Selected>'+cfgHocHamHocVi[i]+'</option>'
-			} else {
-				html = html + '<option value="'+cfgHocHamHocVi[i]+'">'+cfgHocHamHocVi[i]+'</option>'
-			}
-		}
-		html = html + '</Select>'
+		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
+		html = html + '<tr><td>Mã Giảng viên </td><td><input type="text" id="maKy" value="'+record.maKy+'"/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="'+record.tenKy+'"/></td><tr>'
+		html = html + '<tr><td>Năm học</td><td>'
+		html = html + '		<Select id="maNam">'
+		html = html + '			<option value="2023-2024">2023-2024</option>'
+		html = html + '			<option value="2024-2025">2024-2025</option>'	
+		html = html + '			<option value="2025-2026">2025-2026</option>'	
+		html = html + '			<option value="2026-2027">2026-2027</option>'	
+		html = html + '			<option value="2027-2028">2027-2028</option>'	
+		html = html + '		</Select>'
 		html = html + '</td><tr>'
-		html = html + '<tr><td>Chức danh</td><td><input type="text" id="title" value="'+record.title+'" /></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'		
+		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" value="'+record.batDauKyHoc+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" value="'+record.ketThucKyHoc+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'
+		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" value="'+record.batDauLapLich+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" value="'+record.ketThucLapLich+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'			
+		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" value="'+record.batDauChonLich+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" value="'+record.ketThucChonLich+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'			
+		html = html + '<tr><td>Chọn làm kỳ mặc định</td><td><input type="checkbox" id="macDinh" '+record.macDinh+'/></td><tr>'
 
-		html = html + '<tr><td>Chuyên ngành</td>'
-		html = html + '<td>';
-		html = html + '<select id="majorId">';
-		for(i=0; i < cfgKhoa.length; i++){
-			html = html + '<option value="" disable>Khoa '+cfgKhoa[i].tenKhoa+'</option>'
-			for(j=0; j < cfgKhoa[i].chuyenNganh.length; j++){
-				if (cfgKhoa[i].chuyenNganh[j].maChuyenNganh == record.maChuyenNganh){
-					html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'" selected>+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'				
-				} else {
-					html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'">+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'
-				}
-			}
-		}
-		html = html + '</select>'
-		html = html + '</td><tr>'	
-		
-		html = html + '<tr><td>Đơn vị</td><td><input type="text" id="unitId" value="'+record.unitId+'" /></td><tr>'
-		html = html + '<tr><td>Điện thoại</td><td><input type="text" id="mobile" value="'+record.mobile+'" /></td><tr>'
-		html = html + '<tr><td>Email</td><td><input type="text" id="email" value="'+record.email+'" /></td><tr>'
-
-		html = html + '<tr><td>Ghi chú</td><td><input type="text" id="note" value="'+record.note+'" /></td><tr>'
-		if (record.active==true){
-			html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="active" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="active" /></td><tr>'
-		}
-		if (record.admin==true){
-			html = html + '<tr><td>Admin</td><td><input type="checkbox" id="admin" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Admin</td><td><input type="checkbox" id="admin" /></td><tr>'
-		}
-		if (record.secretary==true){
-			html = html + '<tr><td>Thư ký</td><td><input type="checkbox" id="secretary" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Thư ký</td><td><input type="checkbox" id="secretary" /></td><tr>'
-		}
-		if (record.lecturer==true){
-			html = html + '<tr><td>Giảng viên</td><td><input type="checkbox" id="lecturer" checked/></td><tr>'		
-		} else {
-			html = html + '<tr><td>Giảng viên</td><td><input type="checkbox" id="lecturer" /></td><tr>'
-		}
-		html = html + '</table>'
-		$('#modal-title').html("Sửa Giảng viên");
+		$('#modal-title').html("Kỳ học");
 		$('#frm-content').html(html);
 		$('#frm').modal('show');
-		action = "edit";
-	}	
+		
+	}
 	
 </script>
+
+
 <script>includeHTML();</script> 
 <script>
 	tk=JSON.parse(localStorage.getItem('taiKhoan'));
-	$('#userID').html(tk.tenGiangVien +' | '+ tk.username)
+	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+		$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
+	}
+	$('#userID').html(tk.ten +' | '+ tk.userName)
 </script>
 </html

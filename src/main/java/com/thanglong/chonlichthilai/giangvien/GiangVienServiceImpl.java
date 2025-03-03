@@ -1,4 +1,4 @@
-package com.thanglong.chonlichthilai.taikhoan;
+package com.thanglong.chonlichthilai.giangvien;
 
 // Importing required classes
 import java.util.List;
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 public class GiangVienServiceImpl implements GiangVienService {
  
     @Autowired
-    private TaiKhoanRepository repository;
+    private GiangVienRepository repository;
     // Save operation
     @Override
     public GiangVien save(GiangVien e){
         return repository.save(e);
     }
     // Read operation
-    @Override public List<GiangVien> fetchList(){
+    @Override public List<GiangVien> findAll(){
         return (List<GiangVien>) repository.findAll();
     }
     // Read operation
@@ -28,8 +28,8 @@ public class GiangVienServiceImpl implements GiangVienService {
         return repository.findById(id).orElse(null);
     }
     // Read operation
-    @Override public GiangVien findByUserName(String userName){
-        return repository.findByUserName(userName).orElse(null);
+    @Override public GiangVien findByMaGiangVien(String maGiangVien){
+        return repository.findByMaGiangVien(maGiangVien).orElse(null);
     }
     // Update operation
     @Override

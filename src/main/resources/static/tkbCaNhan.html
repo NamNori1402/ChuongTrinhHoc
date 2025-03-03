@@ -9,7 +9,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Chọn lịch thi</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -253,9 +252,9 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
-								<table width="100%" border="0"><tr><td>Cấu hình kỳ học</td>
+								<table width="100%" border="0"><tr><td>Thời khóa biểu</td>
 								<td align="right">
-									<button class="btn btn-primary btn-icon-split" onclick="frmAddKyHoc();">
+									<button class="btn btn-primary btn-icon-split" onclick="frmAdd();">
 										<span class="text">Thêm mới</span>
 									</button>
 								</td>
@@ -534,12 +533,11 @@ $("#Save").click(function() {
 </script>
 <script>list()</script>
 <script>
-	function frmAddKyHoc() {
+	function frmAdd() {
 		action = "add";
 		html = '';
 		html = '<table>';
-		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="2425K1N1"/></td><tr>'
-		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="Kỳ 1 Nhóm 1 2024 - 2025"/></td><tr>'
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="2425K1N1" disabled/></td><tr>'
 		html = html + '<tr><td>Năm học</td><td>'
 		html = html + '		<Select id="maNam">'
 		html = html + '			<option value="2023-2024">2023-2024</option>'
@@ -551,14 +549,17 @@ $("#Save").click(function() {
 		html = html + '</td><tr>'
 		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" /></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'
 		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" /></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" /></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'			
 		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" /></td><tr>'
 		$('#modal-title').html("Chi tiết cấu hình kỳ học");
 		$('#frm-content').html(html);
 		$('#frm').modal('show');
-		setTimeout(function(){ 
+		setTimeout(function(){
+			$('#maKy').val(CFG_KY_MAC_DINH);
 			var now = new Date();
 			now.setDate(now.getDate() + 0);
 			day = ("0" + now.getDate()).slice(-2);
@@ -579,7 +580,7 @@ $("#Save").click(function() {
 			$("#batDauHoc").val(today);
 			$("#batDauChonLich").val(today);
 			$("#ketThucChonLich").val(t7);
-		 }, 1000);  
+		 }, 500);  
 	}
 	
 </script>
@@ -609,10 +610,12 @@ $("#Save").click(function() {
 		html = html + '		</Select>'
 		html = html + '</td><tr>'
 		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" /></td><tr>'
-		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" /></td><tr>';
+		html = html + '<tr><td colspan=2><hr/></td></tr>'
 		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" /></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" /></td><tr>'
-		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
+			html = html + '<tr><td colspan=2><hr/></td></tr>'
+			html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" "/></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" /></td><tr>'
 		$('#modal-title').html("Chi tiết cấu hình kỳ học");
 		$('#frm-content').html(html);
@@ -638,6 +641,6 @@ $("#Save").click(function() {
 <script>includeHTML();</script> 
 <script>
 	tk=JSON.parse(localStorage.getItem('taiKhoan'));
-	$('#userID').html(tk.tenGiangVien +' | '+ tk.username)
+	$('#userID').html(tk.ten +' | '+ tk.userName)
 </script>
 </html

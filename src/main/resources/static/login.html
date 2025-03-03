@@ -22,7 +22,6 @@
 	<script src="js/common.js"></script>
 </head>
 
-
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -40,26 +39,35 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Chọn lịch thi lại</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Đăng nhập</h1>
                                     </div>
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="userName" aria-describedby="emailHelp"
-                                                placeholder="Nhập mã sinh viên"
-												value="CTI061"
+                                                placeholder="Nhập mã sinh viên hoặc mã giảng viên"
 												>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user" 
-                                                id="password" placeholder="Password"
+                                                id="password" placeholder="Nhập mật khẩu đã gửi vào email"
 												disabled
 												>
                                         </div>
+										<div class="form-group" align="right">
+											<table border="0">
+												<tr>
+													<td>Năm học</td><td><div id="frm_namHoc" ></div></td>
+												</tr>
+												<tr>
+													<td>Kỳ học</td><td><div id="frm_kyHoc" ></div></td>
+												</tr>
+											</table>
+										</div>
 										<div class="form-group">
 											<div id="loading" style="width: 100%; margin:0 auto"></div>
 										</div>
                                         <div class="form-group">
-											<button id="login" class="btn btn-primary btn-user btn-block">Lấy mật khẩu</a>
+											<button id="login" class="btn btn-primary btn-user btn-block">Lấy mật khẩu</button>
                                         </div>
 										<div class="form-group">
 											<div id="notify"></div>
@@ -106,25 +114,25 @@
 	
 </body>
 <script>
-var loading ='			<div class="progress" style="text-align:center;size:20pt">'
-		loading =loading + '	<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">'
-		loading =loading + '		<span class="sr-only">45% Complete</span>'
-		loading =loading + '	</div>'
-		loading =loading + '</div>'
-
+	var status = 0;
 </script>
 <script>
-function changeEmail(){
-	userName=$('#userName').val();
-	$('#email').val(userName+'@thanglong.edu.vn')
-}
 $("#login").click(function(){
 	userName=$('#userName').val();
 	password=$('#password').val();
-	console.log(userName);
-	alert(userName);
-	
-	if (userName !='' && password !=''){
+	if (userName==''){
+		alert('Bạn chưa nhập mã sinh viên hoặc mã giảng viên');
+		$('#userName').focus();
+		return;
+	}
+	userName = userName.toUpperCase();
+	$('#userName').val(userName);
+	if (status == 1){
+		if (password==''){
+			alert('Bạn chưa nhập mật khẩu. Vui lòng lấy mật khẩu để đăng nhập trong email')
+			$('#password').focus();
+			return;
+		}
 		data = {userName: userName, password: password}
 		$.ajax({
 				url 		: '/dangnhap',
@@ -133,26 +141,27 @@ $("#login").click(function(){
 				data 		:  JSON.stringify(data),
 				contentType : 'application/json; charset=UTF-8',
 				success : function(resp) {
-					console.log(resp)
 					mess = resp.content
-					if (data.code==-1){
-						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ')
+					if (resp.code==-1){
+						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ');
+						window.location.replace("login.html");
 						return;
 					} else {						
 						if (mess =='quanTri'){
-							window.location.replace("dashboardQuanTri.html");
+							window.location.replace("dashboardThuKy.html");
 						} else if (mess =='thuKy'){
 							window.location.replace("dashboardThuKy.html");
 						} else if (mess =='giangVien'){
-							window.location.replace("dashboardGiangVien.html");
+							window.location.replace("dashboardThuKy.html");
 						} else {
-							window.location.replace("dashboardSinhVien.html");
+							window.location.replace("dashboardThuKy.html");
 						}
+						console.log(resp)						
+						localStorage.setItem('taiKhoan', resp.extent);
 					}
 				}
 		});	
-	}
-	else if (password == ''){
+	} else if (status == 0){
 		$('#loading').html(loading)
 		$.ajax({
 				url 		: '/dangnhap/'+userName,
@@ -161,11 +170,21 @@ $("#login").click(function(){
 				contentType : 'application/json; charset=UTF-8',
 				success : function(resp) {
 					$('#loading').html('')
-					data=JSON.stringify(resp);
-					$('#login').html('Đăng nhập');
-					$("#userName").prop('disabled', true);
-					$("#password").prop('disabled', false);
-					$("#notify").html('Lấy mật khẩu đăng nhập trong email: <br/>' + userName + '@thanglong.edu.vn')
+					if (resp.code==-1){
+						alert(resp.content);
+						window.location.replace("login.html");
+					} else {
+						khoiTao();
+						data=JSON.stringify(resp);
+						$('#login').html('Đăng nhập');
+						$("#userName").prop('disabled', true);
+						$("#password").prop('disabled', false);
+						$("#namHoc").prop('disabled', true);
+						$("#kyHoc").prop('disabled', true);
+						alert('Đã gửi mật khẩu đến email: ' + resp.content);
+						$('#password').focus();	
+						status = 1
+					}
 				}
 		});	
 	}
@@ -173,176 +192,99 @@ $("#login").click(function(){
 }); 
 </script>
 <script>
-	them = '';
+	$(document).ready(function(){
+		frmMacDinh();
+	})
+
 </script>
 <script>
-$("#giangVienDangKy").click(function(){
-	frmAddGiangVien();
-	them='GiangVien';
-}); 
-$("#sinhVienDangKy").click(function(){
-	frmAddSinhVien();
-	them='SinhVien';
-}); 
-</script>
-<script>
-	$("#Save").click(function() {
-		if (them == 'GiangVien'){
-			saveGiangVien();
-		} else {
-			saveSinhVien();
-		}
-	});
-</script>	
-<script>
-	$("#Save").click(function() {
-		
-	});
-</script>
-<script>
-function saveSinhVien() {
-		userName 	= $('#userName').val();
-		tenSinhVien = $('#tenSinhVien').val();
-		lop 		= $('#lop').val();
-		mobile 		= $('#mobile').val();
-		maChuyenNganh	= $('#maChuyenNganh').val();	
-		khoa 		= $('#khoa').val();	
-		ghiChu 		= $('#ghiChu').val();
-		email 		= $('#email').val();
-		trangThai 	= $('#trangThai').val();
-		if (userName == ''){
-			alert('Bạn chưa nhập userName');
-			$('#userName').focus();
-			return;
-		} else if (tenSinhVien == ''){
-			alert('Bạn chưa nhập tenSinhVien')
-			$('#userName').focus();
-			return;
-		} else if (maChuyenNganh == ''){
-					alert('Bạn chưa chọn mã chuyên ngành')
-					$('#maChuyenNganh').focus();
-					return;
-		} else if (mobile == ''){
-			alert('Bạn chưa nhập số điện thoại')
-			$('#userName').focus();
-			return;
-		} else if (email ==''){
-			alert('Bạn chưa nhập email');
-			$('#email').focus();
-			return;
-		}
-		data = '';
-		trangThai = $('#trangThai').is(":checked");
-		trangThai = trangThai == trangThai ? 1 : 0;
-		api  = ''
-		if (action == 'edit') {
-			id = $('#id').val();
-			data = {userName: userName,tenSinhVien: tenSinhVien,mobile: mobile, khoa: khoa, maChuyenNganh: maChuyenNganh, ghiChu: ghiChu, lop: lop, email: email, trangThai: trangThai, id: id};
-			api  = 'sinhvien/update';
-			type = 'PUT'
-		} else {
-			data = {userName: userName,tenSinhVien: tenSinhVien,mobile: mobile, khoa: khoa, maChuyenNganh: maChuyenNganh, ghiChu: ghiChu, lop: lop, email: email, trangThai: trangThai};	
-			api  = 'sinhvien/add';
-			type = 'POST'
-		}
-		console.log(data)
-		$.ajax({
-			url 		: api,
-			type		: type,
-			dataType	: 'json',
-			contentType : 'application/json; charset=UTF-8',
-			data 		:  JSON.stringify(data),
-			success : function(resp) {
-				data = resp;
-				alert(data.message);
-				if (data.code==1000){
-					$('#frm').modal('hide');
-					$('#userName').val(userName);
-					$('#userName').focus();
+function frmMacDinh(){
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="kyHoc" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+				if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+					namHoc = CFG_NAM_HOC[i].namHoc;
+					CFG_NAM_HOC_MAC_DINH = namHoc;
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				} else {
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
 				}
 			}
-		});	
+		}
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == namHoc){
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
+				}
+			}
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
 	}
-	
 </script>
 <script>
-	function saveGiangVien(){
-		userName 	= $('#userName').val();
-		tenGiangVien 	= $('#tenGiangVien').val();
-		maChuyenNganh 	= $('#maChuyenNganh').val();	
-		chucDanh 		= $('#chucDanh').val();
-		donVi 			= $('#donVi').val();
-		hocHamHocVi		= $('#hocHamHocVi').val();
-		mobile 			= $('#mobile').val();
-		email 			= $('#email').val();
-		ghiChu			= $('#ghiChu').val();
-		if (userName == ''){
-			alert('Bạn chưa nhập userName');
-			$('#userName').focus();
-			return;
-		} else if (tenGiangVien == ''){
-			alert('Bạn chưa nhập password')
-			$('#tenGiangVien').focus();
-			return;
-		} else if (mobile == ''){
-			alert('Bạn chưa nhập số điện thoại')
-			$('#mobile').focus();
-			return;
-		} else if (maChuyenNganh == ''){
-			alert('Bạn chưa chọn nguyên ngành')
-			$('#maChuyenNganh').focus();
-			return;
-		} else if (email ==''){
-			alert('Bạn chưa nhập email');
-			$('#email').focus();
-			return;
-		}
-		data = '';
-		khoa 			= $('#khoa').is(":checked");
-		quanTri			= $('#quanTri').is(":checked");
-		taoDeTai		= $('#taoDeTai').is(":checked");
-		duyetDeTai		= $('#duyetDeTai').is(":checked");
-		thanhLapHoiDong	= $('#thanhLapHoiDong').is(":checked");
-		khoa 			= khoa  	== true ? 1 : 0;
-		quanTri			= quanTri 	== true ? 1 : 0;
-		taoDeTai		= taoDeTai 	== true ? 1 : 0;
-		duyetDeTai		= duyetDeTai== true ? 1 : 0;
-		thanhLapHoiDong	= thanhLapHoiDong== true ? 1 : 0;
-		api  = ''
-		
-			data = 		{userName: userName,
-							tenGiangVien: tenGiangVien,
-							chucDanh:chucDanh,
-							hocHamHocVi: hocHamHocVi,
-							maChuyenNganh:maChuyenNganh, 
-							donVi:donVi, 
-							email: email, 
-							ghiChu: ghiChu,
-							mobile: mobile, 
-							khoa: khoa, 
-							duyetDeTai: duyetDeTai, 
-							taoDeTai: taoDeTai, 
-							thanhLapHoiDong: thanhLapHoiDong
-						}	
-			api  = 'giangvien/add';
-			type = 'POST'
-		console.log(data)
-		$.ajax({
-			url 		: api,
-			type		: type,
-			dataType	: 'json',
-			contentType : 'application/json; charset=UTF-8',
-			data 		:  JSON.stringify(data),
-			success : function(resp) {
-				data = resp;
-				alert(data.message);
-				if (data.code==1000){
-					$('#frm').modal('hide');
-					$('#userName').val(userName);
-					$('#userName').focus();
+function frmChonTheoNam(ts){
+	CFG_NAM_HOC_MAC_DINH = $('#namHoc').val();
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="htmlKy" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == CFG_NAM_HOC_MAC_DINH){
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_NAM_HOC_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
 				}
+			} else {
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
 			}
-		});	
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
+	}
+</script>
+<script>
+	function khoiTao() {
+	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
+	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
+
+	    for (let i = 0; i < TAB.length; i++) {
+	        let tabName = TAB[i];
+	        let apiEndpoint = API[i];
+
+	        $.ajax({
+	            url: '/' + apiEndpoint, // Gọi API tương ứng với index
+	            type: 'GET',
+	            dataType: 'json',
+	            contentType: 'application/json; charset=UTF-8',
+	            success: function (resp) {
+	                let DATA = JSON.parse(JSON.stringify(resp), (key, value) => (value == null ? '' : value));
+	                localStorage.setItem(tabName, JSON.stringify(DATA));
+	            },
+	            error: function (xhr, status, error) {
+	                console.error('Lỗi khi gọi API:', apiEndpoint, error);
+	            }
+	        });
+	    }
 	}
 </script>
 </html>

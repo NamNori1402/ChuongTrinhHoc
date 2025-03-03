@@ -1,4 +1,4 @@
-package com.thanglong.chonlichthilai.taikhoan;
+package com.thanglong.chonlichthilai.giangvien;
 
 import java.util.List;
 
@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.thanglong.chonlichthilai.email.EmailDetails;
 import com.thanglong.chonlichthilai.email.EmailService;
-import com.thanglong.chonlichthilai.taikhoan.GiangVien;
-import com.thanglong.chonlichthilai.taikhoan.GiangVienService;
-import com.thanglong.chonlichthilai.util.Message;
+import com.thanglong.chonlichthilai.utils.Message;
 
 import jakarta.validation.Valid;
  
@@ -32,8 +30,8 @@ public class GiangVienController {
 	
     // Read operation
     @GetMapping("/giangvien")
-    public List<GiangVien> fetchUserList()  {
-        return service.fetchList();
+    public List<GiangVien> findAll()  {
+        return service.findAll();
     }
     @PutMapping("/giangvien/{id}")
     public GiangVien update(@RequestBody GiangVien taiKhoan, @PathVariable("id") Long Id) {
