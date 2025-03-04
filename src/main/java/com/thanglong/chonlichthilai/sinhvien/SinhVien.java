@@ -31,12 +31,17 @@ public class SinhVien {
     private String password;
     private String ten;
     private String hoTenDem;
+    private String ngaySinh;
+    private String nhapHoc;
     private String lop;
     private String khoa;
+    private String lopChuyenNganh;
     private String nganh;
     private String email1;
     private String email2;
-    private String dienThoai;
-
+    private String dienThoai1;
+    private String dienThoai2;
+    private String ghiChu;
+    private String khoaNhapHoc;
     
 }

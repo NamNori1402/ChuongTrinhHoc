@@ -33,10 +33,10 @@ public class GiangVien
     private String ghiChu;
     private String hocHam;
     private String hocVi;
-    private int giangVien = 1;
-    private int coHuu1 = 1;
-    private int coHuu2 = 0;
-    private int thinhGiang = 1;
-    private int thuKy = 0;
-    private int quanTri = 0;
+    private int giangVien;
+    private int coHuu1;
+    private int coHuu2;
+    private int thinhGiang;
+    private int thuKy;
+    private int quanTri;
 }
