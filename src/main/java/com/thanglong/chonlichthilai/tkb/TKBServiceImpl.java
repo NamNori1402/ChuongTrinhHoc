@@ -71,6 +71,9 @@ public class TKBServiceImpl implements TKBService {
     @Override public TKB findById(Long id){
         return repository.findById(id).orElse(null);
     }
+    @Override public TKB findByTtTkbTruong(Long ttTkbTruong){
+        return repository.findByTtTkbTruong(ttTkbTruong).orElse(null);
+    }
     // Update operation
 
     @Override

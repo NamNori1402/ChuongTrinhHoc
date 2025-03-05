@@ -28,8 +28,8 @@ public class TkbChiTiet {
     private String loaiHocPhan;
     private String maNguoiNhap;
     private String thu;
-    private String batDau;
-    private String ketThuc;
+    private Integer batDau;
+    private Integer ketThuc;
     private String phong;
     private String ghiChuCa;
 

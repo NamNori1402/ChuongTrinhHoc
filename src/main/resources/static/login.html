@@ -120,6 +120,8 @@
 $("#login").click(function(){
 	userName=$('#userName').val();
 	password=$('#password').val();
+	kyHoc = $('#kyHoc').val();
+	namHoc = $('#namHoc').val();
 	if (userName==''){
 		alert('Bạn chưa nhập mã sinh viên hoặc mã giảng viên');
 		$('#userName').focus();
@@ -133,7 +135,7 @@ $("#login").click(function(){
 			$('#password').focus();
 			return;
 		}
-		data = {userName: userName, password: password}
+		data = {userName: userName, password: password, maKy: kyHoc, namHoc: namHoc}
 		$.ajax({
 				url 		: '/dangnhap',
 				type		: 'POST',

@@ -418,9 +418,23 @@ function list() {
 				}
 			});
 			cols.push({ 
+				field: 'tt',
+				title: 'Lịch thi',
+				valign: 'middle',
+				align: 'center',
+				formatter : function(value,row,index) {
+					var txt = 'Chưa có';
+					if (row.ngayThi !=''){
+						txt = 'Ca '+ row.caThi +'<br/>' + row.ngayThi;	
+					}					
+					return txt;
+				}
+			});			
+			cols.push({ 
 				field: 'maGiangVien',
 				title: 'Mã GV',
-				valign: 'middle'
+				valign: 'middle',
+				align: 'center'
 			});
 			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
 				cols.push({ 
@@ -531,7 +545,9 @@ function del(ts) {
 			
 		var tkbChiTietList =  [];
 		for(i = 1 ; i <= crd.soCa; i++){
-			if ($('#batDau'+i).val() >= $('#ketThuc'+i).val()) {
+			let batDau = ($('#batDau'+i).val()) * 1;
+			let ketThuc= ($('#ketThuc'+i).val()) * 1;
+			if (batDau >= ketThuc ) {
 				alert('Kiểm tra lại Thời gian bắt đầu và thời gian kết thúc của (Ca học số '+i +')');
 				$('#batDau').focus();
 				return;
@@ -540,8 +556,8 @@ function del(ts) {
 				id		: $('#id'+i).val(),
 				ca		: i,
 				thu		: $('#thu'+i).val(),
-				batDau	: $('#batDau'+i).val(),
-				ketThuc	: $('#ketThuc'+i).val(),
+				batDau	: batDau,
+				ketThuc	: ketThuc,
 				phong	: $('#phong'+i).val(),
 				ghiChuCa: $('#ghiChuCa'+i).val()
 			});
@@ -788,7 +804,7 @@ function lichHoc(){
 				if (action =='update' && rUpdate[k-1].batDau == i){
 					batDau = 'Selected'
 				}
-				txt += '<option value="'+i+'" '+batDau+'>Tiết '+i+'</option>'
+				txt += '<option value='+i+' '+batDau+'>Tiết '+i+'</option>'
 			}
 			txt += ' 		</select>'	
 			txt += '	</td>'
@@ -799,7 +815,7 @@ function lichHoc(){
 				if (action =='update' && rUpdate[k-1].ketThuc == i){
 					ketThuc = 'Selected'
 				}
-				txt += '<option value="'+i+'" '+ketThuc+'>Tiết '+i+'</option>'
+				txt += '<option value='+i+' '+ketThuc+'>Tiết '+i+'</option>'
 			}
 			txt += ' 		</select>'	
 			txt += '	</td>'
