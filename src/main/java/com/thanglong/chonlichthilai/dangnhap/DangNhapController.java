@@ -145,4 +145,28 @@ public class DangNhapController {
     	service.deleteById(id);
         return "Deleted Successfully";
     }
+
+	public GiangVienService getService() {
+		return service;
+	}
+
+	public void setService(GiangVienService service) {
+		this.service = service;
+	}
+
+	public SinhVienService getSinhVienService() {
+		return sinhVienService;
+	}
+
+	public void setSinhVienService(SinhVienService sinhVienService) {
+		this.sinhVienService = sinhVienService;
+	}
+
+	public EmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
 }
