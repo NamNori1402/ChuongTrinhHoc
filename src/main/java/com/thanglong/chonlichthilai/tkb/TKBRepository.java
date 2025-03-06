@@ -15,5 +15,6 @@ import org.springframework.stereotype.Repository;
 //Interface
 public interface TKBRepository extends JpaRepository<TKB, Long> {
     Optional<TKB> findById(Long id);
+    Optional<TKB> findByTtTkbTruong(Long ttTkbTruong);
 }
 

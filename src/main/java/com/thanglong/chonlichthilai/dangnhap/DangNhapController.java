@@ -93,6 +93,8 @@ public class DangNhapController {
        		PhienKetNoi phienKetNoi = new PhienKetNoi();
        		
     		phienKetNoi.setUserName(userName);
+    		phienKetNoi.setMaKy(e.getMaKy());
+    		phienKetNoi.setNamHoc(e.getNamHoc());
     		if (userName.indexOf("A")==0) {
     			phienKetNoi.setUserName(userName);
     			phienKetNoi.setDsQuyen("sinhVien");    			

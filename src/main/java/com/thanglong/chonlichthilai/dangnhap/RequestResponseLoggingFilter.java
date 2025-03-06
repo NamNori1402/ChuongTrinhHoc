@@ -27,7 +27,8 @@ public class RequestResponseLoggingFilter implements Filter {
 		System.out.println("Logging Request " + req.getMethod() + ", " + req.getRequestURI());
 
 		String uri = req.getRequestURI();
-		String api [] = {"/ky","/tkb"};
+//		String api [] = {"/ky","/tkb"};
+		String api [] = {};
 		for(int i = 0; i < api.length; i++) {
 			if (uri.startsWith(api[i]) && !uri.endsWith(".html")) {
 				PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");

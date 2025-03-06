@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1>Spring Boot - Multiple file upload example - AJAX</h1>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/sb-admin-2.min.js"></script>
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="js/demo/datatables-demo.js"></script>
+<script src="js/bootstrap-table.min.js"></script>
+<form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+    <input type="text" name="extraField"/><br/><br/>
+    <input type="file" name="files"/><br/><br/>
+    <input type="file" name="files"/><br/><br/>
+    <input type="submit" value="Submit" id="btnSubmit"/>
+</form>
+
+</body>
+
+<script>
+	$(document).ready(function () {
+
+	    $("#btnSubmit").click(function (event) {
+
+	        //stop submit the form, we will post it manually.
+	        event.preventDefault();
+
+	        fire_ajax_submit();
+
+	    });
+
+	});
+
+	function fire_ajax_submit() {
+
+	    // Get form
+	    var form = $('#fileUploadForm')[0];
+
+	    var data = new FormData(form);
+
+	    data.append("CustomField", "This is some extra data, testing");
+
+	    $("#btnSubmit").prop("disabled", true);
+
+	    $.ajax({
+	        type: 'POST',
+	        enctype: 'multipart/form-data',
+	        url: "/upload",
+	        data: data,
+	        //http://api.jquery.com/jQuery.ajax/
+	        //https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+	        processData: false, //prevent jQuery from automatically transforming the data into a query string
+	        contentType: false,
+	        cache: false,
+	        timeout: 600000,
+	        success: function (data) {
+
+	            $("#result").text(data);
+	            console.log("SUCCESS : ", data);
+	            $("#btnSubmit").prop("disabled", false);
+
+	        },
+	        error: function (e) {
+
+	            $("#result").text(e.responseText);
+	            console.log("ERROR : ", e);
+	            $("#btnSubmit").prop("disabled", false);
+
+	        }
+	    });
+
+	}
+</script>
+</html>

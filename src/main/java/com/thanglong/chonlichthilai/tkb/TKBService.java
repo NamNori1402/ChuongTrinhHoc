@@ -17,6 +17,8 @@ public interface TKBService {
 	TKB update(TKB e, Long Id);
 	
 	TKB findById(Long Id);
+	
+	TKB findByTtTkbTruong(Long tt);
 		
  // Delete operation //Delete
 	void deleteById(Long Id);
