@@ -25,6 +25,8 @@ import jakarta.validation.Valid;
  
 // Annotation
 @RestController
+ 
+// Class
 public class DangNhapController {
  
     // Annotation
@@ -132,4 +134,41 @@ public class DangNhapController {
     	}
     	return message;
     }
+
+    // Update operation
+    @PutMapping("/dangnhap/{id}")
+    public GiangVien update(@RequestBody GiangVien taiKhoan, @PathVariable("id") Long id) {
+        return service.update(taiKhoan, id);
+    }
+ 
+    // Delete operation
+    @DeleteMapping("/dangnhap/{id}")
+    public String deleteById(@PathVariable("id") Long id)  {
+    	service.deleteById(id);
+        return "Deleted Successfully";
+    }
+
+	public GiangVienService getService() {
+		return service;
+	}
+
+	public void setService(GiangVienService service) {
+		this.service = service;
+	}
+
+	public SinhVienService getSinhVienService() {
+		return sinhVienService;
+	}
+
+	public void setSinhVienService(SinhVienService sinhVienService) {
+		this.sinhVienService = sinhVienService;
+	}
+
+	public EmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
 }
