@@ -228,7 +228,7 @@
 
 </body>
 <script>
-	var DATA = []
+	var DATA1 = []
 	var action
 </script>
 <script>
@@ -243,9 +243,13 @@ function list() {
 	//--------------------------------------------------------------------\
 	data = {maSinhVien: maSinhVien}
 	$.ajax({
-		url 	: URL + '/bangdiem',
-		type	: 'POST',
-		data	: data,
+		url 	: URL + '/sinhvien/'+ maSinhVien,
+		type	: 'GET',
+		contentType: 'application/json',  // ✅ Gửi JSON đúng format
+		 DATA1: JSON.stringify({ maSinhVien: maSinhVien }),  // ✅ Chuyển object thành JSON string
+		   success: function(resp) {
+		       console.log(resp);
+		   },
 		success : function(resp) {
 			checkResponse(resp)
 			console.log(resp)
@@ -254,8 +258,8 @@ function list() {
 			var cols = [];
 			// Cot 1
 			cols.push({ 
-				field: 'maHocPhan',
-				title: 'Mã Học phần',
+				field: 'maSinhVien',
+				title: 'Mã SV',
 				valign: 'middle'
 			});
 			// Cot 3
@@ -340,7 +344,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/sinhvien/'+ts.id,
+		url 		: URL +  '/sinhvien/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -383,7 +387,7 @@ $('#Save').click(function() {
 
 			trangThai 		:trangThai    ,
 		}
-		api  = 'sinhvien/'+id;
+		api  = '/sinhvien/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
@@ -448,9 +452,9 @@ $('#Save').click(function() {
 		    record.trangThai = 0;
 		} else {
 			action = 'update';
-		    for (let i = 0; i < DATA.length; i++) {
-		        if (act.id == DATA[i].id) {
-		            record = DATA[i];
+		    for (let i = 0; i < DATA1.length; i++) {
+		        if (act.id == DATA1[i].id) {
+		            record = DATA1[i];
 					record.ten 		= record.ten;
 					record.dienThoai1 	= record.dienThoai1;
 					record.dienThoai2 	= record.dienThoai2;

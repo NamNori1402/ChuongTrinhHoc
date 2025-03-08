@@ -230,7 +230,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/cathi',
+		url 		: URL + '/cathi',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -311,7 +311,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/cathi/'+ts.id,
+		url 		: URL +'/cathi/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -341,7 +341,7 @@ $('#Save').click(function() {
 			gioBatDau 				:gioBatDau  ,
 			gioKetThuc 				:gioKetThuc ,
 					}
-		api  = 'cathi/'+id;
+		api  = '/cathi/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
@@ -354,7 +354,7 @@ $('#Save').click(function() {
 	}
 	console.log(data)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',

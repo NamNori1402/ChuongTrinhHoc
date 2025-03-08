@@ -230,7 +230,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/phonghoc',
+		url 		: URL + '/phonghoc',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -299,7 +299,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/phonghoc/'+ts.id,
+		url 		: URL +'/phonghoc/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -325,7 +325,7 @@ $('#Save').click(function() {
 			id   				:id        ,
 			tenPhong 				:tenPhong  ,
 					}
-		api  = 'phonghoc/'+id;
+		api  = '/phonghoc/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
@@ -336,7 +336,7 @@ $('#Save').click(function() {
 	}
 	console.log(data)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',
