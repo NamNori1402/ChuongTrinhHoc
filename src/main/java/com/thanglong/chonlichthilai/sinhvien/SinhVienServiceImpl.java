@@ -1,5 +1,6 @@
 package com.thanglong.chonlichthilai.sinhvien;
 
+import java.util.Collections;
 //Importing required classes
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +21,20 @@ public class SinhVienServiceImpl implements SinhVienService {
  public SinhVien save(SinhVien e){
      return repository.save(e);
  }
+ @Override
+ public List<SinhVien> saveAll(List<SinhVien> list) {
+     if (list == null || list.isEmpty()) {
+         return Collections.emptyList();
+     }
+     return repository.saveAll(list);
+ }
  // Read operation
  @Override public List<SinhVien> findAll(){
      return (List<SinhVien>) repository.findAll();
+ }
+ @Override
+ public SinhVien findFirstByMaSinhVien(String maSinhVien) {
+     return repository.findFirstByMaSinhVien(maSinhVien);
  }
  // Read operation
  @Override public SinhVien findById(Long id){
@@ -43,6 +55,10 @@ public class SinhVienServiceImpl implements SinhVienService {
  @Override
  public void deleteById(Long Id){
 	 repository.deleteById(Id);
+ }
+ @Override
+ public void deleteByMaSinhVien(String maSinhVien){
+	 repository.deleteByMaSinhVien(maSinhVien);
  }
 }
 

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 public interface SinhVienRepository extends JpaRepository<SinhVien, Long> {
     Optional<SinhVien> findByMaSinhVien(String maSinhVien);
+    void deleteByMaSinhVien(String maSinhVien);
+    SinhVien findFirstByMaSinhVien(String maSinhVien);
 }
 
 

@@ -27,6 +27,13 @@ public class RequestResponseLoggingFilter implements Filter {
 		System.out.println("Logging Request " + req.getMethod() + ", " + req.getRequestURI());
 
 		String uri = req.getRequestURI();
+		if (uri.indexOf("api") >=0) {
+			PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
+			if (phienKetNoi == null) {
+				phienKhongHopLe(res,"-9");
+				return;
+			}
+		}
 //		String api [] = {"/ky","/tkb"};
 		String api [] = {};
 		for(int i = 0; i < api.length; i++) {
@@ -59,6 +66,7 @@ public class RequestResponseLoggingFilter implements Filter {
 		res.setCharacterEncoding("UTF-8");
 		res.getWriter().write(code);
 		res.getWriter().flush();
+		return;
 	}
 	// other methods
 }

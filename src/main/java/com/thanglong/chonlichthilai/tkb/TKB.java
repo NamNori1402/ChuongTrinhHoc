@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.thanglong.chonlichthilai.dangkylichthilai.DangKyLichThiLai;
 import com.thanglong.chonlichthilai.tkb.chitiet.TkbChiTiet;
 
 import jakarta.persistence.*;
@@ -39,8 +40,12 @@ public class TKB {
     private Integer trangThai;
     private String maNguoiNhap;
     private String ghiChu;
+    private Date time;
     
-    private String ngayThi;
+
+    @Temporal(TemporalType.DATE)  // Change ngayThi to Date
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date ngayThi;
     private int caThi;
     private String phongThi;
     private String hinhThucThi;
@@ -54,8 +59,6 @@ public class TKB {
     @OneToMany(mappedBy = "tkb", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference  // Prevents infinite recursion
     private List<TkbChiTiet> tkbChiTietList; // ✅ Added orphanRemoval = true
-
-  
     
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

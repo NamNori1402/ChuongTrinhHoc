@@ -21,7 +21,11 @@ public interface SinhVienService {
 		SinhVien findById(Long id);
 		
 		SinhVien findByMaSinhVien(String e);
-		
+		SinhVien findFirstByMaSinhVien(String e);
 	 // Delete operation
 		void deleteById(Long id);
+
+		void deleteByMaSinhVien(String maSinhVien);
+
+		List<SinhVien> saveAll(List<SinhVien> sinhVienList);
 	}

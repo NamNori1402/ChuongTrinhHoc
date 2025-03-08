@@ -33,7 +33,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_menuThuKy.html"></div> 
+		<div w3-include-html="_menu.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -359,7 +359,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/giangvien',
+		url 		: URL + '/giangvien',
 		type		: 'GET',
 		success : function(resp) {
 			if (resp == -9){
@@ -461,7 +461,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/ky/'+ts.id,
+		url 		: URL + '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -541,7 +541,7 @@ $('#Save1,#Save2').click(function() {
 	}
 	console.log(data)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',
@@ -640,7 +640,6 @@ $('#Save1,#Save2').click(function() {
 
 <script>includeHTML();</script> 
 <script>
-	tk=JSON.parse(localStorage.getItem('taiKhoan'));
 	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
 		$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
 	}

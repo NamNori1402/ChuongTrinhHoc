@@ -32,7 +32,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_menuThuKy.html"></div> 
+		<div w3-include-html="_menu.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -348,8 +348,7 @@
 	var action
 	var crd
 	var rUpdate;
-	const trangThaiArray = ['Mở', 'Đóng', 'Khóa'];
-	tk=JSON.parse(localStorage.getItem('taiKhoan'));
+	const trangThaiArray = ['Mở', 'Đóng', 'Khóa'];	
 	THP=JSON.parse(localStorage.getItem('TAB_HOC_PHAN'));
 	TGV=JSON.parse(localStorage.getItem('TAB_GIANG_VIEN'));
 	CA_THI=JSON.parse(localStorage.getItem('TAB_CA_THI'));
@@ -359,7 +358,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/tkb',
+		url 		: URL + '/tkb',
 		type		: 'GET',
 		success : function(resp) {
 			if (resp == -9){
@@ -424,7 +423,7 @@ function list() {
 				align: 'center',
 				formatter : function(value,row,index) {
 					var txt = 'Chưa có';
-					if (row.ngayThi !=''){
+					if (row.caThi !=0 && row.ngayThi !=''){
 						txt = 'Ca '+ row.caThi +'<br/>' + row.ngayThi;	
 					}					
 					return txt;
@@ -493,7 +492,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/tkb/'+ts.id,
+		url 		: URL + '/tkb/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -516,7 +515,7 @@ function del(ts) {
 		ttTkbTruong		= $('#ttTkbTruong').val();
 		trangThai		= $('#trangThai').val();
 		ghiChu			= $('#ghiChu').val();
-
+		
 		if (tt =='') {
 			alert('Bạn chưa nhập số thứ tự');
 			$('#tt').focus();
@@ -581,53 +580,59 @@ function del(ts) {
 			}
 		}
 		api  = ''
-		if (action == 'update') {
-			id = $('#id').val();
-			ngayThi			= $('#ngayThi').val();
-			caThi			= $('#caThi').val();
-			phongThi 		= $('#phongThi').val();
-			hinhThucThi 	= $('#hinhThucThi').val();
-			maNguoiCoiThi 	= $('#maNguoiCoiThi').val();
-			ghiChuLichThi 	= $('#ghiChuLichThi').val();
-			data = 		{	
-				id   			: id        ,
-				maKy 			: maKy  ,
-				maHocPhan 		: maHocPhan  ,
-				maLopHocPhan	: maLopHocPhan ,
-				tkbChiTietList	: tkbChiTietList,
-				maGiangVien		: maGiangVien,
-				tenLop			: tenLop,
-				ttTkbTruong		: ttTkbTruong,
-				trangThai		: trangThai,
-				ghiChu			: ghiChu,
-				
-				ngayThi			: ngayThi,
-				caThi			: caThi,
-				phongThi		: phongThi,
-				hinhThucThi		: hinhThucThi,
-				maNguoiCoiThi	: maNguoiCoiThi,
-				ghiChuLichThi	: ghiChuLichThi,
-				}
-			api  = 'tkb/'+id;
-			type = 'PUT'
-		} else {
-			data = 		{
-				maKy 			: maKy  ,
-				maHocPhan 		: maHocPhan  ,
-				maLopHocPhan	: maLopHocPhan ,
-				tkbChiTietList	: tkbChiTietList,
-				maGiangVien		: maGiangVien,
-				tenLop			: tenLop,
-				ttTkbTruong		: ttTkbTruong,
-				trangThai		: trangThai,
-				ghiChu			: ghiChu
-				}	
-			api  = '/tkb';
+		if (tk.dsQuyen == 'sinhVien'){
+			data = {tkbId : id};
+			api  = '/dangkylichthilai';
 			type = 'POST'
+		} else {
+			if (action == 'update') {
+				id = $('#id').val();
+				ngayThi			= $('#ngayThi').val();
+				caThi			= $('#caThi').val();
+				phongThi 		= $('#phongThi').val();
+				hinhThucThi 	= $('#hinhThucThi').val();
+				maNguoiCoiThi 	= $('#maNguoiCoiThi').val();
+				ghiChuLichThi 	= $('#ghiChuLichThi').val();
+				data = 		{	
+					id   			: id        ,
+					maKy 			: maKy  ,
+					maHocPhan 		: maHocPhan  ,
+					maLopHocPhan	: maLopHocPhan ,
+					tkbChiTietList	: tkbChiTietList,
+					maGiangVien		: maGiangVien,
+					tenLop			: tenLop,
+					ttTkbTruong		: ttTkbTruong,
+					trangThai		: trangThai,
+					ghiChu			: ghiChu,
+					
+					ngayThi			: ngayThi,
+					caThi			: caThi,
+					phongThi		: phongThi,
+					hinhThucThi		: hinhThucThi,
+					maNguoiCoiThi	: maNguoiCoiThi,
+					ghiChuLichThi	: ghiChuLichThi,
+					}
+				api  = '/tkb/'+id;
+				type = 'PUT'
+			} else {
+				data = 		{
+					maKy 			: maKy  ,
+					maHocPhan 		: maHocPhan  ,
+					maLopHocPhan	: maLopHocPhan ,
+					tkbChiTietList	: tkbChiTietList,
+					maGiangVien		: maGiangVien,
+					tenLop			: tenLop,
+					ttTkbTruong		: ttTkbTruong,
+					trangThai		: trangThai,
+					ghiChu			: ghiChu
+					}	
+				api  = '/tkb';
+				type = 'POST'
+			}
 		}
 		console.log('Content: ' + JSON.stringify(data))
 		$.ajax({
-			url 		: api,
+			url 		: URL + api,
 			type		: type,
 			dataType	: 'json',
 			contentType : 'application/json; charset=UTF-8',
@@ -760,6 +765,11 @@ function del(ts) {
 		}
 		if (action =='update'){
 			lichThi(record);
+		}
+		if (tk.dsQuyen =='sinhVien'){
+			$('#Save1').html('Đăng ký chọn lịch thi này');
+			$('#Save2').html('Đăng ký chọn lịch thi này');
+			$('#modal-title').html("Đăng ký chon lịch thi");
 		}
 		$('#frm').modal('show');		
 	}

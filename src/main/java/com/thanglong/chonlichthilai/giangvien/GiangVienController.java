@@ -15,8 +15,7 @@ import jakarta.validation.Valid;
  
 // Annotation
 @RestController
- 
-// Class
+@RequestMapping("/api/v1")
 public class GiangVienController {
  
     // Annotation
