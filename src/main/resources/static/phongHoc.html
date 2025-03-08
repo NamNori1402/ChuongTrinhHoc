@@ -137,7 +137,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
-								<table width="100%" border="0"><tr><td>Danh mục ca thi</td>
+								<table width="100%" border="0"><tr><td>Danh mục phòng học</td>
 								<td align="right" id="btn_InsertUpdate">
 									
 								</td>
@@ -230,7 +230,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/cathi',
+		url 		: '/phonghoc',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -252,21 +252,9 @@ function list() {
 			});
 			// Cot 1
 			cols.push({ 
-				field: 'tenCa',
-				title: 'Tên ca',
+				field: 'tenPhong',
+				title: 'Tên phòng',
 				valign: 'middle'
-			});
-			// Cot 2
-			cols.push({ 
-				field: 'gioBatDau',
-				title: 'Thời gian bắt đầu',
-				valign: 'middle'
-			});
-			// Cot 3
-			cols.push({ 
-				field: 'gioKetThuc',
-				title: 'Thời gian kết thúc',
-				valign: 'middle',
 			});
 			
 			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
@@ -311,7 +299,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/cathi/'+ts.id,
+		url 		: '/phonghoc/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -327,9 +315,7 @@ function del(ts) {
 <script>
 $('#Save').click(function() {
 	id 		= $('#id').val();
-	tenCa 	= $('#tenCa').val();
-	gioBatDau 	= $('#gioBatDau').val();
-	gioKetThuc 	= $('#gioKetThuc').val();
+	tenPhong 	= $('#tenPhong').val();
 	
 	api  = ''
 
@@ -337,19 +323,15 @@ $('#Save').click(function() {
 		id = $('#id').val();
 		data = 		{	
 			id   				:id        ,
-			tenCa 				:tenCa  ,
-			gioBatDau 				:gioBatDau  ,
-			gioKetThuc 				:gioKetThuc ,
+			tenPhong 				:tenPhong  ,
 					}
-		api  = 'cathi/'+id;
+		api  = 'phonghoc/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
-			tenCa 				:tenCa  ,
-			gioBatDau 				:gioBatDau  ,
-			gioKetThuc 				:gioKetThuc ,
+				tenPhong 				:tenPhong  ,
 			}	
-		api  = '/cathi';
+		api  = '/phonghoc';
 		type = 'POST'
 	}
 	console.log(data)
@@ -378,28 +360,22 @@ $('#Save').click(function() {
 			action = 'insert';
 		    
 
-		    record.tenCa = '';
-		    record.gioBatDau = '7:00 AM';
-		    record.gioKetThuc = '8:45 AM';
+		    record.tenPhong = '';
 		} else {
 			action = 'update';
 		    for (let i = 0; i < DATA.length; i++) {
 		        if (act.id == DATA[i].id) {
 		            record = DATA[i];
-					record.tenCa = record.tenCa;
-					record.gioBatDau 		= record.gioBatDau;
-					record.gioKetThuc 	= record.gioKetThuc;
+					record.tenPhong = record.tenPhong;
 		        }
 		    }
 		}
 		html = '';
 		html = '<table>';
 		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
-		html = html + '<tr><td>Tên ca thi </td><td><input type="text" id="tenCa" value="'+record.tenCa+'"/></td><tr>'		
-		html = html + '<tr><td>Thời gian bắt đầu </td><td><input type="time" id="gioBatDau" value="'+record.gioBatDau+'"/></td><tr>'
-		html = html + '<tr><td>Thời gian kết thúc</td><td><input type="time" id="gioKetThuc" value="'+record.gioKetThuc+'"/></td><tr>'
+		html = html + '<tr><td>Tên phòng học </td><td><input type="text" id="tenPhong" value="'+record.tenPhong+'"/></td><tr>'		
 
-		$('#modal-title').html("Ca Thi");
+		$('#modal-title').html("Phòng học");
 		$('#frm-content').html(html);
 		$('#frm').modal('show');
 		

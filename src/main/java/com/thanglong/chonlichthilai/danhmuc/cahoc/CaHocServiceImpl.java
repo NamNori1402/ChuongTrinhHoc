@@ -36,6 +36,7 @@ public class CaHocServiceImpl implements CaHocService {
     @Override
     public CaHoc update(CaHoc e, Long Id) {
     	CaHoc edb= repository.findById(Id).get();
+    	edb = e;
         return repository.save(edb);
     }
     // Delete operation

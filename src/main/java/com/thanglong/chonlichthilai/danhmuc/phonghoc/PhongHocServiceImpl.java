@@ -36,6 +36,7 @@ public class PhongHocServiceImpl implements PhongHocService {
     @Override
     public PhongHoc update(PhongHoc e, Long Id) {
     	PhongHoc edb= repository.findById(Id).get();
+    	edb = e;
         return repository.save(edb);
     }
     // Delete operation
