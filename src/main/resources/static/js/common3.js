@@ -1,3 +1,30 @@
+
+function khoiTao() {
+	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
+	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
+
+	    for (let i = 0; i < TAB.length; i++) {
+	        let tabName = TAB[i];
+	        let apiEndpoint = API[i];
+
+	        $.ajax({
+	            url: URL + '/' + apiEndpoint, // Gọi API tương ứng với index
+	            type: 'GET',
+	            dataType: 'json',
+	            contentType: 'application/json; charset=UTF-8',
+	            success: function (resp) {
+	                let DATA = JSON.parse(JSON.stringify(resp), (key, value) => (value == null ? '' : value));
+	                localStorage.setItem(tabName, JSON.stringify(DATA));
+	            },
+	            error: function (xhr, status, error) {
+	                console.error('Lỗi khi gọi API:', apiEndpoint, error);
+	            }
+	        });
+	    }
+	}
+
+
+
 var DATA_IDX;
 cfgHoiDong = [
 	{
@@ -167,7 +194,34 @@ cfgKhoa = [
 	},
 ]
 
-
+function includeHTML() {
+  var z, i, elmnt, file, xhttp;
+  /* Loop through a collection of all HTML elements: */
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    elmnt = z[i];
+    /*search for elements with a certain atrribute:*/
+    file = elmnt.getAttribute("w3-include-html");
+    if (file) {
+      /* Make an HTTP request using the attribute value as the file name: */
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+          /* Remove the attribute, and call this function once more: */
+          elmnt.removeAttribute("w3-include-html");
+          includeHTML();
+        }
+      }
+	  
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      /* Exit the function: */
+      return;
+    }
+  }
+}
 function getQueryString() {
   var key = false, res = {}, itm = null;
   // get the query string without the ?
@@ -191,6 +245,7 @@ function getQueryString() {
 }
 
 function setCookie(name,value,days) {
+	alert(name)
     var expires = "";
     if (days) {
         var date = new Date();
@@ -200,6 +255,7 @@ function setCookie(name,value,days) {
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
 function getCookie(name) {
+	alert(name)
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for(var i=0;i < ca.length;i++) {
@@ -213,115 +269,8 @@ function eraseCookie(name) {
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-function frmAddGiangVien() {
-	action = "add";
-	html = '';
-	html = '<table>';
-	html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="username" value="CTI061"/></td><tr>'
-	html = html + '<tr><td>Tên giảng viên</td><td><input type="text" id="tenGiangVien" value="Nguyễn Xuân Thanh"/></td><tr>'
-	html = html + '<tr><td>Học hàm/học vị</td><td>';
-	html = html + '<Select id="hocHamHocVi"/>'
-	for (i = 0; i < cfgHocHamHocVi.length; i++){
-		if (cfgHocHamHocVi[i]=='ThS'){
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'" Selected>'+cfgHocHamHocVi[i]+'</option>'
-		} else {
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'">'+cfgHocHamHocVi[i]+'</option>'
-		}
-	}
-	html = html + '</Select>'
-	html = html + '</td><tr>'
-	html = html + '<tr><td>Chức danh</td><td><input type="text" id="chucDanh" value="Giảng viên"/></td><tr>'
-	html = html + '<tr><td>Chuyên ngành</td>'
-	html = html + '<td>';
-	html = html + '<select id="maChuyenNganh">';
-	for(i=0; i < cfgKhoa.length; i++){
-		html = html + '<option value="" disable>Khoa '+cfgKhoa[i].tenKhoa+'</option>'
-		for(j=0; j < cfgKhoa[i].chuyenNganh.length; j++){
-			html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'">+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'
-		}
-	}
-	html = html + '</select>'
-	html = html + '</td><tr>'
-	html = html + '<tr><td>Đơn vị</td><td><input type="text" id="donVi" value="Trường Đại học Thăng Long"/></td><tr>'
-	html = html + '<tr><td>Điện thoại</td><td><input type="text" id="mobile" value="0904222294"/></td><tr>'
-	html = html + '<tr><td>Email</td><td><input type="email" id="email" value="thanhnx@thanglong.edu.vn"/></td><tr>'
-	html = html + '<tr><td>Ghi chú</td><td><input type="text" id="ghiChu"/></td><tr>'
-	html = html + '</table>'
-	html = html + '<input hidden type="checkbox" id="khoa"/>'
-	html = html + '<input hidden type="checkbox" id="taoDeTai" checked/></td><tr>'
-	html = html + '<input hidden type="checkbox" id="duyetDeTai"/></td><tr>'
-	html = html + '<input hidden type="checkbox" id="thanhLapHoiDong"/></td><tr>'
-	$('#modal-title').html("Thêm Giảng viên");
-	$('#frm-content').html(html);
-	$('#frm').modal('show');
-}
-function frmEditGiangVien(this_) {
-	record=getRecordFromID(DATA,this_.value);
-	html = '';
-	html = '<table>';
-	html = html + '<tr><td>ID</td><td><input type="text" id="id" value="'+record.id+'" readonly/></td><tr>'
-	html = html + '<tr><td>Mã giảng viên</td><td><input type="text" id="username" value="'+record.username+'" /></td><tr>'
-	html = html + '<tr><td>Tên giảng viên</td><td><input type="text" id="tenGiangVien" value="'+record.tenGiangVien+'" /></td><tr>'
-	html = html + '<tr><td>Học hàm/học vị</td><td>';
-	html = html + '<Select id="hocHamHocVi"/>'
-	for (i = 0; i < cfgHocHamHocVi.length; i++){
-		if (cfgHocHamHocVi[i]=='ThS'){
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'" Selected>'+cfgHocHamHocVi[i]+'</option>'
-		} else {
-			html = html + '<option value="'+cfgHocHamHocVi[i]+'">'+cfgHocHamHocVi[i]+'</option>'
-		}
-	}
-	html = html + '</Select>'
-	html = html + '</td><tr>'
-	html = html + '<tr><td>Chức danh</td><td><input type="text" id="chucDanh" value="'+record.chucDanh+'" /></td><tr>'
 
-	html = html + '<tr><td>Chuyên ngành</td>'
-	html = html + '<td>';
-	html = html + '<select id="maChuyenNganh">';
-	for(i=0; i < cfgKhoa.length; i++){
-		html = html + '<option value="" disable>Khoa '+cfgKhoa[i].tenKhoa+'</option>'
-		for(j=0; j < cfgKhoa[i].chuyenNganh.length; j++){
-			if (cfgKhoa[i].chuyenNganh[j].maChuyenNganh == record.maChuyenNganh){
-				html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'" selected>+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'				
-			} else {
-				html = html + '<option value="'+cfgKhoa[i].chuyenNganh[j].maChuyenNganh+'">+ '+cfgKhoa[i].chuyenNganh[j].tenChuyenNganh+'</option>'
-			}
-		}
-	}
-	html = html + '</select>'
-	html = html + '</td><tr>'	
-	
-	html = html + '<tr><td>Đơn vị</td><td><input type="text" id="donVi" value="'+record.donVi+'" /></td><tr>'
-	html = html + '<tr><td>Điện thoại</td><td><input type="text" id="mobile" value="'+record.mobile+'" /></td><tr>'
-	html = html + '<tr><td>Email</td><td><input type="text" id="email" value="'+record.email+'" /></td><tr>'
 
-	html = html + '<tr><td>Ghi chú</td><td><input type="text" id="ghiChu" value="'+record.ghiChu+'" /></td><tr>'
-	if (record.khoa=='1'){
-		html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="khoa" checked/></td><tr>'		
-	} else {
-		html = html + '<tr><td>Khóa</td><td><input type="checkbox" id="khoa" /></td><tr>'
-	}
-	if (record.taoDeTai=='1'){
-		html = html + '<tr><td>Tạo đề tài</td><td><input type="checkbox" id="taoDeTai" checked/></td><tr>'		
-	} else {
-		html = html + '<tr><td>Tạo đề tài</td><td><input type="checkbox" id="taoDeTai" /></td><tr>'
-	}
-	if (record.duyetDeTai=='1'){
-		html = html + '<tr><td>Duyệt đề tài</td><td><input type="checkbox" id="duyetDeTai" checked/></td><tr>'		
-	} else {
-		html = html + '<tr><td>Duyệt đề tài</td><td><input type="checkbox" id="duyetDeTai" /></td><tr>'
-	}
-	if (record.thanhLapHoiDong=='1'){
-		html = html + '<tr><td>Thành lập hội đồng</td><td><input type="checkbox" id="thanhLapHoiDong" checked/></td><tr>'		
-	} else {
-		html = html + '<tr><td>Thành lập hội đồng</td><td><input type="checkbox" id="thanhLapHoiDong" /></td><tr>'
-	}
-	html = html + '</table>'
-	$('#modal-title').html("Sửa Giảng viên");
-	$('#frm-content').html(html);
-	$('#frm').modal('show');
-	action = "edit";
-}
 function frmAddSinhVien() {
 	action = "add";
 	html = '';
@@ -735,4 +684,3 @@ function tinhDiem(this_, record_){
 	}
 	$('#'+arr[0]).html(tong);
 }
-

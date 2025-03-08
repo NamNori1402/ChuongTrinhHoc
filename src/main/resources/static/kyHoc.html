@@ -33,7 +33,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_menuThuKy.html"></div> 
+		<div w3-include-html="_menu.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -359,7 +359,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/ky',
+		url 		: URL + '/ky',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -482,7 +482,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/ky/'+ts.id,
+		url 		: URL + '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -539,7 +539,7 @@ $('#Save1,#Save2').click(function() {
 			ketThucChonLich  	:ketThucChonLich  ,
 			macDinh				: macDinh
 					}
-		api  = 'ky/'+id;
+		api  = '/ky/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
@@ -562,7 +562,7 @@ $('#Save1,#Save2').click(function() {
 	}
 	console.log(data)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',

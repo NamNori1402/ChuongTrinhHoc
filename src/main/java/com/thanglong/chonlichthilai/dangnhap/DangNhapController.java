@@ -25,8 +25,6 @@ import jakarta.validation.Valid;
  
 // Annotation
 @RestController
- 
-// Class
 public class DangNhapController {
  
     // Annotation
@@ -133,18 +131,5 @@ public class DangNhapController {
 			message.setContent("Tên đăng nhập hoặc tài khoản không hợp lệ, vui lòng liên hệ 0904.222.294");
     	}
     	return message;
-    }
-
-    // Update operation
-    @PutMapping("/dangnhap/{id}")
-    public GiangVien update(@RequestBody GiangVien taiKhoan, @PathVariable("id") Long id) {
-        return service.update(taiKhoan, id);
-    }
- 
-    // Delete operation
-    @DeleteMapping("/dangnhap/{id}")
-    public String deleteById(@PathVariable("id") Long id)  {
-    	service.deleteById(id);
-        return "Deleted Successfully";
     }
 }

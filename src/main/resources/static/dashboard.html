@@ -4,9 +4,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-		<div w3-include-html="_left.html"></div> 
-
-
+		<div w3-include-html="_menu.html"></div> 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -416,8 +414,8 @@
 
 </body>
 <script>
-	tk=JSON.parse(localStorage.getItem('taiKhoan'));
-	$('#userID').html(tk.tenGiangVien +' | '+ tk.username)
+	$('#userID').html(tk.ten +' | '+ tk.userName)
+	khoiTao();
 </script>
 <script>
 includeHTML();

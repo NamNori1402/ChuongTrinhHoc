@@ -27,11 +27,12 @@ public class TkbChiTiet {
 
     private String loaiHocPhan;
     private String maNguoiNhap;
-    private String thu;
+    private Integer thu;
     private Integer batDau;
     private Integer ketThuc;
     private String phong;
     private String ghiChuCa;
+    private Date time;
 
     @ManyToOne
     @JsonBackReference

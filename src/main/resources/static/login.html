@@ -150,13 +150,13 @@ $("#login").click(function(){
 						return;
 					} else {						
 						if (mess =='quanTri'){
-							window.location.replace("dashboardThuKy.html");
+							window.location.replace("dashboard.html");
 						} else if (mess =='thuKy'){
-							window.location.replace("dashboardThuKy.html");
+							window.location.replace("dashboard.html");
 						} else if (mess =='giangVien'){
-							window.location.replace("dashboardThuKy.html");
+							window.location.replace("dashboard.html");
 						} else {
-							window.location.replace("dashboardThuKy.html");
+							window.location.replace("dashboard.html");
 						}
 						console.log(resp)						
 						localStorage.setItem('taiKhoan', resp.extent);
@@ -175,8 +175,7 @@ $("#login").click(function(){
 					if (resp.code==-1){
 						alert(resp.content);
 						window.location.replace("login.html");
-					} else {
-						khoiTao();
+					} else {						
 						data=JSON.stringify(resp);
 						$('#login').html('Đăng nhập');
 						$("#userName").prop('disabled', true);
@@ -262,31 +261,6 @@ function frmChonTheoNam(ts){
 
 		$('#frm_namHoc').html(htmlNam);
 		$('#frm_kyHoc').html(htmlKy);
-	}
-</script>
-<script>
-	function khoiTao() {
-	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
-	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
-
-	    for (let i = 0; i < TAB.length; i++) {
-	        let tabName = TAB[i];
-	        let apiEndpoint = API[i];
-
-	        $.ajax({
-	            url: '/' + apiEndpoint, // Gọi API tương ứng với index
-	            type: 'GET',
-	            dataType: 'json',
-	            contentType: 'application/json; charset=UTF-8',
-	            success: function (resp) {
-	                let DATA = JSON.parse(JSON.stringify(resp), (key, value) => (value == null ? '' : value));
-	                localStorage.setItem(tabName, JSON.stringify(DATA));
-	            },
-	            error: function (xhr, status, error) {
-	                console.error('Lỗi khi gọi API:', apiEndpoint, error);
-	            }
-	        });
-	    }
 	}
 </script>
 </html>

@@ -32,7 +32,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_menuThuKy.html"></div> 
+		<div w3-include-html="_menu.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -350,7 +350,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: '/ky',
+		url 		: URL + '/ky',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -442,7 +442,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/ky/'+ts.id,
+		url 		: URL + '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -515,7 +515,7 @@ $("#Save").click(function() {
 	console.log(data)
 	alert(api)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',

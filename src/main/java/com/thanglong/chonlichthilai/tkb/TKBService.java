@@ -2,6 +2,7 @@ package com.thanglong.chonlichthilai.tkb;
 
 //Importing required classes
 import java.util.List;
+import java.util.Set;
 
 
 //Interface
@@ -22,4 +23,8 @@ public interface TKBService {
 		
  // Delete operation //Delete
 	void deleteById(Long Id);
+
+	void deleteAllByMaLopHocPhanIn(Set<String> maLopHocPhanSet);
+
+	void saveAllBatch(List<TKB> tkbBatch);
 }

@@ -33,7 +33,7 @@
 
 		<!-- Sidebar -->
 
-		<div w3-include-html="_menuThuKy.html"></div> 
+		<div w3-include-html="_menu.html"></div> 
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -44,7 +44,7 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Sidebar Toggle (Topbar) -->
+                    <!-- Sidebar Toggle (Topbfar) -->
                     <form class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
@@ -265,6 +265,12 @@
                                 </table>
                             </div>
                         </div>
+						<div class="card-body">
+						    <div class="table-responsive">
+						        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+						        </table>
+						    </div>
+						</div>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -362,98 +368,37 @@ function list() {
 		document.getElementById('maSinhVien').focus();
 		return;
 	}
+
+	//--------------------------------------------------------------------\
+	data = {maSinhVien: maSinhVien}
 	$.ajax({
-		url 		: '/sinhvien/'+maSinhVien,
-		type		: 'GET',
+		url 	: URL + '/bangdiem',
+		type	: 'POST',
+		data	: data,
 		success : function(resp) {
-			if (resp == -9){
-				alert("Phiên truy cập không hợp lệ")
-				window.location.replace("login.html");
-				return;
-			}
-			DATA = [];
-			DATA.push(resp);
+			checkResponse(resp)
+			console.log(resp)
+			DATA1 = [];
+			DATA1.push(resp);
 			var cols = [];
-			cols.push({ 
-			    title: 'STT',
-			    valign: 'middle',
-			    align: 'center',
-			    formatter: function(value, row, index) {
-			        return index + 1;
-			    }
-			});
 			// Cot 1
 			cols.push({ 
-				field: 'maSinhVien',
-				title: 'MSV',
+				field: 'maHocPhan',
+				title: 'Mã Học phần',
 				valign: 'middle'
 			});
 			// Cot 3
-			cols.push({ 
-				field: 'ten',
-				title: 'Tên',
-				valign: 'middle',
-				align: 'right',
-				formatter : function(value,row,index) {
-					txt = '';
-					txt += row.hoTenDem + ' ' + row.ten
-					return txt
-				}
-			});
-			// Cot 4
-			cols.push({ 
-				field: 'dienThoai1',
-			 	title: 'Đ.thoại 1',
-			 	valign: 'left',
-			 	align: 'center'
-			});
-			cols.push({ 
-				field: 'dienThoai2',
-			 	title: 'Đ.thoại 2',
-			 	valign: 'left',
-			 	align: 'center'
-			});
-			// Cot 4
-			cols.push({ 
-				field: 'lopChuyeNganh',
-             	title: 'Lớp CN',
-             	valign: 'left',
-             	align: 'center'
-			});
-			cols.push({ 
-				field: 'email1',
-				title: 'Email 1',
-				align: 'center',
-				valign: 'center'
-			});
-			cols.push({ 
-				field: 'email2',
-				title: 'Email 2',
-				align: 'center',
-				valign: 'center'
-			});
-			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
-				cols.push({ 
-					field: 'B',
-					title: 'Sửa',
-					align: 'center',
-					valign: 'middle',
-					clickToSelect: false,
-					formatter : function(value,row,index) {
-						return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
-					}
-				});
-			}
-			$('#dataTable').bootstrapTable("destroy");
-			$('#dataTable').bootstrapTable({
+			
+			$('#dataTable2').bootstrapTable("destroy");
+			$('#dataTable2').bootstrapTable({
 				columns: cols,
-			    data: DATA,
+			    data: DATA1,
 			    exportTypes: ['txt', 'sql', 'excel'],
 			    pageSize: 15,
 			    search: true
-			});			
+			});
 		}
-	});
+	});	
 }
 </script>
 <script>
@@ -462,7 +407,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: '/ky/'+ts.id,
+		url 		: URL + '/ky/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -542,7 +487,7 @@ $('#Save1,#Save2').click(function() {
 	}
 	console.log(data)
 	$.ajax({
-		url 		: api,
+		url 		: URL + api,
 		type		: type,
 		dataType	: 'json',
 		contentType : 'application/json; charset=UTF-8',
@@ -644,9 +589,9 @@ $('#Save1,#Save2').click(function() {
 	let txt = `
 		<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 			<div class="input-group">
-				<input value ="" id="maSinhVien" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
+				<input id="maSinhVien" value="A28198" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
 				<div class="input-group-append">
-					<button class="btn btn-primary" type="button" onclick="list();">
+					<button class="btn btn-primary" type="button"  onclick="list();">
 						<i class="fas fa-search fa-sm"></i>
 					</button>
 				</div>

@@ -8,13 +8,13 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
 //Annotation
 @Repository
 
-//Interface
 public interface CaThiRepository extends JpaRepository<CaThi, Long> {
     Optional<CaThi> findByTenCa(String tenCa);
 }

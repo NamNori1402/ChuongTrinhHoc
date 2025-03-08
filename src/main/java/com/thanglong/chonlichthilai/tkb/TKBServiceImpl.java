@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.thanglong.chonlichthilai.tkb.chitiet.TkbChiTiet;
 import com.thanglong.chonlichthilai.tkb.chitiet.TkbChiTietRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 @Service
 public class TKBServiceImpl implements TKBService {
@@ -122,10 +128,39 @@ public class TKBServiceImpl implements TKBService {
 
         return repository.save(tkb);
     }
+    @PersistenceContext
+    private EntityManager entityManager1;
 
+    @Transactional
+    @Override
+    public void saveAllBatch(List<TKB> tkbBatch) {
+        int batchSize = 50; // Adjust batch size for performance
+        for (int i = 0; i < tkbBatch.size(); i++) {
+            entityManager1.persist(tkbBatch.get(i));
+            
+            // Flush and clear periodically to avoid memory issues
+            if (i % batchSize == 0) {
+                entityManager1.flush();
+                entityManager1.clear();
+            }
+        }
+    }
     // Delete operation
     @Override
     public void deleteById(Long Id){
     	repository.deleteById(Id);
     }
+    @PersistenceContext
+    private EntityManager entityManager;
+    
+    @Transactional
+    @Override
+    public void deleteAllByMaLopHocPhanIn(Set<String> maLopHocPhanSet) {
+        Query query = entityManager1.createQuery(
+            "DELETE FROM TKB t WHERE t.maLopHocPhan IN :maLopHocPhanSet"
+        );
+        query.setParameter("maLopHocPhanSet", maLopHocPhanSet);
+        query.executeUpdate();
+    }
+
 }
