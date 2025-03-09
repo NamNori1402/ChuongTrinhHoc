@@ -39,4 +39,5 @@ public class GiangVien
     private int thinhGiang;
     private int thuKy;
     private int quanTri;
+    private int trangThai;
 }

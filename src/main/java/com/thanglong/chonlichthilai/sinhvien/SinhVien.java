@@ -14,19 +14,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-// Annotations 
+@JsonInclude(JsonInclude.Include.ALWAYS)
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 // Class 
 public class SinhVien {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
     private String maSinhVien;
     private String password;
     private String ten;
@@ -43,5 +44,5 @@ public class SinhVien {
     private String dienThoai2;
     private String ghiChu;
     private String khoaNhapHoc;
-    
+    private int trangThai;
 }

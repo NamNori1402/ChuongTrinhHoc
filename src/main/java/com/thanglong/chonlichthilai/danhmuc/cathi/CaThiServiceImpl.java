@@ -36,6 +36,7 @@ public class CaThiServiceImpl implements CaThiService {
     @Override
     public CaThi update(CaThi e, Long Id) {
     	CaThi edb= repository.findById(Id).get();
+    	edb = e;
         return repository.save(edb);
     }
     // Delete operation

@@ -137,7 +137,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
-								<table width="100%" border="0"><tr><td>Danh mục ca học</td>
+								<table width="100%" border="0"><tr><td>Danh mục ca thi</td>
 								<td align="right" id="btn_InsertUpdate">
 									
 								</td>
@@ -230,7 +230,7 @@
 <script>
 function list() {
 	$.ajax({
-		url 		: URL + '/cahoc',
+		url 		: URL + '/cathi',
 		type		: 'GET',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -311,7 +311,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: URL +'/cahoc/'+ts.id,
+		url 		: URL +'/cathi/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -341,7 +341,7 @@ $('#Save').click(function() {
 			gioBatDau 				:gioBatDau  ,
 			gioKetThuc 				:gioKetThuc ,
 					}
-		api  =  '/cahoc/'+id;
+		api  = '/cathi/'+id;
 		type = 'PUT'
 	} else {
 		data = 		{
@@ -349,7 +349,7 @@ $('#Save').click(function() {
 			gioBatDau 				:gioBatDau  ,
 			gioKetThuc 				:gioKetThuc ,
 			}	
-		api  = '/cahoc';
+		api  = '/cathi';
 		type = 'POST'
 	}
 	console.log(data)
@@ -395,11 +395,11 @@ $('#Save').click(function() {
 		html = '';
 		html = '<table>';
 		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
-		html = html + '<tr><td>Tên ca học </td><td><input type="text" id="tenCa" value="'+record.tenCa+'"/></td><tr>'		
+		html = html + '<tr><td>Tên ca thi </td><td><input type="text" id="tenCa" value="'+record.tenCa+'"/></td><tr>'		
 		html = html + '<tr><td>Thời gian bắt đầu </td><td><input type="time" id="gioBatDau" value="'+record.gioBatDau+'"/></td><tr>'
 		html = html + '<tr><td>Thời gian kết thúc</td><td><input type="time" id="gioKetThuc" value="'+record.gioKetThuc+'"/></td><tr>'
 
-		$('#modal-title').html("Ca Học");
+		$('#modal-title').html("Ca Thi");
 		$('#frm-content').html(html);
 		$('#frm').modal('show');
 		

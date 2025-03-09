@@ -36,6 +36,7 @@ public class HinhThucServiceImpl implements HinhThucThiService {
     @Override
     public HinhThucThi update(HinhThucThi e, Long Id) {
     	HinhThucThi edb= repository.findById(Id).get();
+    	edb =e;
         return repository.save(edb);
     }
     // Delete operation
