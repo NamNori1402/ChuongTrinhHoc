@@ -148,7 +148,8 @@ $("#login").click(function(){
 						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ');
 						window.location.replace("login.html");
 						return;
-					} else {						
+					} else {		
+						localStorage.setItem('taiKhoan', resp.extent);				
 						if (mess =='quanTri'){
 							window.location.replace("dashboard.html");
 						} else if (mess =='thuKy'){
@@ -159,7 +160,6 @@ $("#login").click(function(){
 							window.location.replace("dashboard.html");
 						}
 						console.log(resp)						
-						localStorage.setItem('taiKhoan', resp.extent);
 					}
 				}
 		});	

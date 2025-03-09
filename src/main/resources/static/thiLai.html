@@ -259,6 +259,9 @@
 								</tr></table>
 							</h6>
                         </div>
+						<div class="form-group">
+							<div id="loading" style="width: 40%; margin:0 auto"></div>
+						</div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -358,10 +361,12 @@
 </script>
 <script>
 function list() {
+	$('#loading').html(loading)
 	$.ajax({
 		url 		: URL + '/dangkylichthilai',
 		type		: 'GET',
 		success : function(resp) {
+			$('#loading').html('')
 			if (resp == -9){
 				alert("Phiên truy cập không hợp lệ")
 				window.location.replace("login.html");
@@ -423,10 +428,10 @@ function list() {
 				align: 'center',
 				formatter : function(value,row,index) {
 					var txt = 'Chưa có';
-					let caThi = getCaThi(row.ca_thi);
+					let caThi = getCaThi(row.ca_thi);		
 					if (caThi.id != 0){
 						txt = caThi.tenCa +'<br/>' +caThi.gioBatDau +'-'+caThi.gioKetThuc + '<br/>' + row.ngay_thi;	
-					}		
+					}					
 					return txt;
 				}
 			});			

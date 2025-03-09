@@ -1,27 +1,5 @@
 
-function khoiTao() {
-	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
-	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
 
-	    for (let i = 0; i < TAB.length; i++) {
-	        let tabName = TAB[i];
-	        let apiEndpoint = API[i];
-
-	        $.ajax({
-	            url: URL + '/' + apiEndpoint, // Gọi API tương ứng với index
-	            type: 'GET',
-	            dataType: 'json',
-	            contentType: 'application/json; charset=UTF-8',
-	            success: function (resp) {
-	                let DATA = JSON.parse(JSON.stringify(resp), (key, value) => (value == null ? '' : value));
-	                localStorage.setItem(tabName, JSON.stringify(DATA));
-	            },
-	            error: function (xhr, status, error) {
-	                console.error('Lỗi khi gọi API:', apiEndpoint, error);
-	            }
-	        });
-	    }
-	}
 
 
 

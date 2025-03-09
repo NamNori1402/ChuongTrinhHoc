@@ -38,7 +38,8 @@ public class BangDiemController {
 
     @PostMapping("/bangdiem")
     public List<BangDiem> findSinhVien(@Valid @RequestBody SinhVien maSinhVien, ServletRequest request)  {
-    	return service.findByMsv(maSinhVien.getMaSinhVien());
+    	List<BangDiem> e = service.findByMsv(maSinhVien.getMaSinhVien());
+    	return e;
 //    	String sql = "SELECT * from bang_diem where msv ='"+msv+"'";
 //        String result = service.querySQL(sql); // Trả về danh sách map
 //        return ResponseEntity.ok(result);

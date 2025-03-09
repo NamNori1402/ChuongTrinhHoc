@@ -1,5 +1,6 @@
 package com.thanglong.chonlichthilai.hocphan;
 
+import java.util.List;
 import java.util.Optional;
 
 //Java Program to Illustrate DepartmentRepository File
@@ -7,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.thanglong.chonlichthilai.bangdiem.BangDiem;
 
 
 //Annotation
@@ -16,7 +19,5 @@ import org.springframework.stereotype.Repository;
 
 public interface HocPhanRepository extends JpaRepository<HocPhan, Long> {
     Optional<HocPhan> findByMaHocPhan(String maHocPhan);
+
 }
-
-
-

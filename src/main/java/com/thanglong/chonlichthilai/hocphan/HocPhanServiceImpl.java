@@ -1,10 +1,13 @@
 package com.thanglong.chonlichthilai.hocphan;
 
+import java.util.Collections;
 //Importing required classes
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.thanglong.chonlichthilai.bangdiem.BangDiem;
 
 
 //Annotation
@@ -43,6 +46,13 @@ public class HocPhanServiceImpl implements HocPhanService {
  @Override
  public void deleteById(Long Id){
 	 repository.deleteById(Id);
+ }
+ @Override
+ public List<HocPhan> saveAll(List<HocPhan> list) {
+     if (list == null || list.isEmpty()) {
+         return Collections.emptyList();
+     }
+     return repository.saveAll(list);
  }
 }
 

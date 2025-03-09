@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.thanglong.chonlichthilai.bangdiem.BangDiem;
 import com.thanglong.chonlichthilai.bangdiem.BangDiemService;
 import com.thanglong.chonlichthilai.dangnhap.PhienKetNoi;
+import com.thanglong.chonlichthilai.hocphan.HocPhan;
+import com.thanglong.chonlichthilai.hocphan.HocPhanService;
 import com.thanglong.chonlichthilai.sinhvien.SinhVien;
 import com.thanglong.chonlichthilai.sinhvien.SinhVienService;
 import com.thanglong.chonlichthilai.tkb.TKB;
@@ -36,6 +38,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +68,7 @@ public class RestUploadController {
     @Autowired private TkbChiTietService serviceChiTiet;
     @Autowired private BangDiemService serviceBangDiem;
     @Autowired private SinhVienService serviceSinhVien;
+    @Autowired private HocPhanService serviceHocPhan;
 	// Save the uploaded file to this folder
 	private static String UPLOADED_FOLDER = "F://temp//";
 
@@ -257,13 +261,16 @@ public class RestUploadController {
 	                } else if (up.equals("diem")) {
 	                    List<BangDiem> bangDiemList = new ArrayList<>();
 	                    List<SinhVien> sinhVienList = new ArrayList<>();
+	                    List<HocPhan> hocPhanList = new ArrayList<>();
 	                    Set<String> msvSet = new HashSet<>();
+	                    HashMap<String, String> hm = new HashMap<String,String>();
 
 	                    // Duyệt qua sheet để thu thập dữ liệu
 	                    for (Row row : (Iterable<Row>) sheet) {
 	                        if (row.getRowNum() == 0) continue; // Bỏ qua dòng tiêu đề
 
 	                        String msv = getStringValueFromCell(row.getCell(0));
+	                        msv = msv.trim();
 	                        if (msv == null || msv.length() < 5) break;
 
 	                        msvSet.add(msv); // Thu thập danh sách mã sinh viên để xử lý hàng loạt
@@ -276,21 +283,40 @@ public class RestUploadController {
 	                            sv.setEmail1(msv + "@thanglong.edu.vn");
 	                            sinhVienList.add(sv);
 	                        }
-
+	                        String maHocPhan = getStringValueFromCell(row.getCell(1));
+	                        HocPhan existingHocPhan = null;
+	                        if(!hm.containsKey(maHocPhan)) {
+	                        	existingHocPhan = serviceHocPhan.findByMaHocPhan(maHocPhan);	
+		                        if (existingHocPhan == null) {
+		                            HocPhan hp = new HocPhan();
+		                            hp.setMaHocPhan(maHocPhan);
+		                            hp.setTenHocPhan(getStringValueFromCell(row.getCell(5)));
+		                            hp.setSoTinChi(Integer.parseInt(getStringValueFromCell(row.getCell(8))));
+		                            hm.put(maHocPhan,"");
+		                            hocPhanList.add(hp);
+		                        }
+	                        }
 	                        // Tạo mới bảng điểm
 	                        BangDiem bangDiem = new BangDiem();
 	                        bangDiem.setMsv(msv);
 	                        bangDiem.setMaHocPhan(getStringValueFromCell(row.getCell(1)));
-	                        bangDiem.setDiemTongKet(Float.parseFloat(getStringValueFromCell(row.getCell(2))));
+	                        if (msv.equals("A49570")) {
+	                        	float f = Float.parseFloat(getStringValueFromCell(row.getCell(2)));
+	                        }
+	                        String s1 = row.getCell(2).toString();
+	                        s1 = s1.trim();
+	                        s1 = s1.replaceAll(",", ".");
+	                        bangDiem.setDiemTongKet(Float.parseFloat(s1));
 	                        bangDiem.setSoLanThi(Integer.parseInt(getStringValueFromCell(row.getCell(4))));
 	                        bangDiem.setTime(t);
+	                        bangDiem.setSoTinChi(Integer.parseInt(getStringValueFromCell(row.getCell(8))));
 	                        bangDiemList.add(bangDiem);
 	                    }
 
 	                    // Xóa điểm cũ theo danh sách mã sinh viên (nếu có)
 	                    if (!msvSet.isEmpty()) {
 	                        serviceBangDiem.deleteAllByMsv(msvSet);
-	                        diemDelete += msvSet.size();
+	                        diemDelete = msvSet.size();
 	                    }
 
 	                    // Lưu danh sách sinh viên mới
@@ -316,12 +342,31 @@ public class RestUploadController {
 	                    // Lưu danh sách điểm mới
 	                    if (!bangDiemList.isEmpty()) {
 	                        serviceBangDiem.saveAll(bangDiemList);
-	                        diemInsert += bangDiemList.size();
+	                        diemInsert = bangDiemList.size();
 	                    }
-	  	                str = "Bảng điểm: -> Xóa: " + diemDelete +"; Insert: "+ diemInsert +"; Thêm sinh viên: "+ svInsert;
+	                    // Danh sach hoc phan moi
+	                    if (!hocPhanList.isEmpty()) {
+	                    	String m = "";
+	                    	try {
+	                    		serviceHocPhan.saveAll(hocPhanList);
+	                    	} catch (Exception e) {
+		                    	for (HocPhan hp : hocPhanList) {
+		                    		m = hp.getMaHocPhan();
+		                    		try {
+		                    			serviceHocPhan.save(hp);
+		                    		} catch (Exception e1) {
+		                    			str = "Có lỗi khi Insert hoc phan: " + m + "; " + e.getMessage();	                    		
+		                    			System.out.println(m);
+		                    			e.printStackTrace();
+		                    		}             
+		                    	}
+	                    	}	                        
+	                    }
+	                    
+	  	                str = "Bảng điểm: -> Xóa sinh viên: " + diemDelete +"; Insert: "+ diemInsert +" sinh viên; Thêm sinh viên: "+ svInsert;
 	                }
 	            } catch (Exception e) {
-	                System.err.println("Lỗi xử lý file: " + file.getOriginalFilename());
+	            	str = "Lỗi xử lý file: " + file.getOriginalFilename() + "; " + str;
 	                e.printStackTrace();
 	                System.out.println(TKB.builder());
 	            }

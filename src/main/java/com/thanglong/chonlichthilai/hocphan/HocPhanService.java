@@ -2,6 +2,8 @@ package com.thanglong.chonlichthilai.hocphan;
 //Importing required classes
 import java.util.List;
 
+import com.thanglong.chonlichthilai.bangdiem.BangDiem;
+
 
 
 
@@ -24,5 +26,5 @@ public interface HocPhanService {
 		
 	 // Delete operation
 		void deleteById(Long id);
-
+		List<HocPhan> saveAll(List<HocPhan> list);
 	}

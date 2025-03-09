@@ -96,8 +96,11 @@ public class DangNhapController {
     		phienKetNoi.setMaKy(e.getMaKy());
     		phienKetNoi.setNamHoc(e.getNamHoc());
     		if (userName.indexOf("A")==0) {
+    			SinhVien sinhVien = (SinhVien)obj;
     			phienKetNoi.setUserName(userName);
-    			phienKetNoi.setDsQuyen("sinhVien");    			
+    			phienKetNoi.setDsQuyen("sinhVien");   
+    			phienKetNoi.setTen(sinhVien.getTen());
+    			phienKetNoi.setHoTenDem(sinhVien.getHoTenDem());
     			message.setCode(0);
     			message.setContent("sinhVien");    			
     		} else {

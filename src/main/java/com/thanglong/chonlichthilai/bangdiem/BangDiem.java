@@ -4,6 +4,7 @@ package com.thanglong.chonlichthilai.bangdiem;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thanglong.chonlichthilai.tkb.TKB;
 
 import jakarta.persistence.Entity;
@@ -34,6 +35,8 @@ public class BangDiem
     private String maHocPhan;
     private float diemTongKet;
     private Integer soLanThi;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date time;
+    private Integer soTinChi;
     
 }

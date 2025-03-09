@@ -383,20 +383,22 @@ function list() {
 			cols.push({ 
 				field: 'maKy',
 				title: 'Mã Kỳ',
-				valign: 'middle'
+				valign: 'middle',
+				align: 'center',
 			});
 			// Cot 2
 			cols.push({ 
 				field: 'maNam',
 				title: 'Năm học',
-				valign: 'middle'
+				valign: 'middle',
+				align: 'center',
 			});
 			// Cot 3
 			cols.push({ 
 				field: 'batDauKyHoc',
 				title: 'Thời gian học',
 				valign: 'middle',
-				align: 'right',
+				align: 'center',
 				formatter : function(value,row,index) {
 					batDau  = row.batDauKyHoc.split(" 00:00:00").join("");
 					ketThuc = row.ketThucKyHoc.split(" 00:00:00").join("");

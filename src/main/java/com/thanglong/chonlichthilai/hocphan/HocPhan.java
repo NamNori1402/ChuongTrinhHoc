@@ -34,6 +34,8 @@ public class HocPhan {
     private String lienLac;
     private String maGiangVien;
     private String moRong;
+    private Integer soTinChi;
+    
     
     @Column(name="so_ca", columnDefinition="int(1) default 2")
     private int soCa;

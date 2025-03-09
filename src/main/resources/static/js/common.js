@@ -66,7 +66,21 @@ function formatDate(date, daysToAdd = 0) {
     let month = ("0" + (d.getMonth() + 1)).slice(-2);
     return `${d.getFullYear()}-${month}-${day}`;
 }
-
+//-------------------------------------------------------------------------------------------------------------------------
+var TAB_HOC_PHAN=JSON.parse(localStorage.getItem('TAB_HOC_PHAN'));
+function getHocPhan(maHocPhan) {
+	for(i = 0; i < TAB_HOC_PHAN.length; i++){
+		if(TAB_HOC_PHAN[i].maHocPhan == maHocPhan){
+			return TAB_HOC_PHAN[i];
+		}
+	}
+	var hocPhan = {
+       maHocPhan: maHocPhan,
+       tenHocPhan: 'Chưa xác định'
+   };
+	return hocPhan
+}
+//-
 //-------------------------------------------------------------------------------------------------------------------------
 var TAB_GIANG_VIEN=JSON.parse(localStorage.getItem('TAB_GIANG_VIEN'));
 function getGiangVien(maGiangVien) {
@@ -84,6 +98,7 @@ function getCaThi(caThi) {
 			return TAB_CA_THI[i];
 		}
 	}
+	return 0;
 }
 function checkResponse(resp) {
 	if (resp == -9){
@@ -92,6 +107,30 @@ function checkResponse(resp) {
 		return;
 	}	
 }
+//
+function khoiTao() {
+	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
+	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
+
+	    for (let i = 0; i < TAB.length; i++) {
+	        let tabName = TAB[i];
+	        let apiEndpoint = API[i];
+
+	        $.ajax({
+	            url: URL + '/' + apiEndpoint, // Gọi API tương ứng với index
+	            type: 'GET',
+	            dataType: 'json',
+	            contentType: 'application/json; charset=UTF-8',
+	            success: function (resp) {
+	                let DATA = JSON.parse(JSON.stringify(resp), (key, value) => (value == null ? '' : value));
+	                localStorage.setItem(tabName, JSON.stringify(DATA));
+	            },
+	            error: function (xhr, status, error) {
+	                console.error('Lỗi khi gọi API:', apiEndpoint, error);
+	            }
+	        });
+	    }
+	}
 //-------------------------------------------------------------------------------------------------------------------------
 function includeHTML() {
   var z, i, elmnt, file, xhttp;
