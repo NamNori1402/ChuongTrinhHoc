@@ -136,8 +136,11 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
+							
                             <h6 class="m-0 font-weight-bold text-primary">
-								<table width="100%" border="0"><tr><td>Danh sách sinh viên</td>
+								<table width="100%" border="0">
+									<tr>
+										<td>Thông tin sinh viên</td>
 								<td align="right" id="btn_InsertUpdate">
 								</td>
 								</tr></table>
@@ -145,13 +148,19 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
                                 </table>
                             </div>
                         </div>
 						<div class="card-body">
 						    <div class="table-responsive">
 						        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+						        </table>
+						    </div>
+						</div>
+						<div class="card-body">
+						    <div class="table-responsive">
+						        <table class="table table-bordered" id="dataTable3" width="100%" cellspacing="0">
 						        </table>
 						    </div>
 						</div>
@@ -239,103 +248,304 @@ function list() {
 		document.getElementById('maSinhVien').focus();
 		return;
 	}
-
-	//--------------------------------------------------------------------\
+	//--------------------------------------------------------------------
 	data = {maSinhVien: maSinhVien}
-	$.ajax({
-		url 	: URL + '/sinhvien/'+ maSinhVien,
-		type	: 'GET',
-		contentType: 'application/json',  // ✅ Gửi JSON đúng format
-		 DATA1: JSON.stringify({ maSinhVien: maSinhVien }),  // ✅ Chuyển object thành JSON string
-		   success: function(resp) {
-		       console.log(resp);
-		   },
-		success : function(resp) {
-			checkResponse(resp)
-			console.log(resp)
-			DATA1 = [];
-			DATA1.push(resp);
-			var cols = [];
-			// Cot 1
-			cols.push({ 
-				field: 'maSinhVien',
-				title: 'Mã SV',
-				valign: 'middle'
-			});
-			// Cot 3
-			cols.push({ 
-				field: 'ten',
-				title: 'Tên',
-				valign: 'middle',
-				/*formatter : function(value,row,index) {
-					txt = '';
-					txt += row.hoTenDem + ' ' + row.ten
-					return txt
-				}*/
-			});
-			// Cot 4
-			cols.push({ 
-				field: 'dienThoai1',
-			 	title: 'Đ.thoại 1',
-			 	valign: 'left',
-			 	align: 'center'
-			});
-			cols.push({ 
-				field: 'dienThoai2',
-			 	title: 'Đ.thoại 2',
-			 	valign: 'left',
-			 	align: 'center'
-			});
-			// Cot 4
-			cols.push({ 
-				field: 'lopChuyenNganh',
-             	title: 'Lớp CN',
-             	valign: 'left',
-             	align: 'center'
-			});
-			cols.push({ 
-				field: 'email1',
-				title: 'Email 1',
-				align: 'center',
-				valign: 'center'
-			});
-			cols.push({ 
-				field: 'email2',
-				title: 'Email 2',
-				align: 'center',
-				valign: 'center'
-			});
-			cols.push({ 
-				field: 'trangThai',
-				title: 'Trạng thái',
-				align: 'center',
-				valign: 'center',
-				formatter: function(value, row, index) {
-				       return value == 0 ? "Mở" : "Khóa";
-				   },
-			});
-			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
+	var chuaHoanThanh = [];
+	var soTin = 0;
+		$.ajax({
+			url 	: URL + '/bangdiem',
+			contentType: 'application/json',
+			type	: 'POST',
+			data	: JSON.stringify(data),
+			contentType: 'application/json',  // ✅ Gửi JSON đúng format
+			 DATA1: JSON.stringify({ maSinhVien: maSinhVien }),  // ✅ Chuyển object thành JSON string
+			   success: function(resp) {
+			       console.log(resp);
+			   },
+			success : function(resp) {
+				checkResponse(resp)
+				for(i = 0; i < resp.length; i++){
+					if (resp[i].diemTongKet >=4){
+						soTin += resp[i].soTinChi;	
+					}
+				}
+				var cols = [];
 				cols.push({ 
-					field: 'B',
-					title: 'Sửa',
-					align: 'center',
+				    title: 'STT',
+				    valign: 'middle',
+				    align: 'center',
+				    formatter: function(value, row, index) {
+				        return index + 1;
+				    }
+				});
+				cols.push({ 
+					field: 'maHocPhan',
+					title: 'Mã HP',
+					valign: 'middle'
+				});
+				cols.push({ 
+					field: 'maHocPhan',
+					title: 'Tên học phần',
 					valign: 'middle',
-					clickToSelect: false,
-					formatter : function(value,row,index) {
-						return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+					formatter: function(value, row, index) {
+					    return getHocPhan(row.maHocPhan).tenHocPhan;
+					}			
+				});		
+				cols.push({ 
+					field: 'diemTongKet',
+					title: 'Điểm tổng kết',
+					valign: 'middle',
+					align: 'right',
+					formatter: function(value, row, index) {
+						var txt = '';
+						if (row.diemTongKet < 4) {
+							chuaHoanThanh.push(row)
+							return `<span style="color: red; background-color: yellow; padding: 2px;">${row.diemTongKet}</span>`;
+						} else {
+							return row.diemTongKet
+						}					
+					}	
+				});
+				cols.push({ 
+					field: 'soLanThi',
+					title: 'Số lần thi lại',
+					valign: 'middle',
+					align: 'right',
+					formatter: function(value, row, index) {
+						var txt = '';
+						if (row.soLanThi > 0) {
+							return `<span style="color: red; background-color: yellow; padding: 2px;">${row.soLanThi}</span>`;
+						} else {
+							return ''
+						}					
 					}
 				});
-			}
-			$('#dataTable').bootstrapTable("destroy");
-			$('#dataTable').bootstrapTable({
-				columns: cols,
-			    data: DATA1,
-			    exportTypes: ['txt', 'sql', 'excel'],
-			    pageSize: 15,
-			    search: true
-			});
+				cols.push({ 
+					field: 'time',
+					title: 'Cập nhật lúc',
+					valign: 'middle',
+					align: 'center'
+				});
+				cols.push({ 
+					field: 'soTinChi',
+					title: 'Số tín chỉ',
+					valign: 'middle',
+					align: 'right'
+				});
+				$('#dataTable3').bootstrapTable("destroy");
+				$('#dataTable3').bootstrapTable({
+					columns: cols,
+				    data: resp,
+				    exportTypes: ['txt', 'sql', 'excel'],
+				});
+				$('#dataTable2').bootstrapTable("destroy");
+				$('#dataTable2').bootstrapTable({
+					columns: cols,
+				    data: chuaHoanThanh,
+				    exportTypes: ['txt', 'sql', 'excel'],
+				});
+				//
+				$.ajax({
+					url 		: URL + '/sinhvien/'+maSinhVien,
+					type		: 'GET',
+					success : function(resp) {
+						checkResponse(resp)
+						console.log(resp)
+						DATA = [];
+						DATA.push(resp);
+						var cols = [];
+						cols.push({ 
+						    title: 'STT',
+						    valign: 'middle',
+						    align: 'center',
+						    formatter: function(value, row, index) {
+						        return index + 1;
+						    }
+						});
+						// Cot 1
+						cols.push({ 
+							field: 'maSinhVien',
+							title: 'MSV',
+							valign: 'middle'
+						});
+						// Cot 3
+						cols.push({ 
+							field: 'ten',
+							title: 'Tên',
+							valign: 'middle',
+							align: 'right',
+							formatter : function(value,row,index) {
+								txt = '';
+								row.hoTenDem = row.hoTenDem == null ? '' : row.hoTenDem
+								txt += row.hoTenDem + ' ' + row.ten
+								return txt
+							}
+						});
+						// Cot 4
+						cols.push({ 
+							field: 'dienThoai1',
+						 	title: 'Đ.thoại 1',
+						 	valign: 'middle',
+						 	align: 'center'
+						});
+						cols.push({ 
+							field: 'dienThoai2',
+						 	title: 'Đ.thoại 2',
+						 	valign: 'middle',
+						 	align: 'center'
+						});
+						// Cot 4
+						cols.push({ 
+							field: 'lopChuyeNganh',
+				         	title: 'Lớp CN',
+				         	valign: 'middle',
+				         	align: 'center'
+						});
+						cols.push({ 
+							field: 'email1',
+							title: 'Email 1',
+							align: 'center',
+							valign: 'middle'
+						});
+						cols.push({ 
+							field: 'email2',
+							title: 'Email 2',
+							align: 'center',
+							valign: 'middle'
+						});
+						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
+							cols.push({ 
+								field: 'B',
+								title: 'Sửa',
+								align: 'center',
+								valign: 'middle',
+								clickToSelect: false,
+								formatter : function(value,row,index) {
+									return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+								}
+							});
+						}
+						$('#dataTable1').bootstrapTable("destroy");
+						$('#dataTable1').bootstrapTable({
+							columns: cols,
+						    data: DATA,
+						    exportTypes: ['txt', 'sql', 'excel'],
+						    pageSize: 15,
+						    search: true
+						});
+					}
+				});
+				//
+				$.ajax({
+						url 		: URL + '/sinhvien/'+maSinhVien,
+						type		: 'GET',
+						success : function(resp) {
+							checkResponse(resp)
+							DATA = [];
+							resp.soTin = soTin;
+							DATA.push(resp);
+							console.log(resp)
+							var cols = [];
+							cols.push({ 
+							    title: 'STT',
+							    valign: 'middle',
+							    align: 'center',
+							    formatter: function(value, row, index) {
+							        return index + 1;
+							    }
+							});
+							// Cot 1
+							cols.push({ 
+								field: 'maSinhVien',
+								title: 'MSV',
+								align: 'center',
+								valign: 'middle'
+							});
+							cols.push({ 
+								field: 'soTin',
+								title: 'Tổng số tín',
+								align: 'center',
+								valign: 'middle',
+								formatter : function(value,row,index) {		
+									return soTin;
+								}
+							});
+							cols.push({ 
+								field: 'Khoa',
+								title: 'Khóa',
+								align: 'center',
+								valign: 'middle',
+								formatter : function(value,row,index) {					
+									return '<span title="Khóa hiện tại">' + row.khoa + '</span>/<span title="Khóa nhập học">' + row.khoaNhapHoc + '</span>'
+								}				
+							});
+							// Cot 3
+							cols.push({ 
+								field: 'ten',
+								title: 'Tên',
+								valign: 'middle',
+								align: 'left',
+								formatter : function(value,row,index) {
+									txt = '';
+									row.hoTenDem = row.hoTenDem == null ? '' : row.hoTenDem
+									txt += row.hoTenDem + ' ' + row.ten
+									return txt
+								}
+							});
+							// Cot 4
+							cols.push({ 
+								field: 'dienThoai1',
+							 	title: 'Đ.thoại 1',
+							 	valign: 'middle',
+							 	align: 'center'
+							});
+							cols.push({ 
+								field: 'dienThoai2',
+							 	title: 'Đ.thoại 2',
+							 	valign: 'middle',
+							 	align: 'center'
+							});
+							// Cot 4
+							cols.push({ 
+								field: 'lopChuyenNganh',
+					         	title: 'Lớp chuyên ngành',
+					         	valign: 'middle',
+					         	align: 'center'
+							});
+							cols.push({ 
+								field: 'email1',
+								title: 'Email1',
+								align: 'left',
+								valign: 'middle'
+							});
+							cols.push({ 
+								field: 'email2',
+								title: 'Email 2',
+								align: 'center',
+								valign: 'middle'
+							});
+							if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
+								cols.push({ 
+									field: 'B',
+									title: 'Sửa',
+									align: 'center',
+									valign: 'middle',
+									clickToSelect: false,
+									formatter : function(value,row,index) {
+										return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+									}
+								});
+							}
+							$('#dataTable1').bootstrapTable("destroy");
+							$('#dataTable1').bootstrapTable({
+								columns: cols,
+							    data: DATA,
+							    exportTypes: ['txt', 'sql', 'excel'],
+							});
+						}
+					});
 		}
-	});	
+	});
 }
 </script>
 <script>
@@ -357,74 +567,8 @@ function del(ts) {
 <script>
 
 </script>
-<script>
-$('#Save').click(function() {
-	id 		= $('#id').val();
-	maSinhVien 	= $('#maSinhVien').val();
-	ten 	= $('#ten').val();
-	dienThoai1 	= $('#dienThoai1').val();
-	dienThoai2 		= $('#dienThoai2').val();
-	lopChuyenNganh		= $('#lopChuyenNganh').val();
-	email1		= $('#email1').val();
-	email2 		= $('#email2').val();
-	trangThai = $('#trangThai').is(':checked') ? 1 : 0;
-	api  = ''
 
-	if (action == 'update') {
-		id = $('#id').val();
-		data = 		{	
-			id   				:id        ,
-			maSinhVien 				:maSinhVien  ,
-			ten 				:ten  ,
-			
-			dienThoai1 				:dienThoai1 ,
-			dienThoai2			: dienThoai2,
-			
-			lopChuyenNganh		: lopChuyenNganh  ,
-			
-			email1 		:email1     ,
-			email2  	:email2    ,
 
-			trangThai 		:trangThai    ,
-		}
-		api  = '/sinhvien/'+id;
-		type = 'PUT'
-	} else {
-		data = 		{
-			maSinhVien 				:maSinhVien  ,
-			ten 				:ten  ,
-						
-			dienThoai1 				:dienThoai1 ,
-			dienThoai2			: dienThoai2,
-						
-			lopChuyenNganh		: lopChuyenNganh  ,
-						
-			email1 		:email1     ,
-			email2  	:email2    ,
-
-			trangThai 		:trangThai    ,
-			}	
-		api  = '/sinhvien';
-		type = 'POST'
-	}
-	console.log(data)
-	$.ajax({
-		url 		: URL + api,
-		type		: type,
-		dataType	: 'json',
-		contentType : 'application/json; charset=UTF-8',
-		data 		:  JSON.stringify(data),
-		success : function(resp) {
-			data = resp;
-//			alert(data.code + ': ' +data.message);
-//			if (data.code==1000){
-				$('#frm').modal('hide');
-				list();
-//			}
-		}
-	});	
-});
-</script>
 <script>
 	function formatDate(date, daysToAdd = 0) {
 	    let d = new Date(date);
@@ -488,7 +632,6 @@ $('#Save').click(function() {
 	
 </script>
 
-
 <script>includeHTML();</script> 
 <script>
 	tk=JSON.parse(localStorage.getItem('taiKhoan'));
@@ -503,12 +646,9 @@ $('#Save').click(function() {
 				</div>
 			</div>
 		</form>`;
-	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
-		$('#btn_InsertUpdate').html(txt);
-	} else {
-		txt = txt.split('value =""').join('value ="'+tk.userName+'"');
-		$('#btn_InsertUpdate').html(txt);
-	}
+
+	txt = txt.split('value =""').join('value ="'+tk.userName+'"');
+	$('#btn_InsertUpdate').html(txt);
 	$('#userID').html(tk.ten +' | '+ tk.userName)
 </script>
 <script>
@@ -516,8 +656,9 @@ $('#Save').click(function() {
         setTimeout(function() {
 			if (tk.dsQuyen == 'sinhVien') {
 				list();
+				$('#maSinhVien').prop("disabled", true);
 			}            
         }, 1000); // Executes list() after 1 second (1000ms)
     });
 </script>
-</html
+</html>

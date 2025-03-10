@@ -15,6 +15,7 @@ import com.thanglong.chonlichthilai.email.EmailDetails;
 import com.thanglong.chonlichthilai.email.EmailService;
 import com.thanglong.chonlichthilai.giangvien.GiangVien;
 import com.thanglong.chonlichthilai.giangvien.GiangVienService;
+import com.thanglong.chonlichthilai.ky.KyService;
 import com.thanglong.chonlichthilai.sinhvien.SinhVien;
 import com.thanglong.chonlichthilai.sinhvien.SinhVienService;
 import com.thanglong.chonlichthilai.utils.Message;
@@ -33,7 +34,7 @@ public class DangNhapController {
     @Autowired private GiangVienService service;
     @Autowired private SinhVienService sinhVienService;
 	@Autowired private EmailService emailService;
-
+	@Autowired private KyService kyService;
     // Read operation
     @GetMapping("/dangnhap")
     public List<GiangVien> findAll()  {
@@ -93,7 +94,7 @@ public class DangNhapController {
        		PhienKetNoi phienKetNoi = new PhienKetNoi();
        		
     		phienKetNoi.setUserName(userName);
-    		phienKetNoi.setMaKy(e.getMaKy());
+    		phienKetNoi.setMaKy(kyService.findByMacDinh(1).getMaKy());
     		phienKetNoi.setNamHoc(e.getNamHoc());
     		if (userName.indexOf("A")==0) {
     			SinhVien sinhVien = (SinhVien)obj;

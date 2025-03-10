@@ -162,5 +162,8 @@ public class TKBServiceImpl implements TKBService {
         query.setParameter("maLopHocPhanSet", maLopHocPhanSet);
         query.executeUpdate();
     }
-
+    @Override
+    public List<TKB> findByMaKy(String maKy) {
+    	return repository.findByMaKy(maKy);
+    }
 }

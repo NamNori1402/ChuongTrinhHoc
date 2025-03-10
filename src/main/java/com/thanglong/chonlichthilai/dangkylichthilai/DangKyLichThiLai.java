@@ -29,4 +29,5 @@ public class DangKyLichThiLai
     private Long id;
     private String msv;
     private String tkbId;
+    private String maKy;
 }

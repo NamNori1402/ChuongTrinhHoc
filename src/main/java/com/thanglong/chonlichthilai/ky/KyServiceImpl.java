@@ -44,6 +44,10 @@ public class KyServiceImpl implements KyService {
  @Override public Ky findByMaKy(String maKy){
      return repository.findByMaKy(maKy).orElse(null);
  }
+ @Override public Ky findByMacDinh(Integer macDinh){
+     return repository.findByMacDinh(macDinh).orElse(null);
+ }
+ 
  // Update operation
  @Override
  public Ky update(Ky e, Long id) {

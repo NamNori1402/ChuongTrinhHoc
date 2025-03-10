@@ -52,7 +52,17 @@
                                                 id="password" placeholder="Nhập mật khẩu đã gửi vào email"
 												disabled
 												>
-                                        </div>										
+                                        </div>
+										<div class="form-group" align="right">
+											<table border="0">
+												<tr>
+													<td>Năm học</td><td><div id="frm_namHoc" ></div></td>
+												</tr>
+												<tr>
+													<td>Kỳ học</td><td><div id="frm_kyHoc" ></div></td>
+												</tr>
+											</table>
+										</div>
 										<div class="form-group">
 											<div id="loading" style="width: 100%; margin:0 auto"></div>
 										</div>
@@ -181,5 +191,76 @@ $("#login").click(function(){
 	}
 
 }); 
+</script>
+<script>
+	$(document).ready(function(){
+		frmMacDinh();
+	})
+
+</script>
+<script>
+function frmMacDinh(){
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="kyHoc" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+				if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+					namHoc = CFG_NAM_HOC[i].namHoc;
+					CFG_NAM_HOC_MAC_DINH = namHoc;
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				} else {
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				}
+			}
+		}
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == namHoc){
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
+				}
+			}
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
+	}
+</script>
+<script>
+function frmChonTheoNam(ts){
+	CFG_NAM_HOC_MAC_DINH = $('#namHoc').val();
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="htmlKy" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == CFG_NAM_HOC_MAC_DINH){
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_NAM_HOC_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
+				}
+			} else {
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
+			}
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
+	}
 </script>
 </html>

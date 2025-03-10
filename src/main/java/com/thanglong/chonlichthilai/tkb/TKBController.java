@@ -29,7 +29,12 @@ public class TKBController {
 		e.setMaNguoiNhap(phienKetNoi.getUserName());
         return service.save(e);
     }
- 
+    @PostMapping("/tkb/ky")
+    public List<TKB>  getTKBKy(@Valid @RequestBody TKB e, ServletRequest request)  {
+        List<TKB> tkbList = service.findByMaKy(e.getMaKy());
+        tkbList.forEach(tkb -> Hibernate.initialize(tkb.getTkbChiTietList())); // Force initialization
+        return tkbList;
+    } 
     // Read operation
     @GetMapping("/tkb")
     public List<TKB> findAll() {

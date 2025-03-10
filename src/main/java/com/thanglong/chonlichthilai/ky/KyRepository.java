@@ -19,5 +19,7 @@ public interface KyRepository extends JpaRepository<Ky, Long> {
     @Modifying
     @Query("UPDATE Ky u set u.macDinh = ?1")
     void updateInBulkByMacDinh(long macDinh);
+
+	Optional<Ky> findByMacDinh(Integer macDinh);
     
 }

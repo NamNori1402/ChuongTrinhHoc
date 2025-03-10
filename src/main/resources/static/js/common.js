@@ -2,59 +2,15 @@ var CFG_KY_MAC_DINH='2526K2';
 var TAB_GIANG_VIEN = '';
 var TAB_HOC_PHAN = '';
 var CFG_NAM_HOC_MAC_DINH='';
-var CFG_NAM_HOC = [
-	{
-		"namHoc": "2024-2025",
-		"kyHoc": [
-			{
-				"maKy": "2425K1N1",
-				"tenKy": "Kỳ 1 Nhóm 1"
-			},{
-				"maKy": "2425K1N2",
-				"tenKy": "Kỳ 1 Nhóm 2"				
-			},{
-				"maKy": "2425K1N3",
-				"tenKy": "Kỳ 1 Nhóm 3"		
-			},{
-				"maKy": "0",
-				"tenKy": "---------------"
-			},{
-				"maKy": "2425K2N1",
-				"tenKy": "Kỳ 2 Nhóm 1"
-			},{
-				"maKy": "2425K2N2",
-				"tenKy": "Kỳ 2 Nhóm 2"				
-			},{
-				"maKy": "2425K2N3",
-				"tenKy": "Kỳ 2 Nhóm 3"		
-			},{
-				"maKy": "0",
-				"tenKy": "---------------"
-			},{		
-				"maKy": "2425K3N1",
-				"tenKy": "Kỳ 2 Nhóm 1"
-			},{
-				"maKy": "2425K3N2",
-				"tenKy": "Kỳ 2 Nhóm 2"				
-			},{
-				"maKy": "2425K3N3",
-				"tenKy": "Kỳ 2 Nhóm 3"				
-			}
-		]
-	},{
-		"namHoc": "2025-2026",
-		"kyHoc": [
-			{
-			"maKy": "2526K1",
-			"tenKy": "Kỳ 1"
-			},{
-			"maKy": "2526K2",
-			"tenKy": "Kỳ 2"
-			},			
-		]
+//-------------------------------------------------------------------------------------------------------------------------
+var TAB_KY=JSON.parse(localStorage.getItem('TAB_KY'));
+function getKyMacDinh() {
+	for(i = 0; i < TAB_KY.length; i++){
+		if(TAB_KY[i].macDinh == 1){
+			return TAB_KY[i];
+		}
 	}
-];
-
+}
 //-------------------------------------------------------------------------------------------------------------------------
 var URL = '/api/v1'
 tk=JSON.parse(localStorage.getItem('taiKhoan'));
@@ -98,7 +54,6 @@ function getCaThi(caThi) {
 			return TAB_CA_THI[i];
 		}
 	}
-	return 0;
 }
 function checkResponse(resp) {
 	if (resp == -9){
@@ -109,8 +64,8 @@ function checkResponse(resp) {
 }
 //
 function khoiTao() {
-	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI'];
-	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi'];
+	    TAB = ['TAB_GIANG_VIEN', 'TAB_HOC_PHAN', 'TAB_CA_HOC', 'TAB_CA_THI','TAB_PHONG_HOC','TAB_HINH_THUC_THI','TAB_KY'];
+	    API = ['giangvien', 'hocphan', 'cahoc', 'cathi','phonghoc','hinhthucthi','ky'];
 
 	    for (let i = 0; i < TAB.length; i++) {
 	        let tabName = TAB[i];

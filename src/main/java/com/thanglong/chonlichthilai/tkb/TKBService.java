@@ -27,4 +27,6 @@ public interface TKBService {
 	void deleteAllByMaLopHocPhanIn(Set<String> maLopHocPhanSet);
 
 	void saveAllBatch(List<TKB> tkbBatch);
+
+	List<TKB> findByMaKy(String maKy);
 }

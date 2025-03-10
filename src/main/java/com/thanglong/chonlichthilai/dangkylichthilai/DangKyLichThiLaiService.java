@@ -3,6 +3,11 @@ package com.thanglong.chonlichthilai.dangkylichthilai;
 //Importing required classes
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import com.thanglong.chonlichthilai.bangdiem.BangDiem;
+import com.thanglong.chonlichthilai.entity.CanThiLai;
+import com.thanglong.chonlichthilai.entity.ThiLaiResp;
 
 //Interface
 public interface DangKyLichThiLaiService {
@@ -23,5 +28,8 @@ public interface DangKyLichThiLaiService {
  // Delete operation
 	void deleteById(Long id);
 
-	String querySQL(String sql);
+
+	List<ThiLaiResp> findByMaKy(String maKy);
+
+	List<CanThiLai> findDsCanThiLai(String maKy);
 }

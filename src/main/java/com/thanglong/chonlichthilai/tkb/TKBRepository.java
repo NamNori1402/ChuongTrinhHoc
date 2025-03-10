@@ -1,5 +1,6 @@
 package com.thanglong.chonlichthilai.tkb;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,5 +19,6 @@ public interface TKBRepository extends JpaRepository<TKB, Long> {
     Optional<TKB> findById(Long id);
     Optional<TKB> findByTtTkbTruong(Long ttTkbTruong);
     void deleteAllByMaLopHocPhanIn(Set<String> maLopHocPhanSet);
+	List<TKB> findByMaKy(String maKy);
 }
 

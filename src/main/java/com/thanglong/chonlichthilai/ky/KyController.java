@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.thanglong.chonlichthilai.dangnhap.PhienKetNoi;
+
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
  
 // Annotation
@@ -18,9 +22,14 @@ public class KyController {
     // Save operation
     @CrossOrigin(origins = "*") 
     @PostMapping("/ky")
-    public Ky saveKy(@Valid @RequestBody Ky e)  {
+    public Ky saveKy(@Valid @RequestBody Ky e, ServletRequest request)  {
     	if (e.getMacDinh()==1) {
+    		HttpServletRequest req = (HttpServletRequest) request;
+    		PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
+    		req.getSession().setAttribute("phienKetNoi",phienKetNoi);
+    		phienKetNoi.setMaKy(e.getMaKy());
     		service.updateInBulkByMacDinh(Long.parseLong("0"));
+    		
     	}
         return service.save(e);
     }
@@ -40,8 +49,12 @@ public class KyController {
     }
     // Update operation
     @PutMapping("/ky/{id}")
-    public Ky updateUser(@RequestBody Ky e, @PathVariable("id") Long id) {
+    public Ky updateUser(@RequestBody Ky e, @PathVariable("id") Long id, ServletRequest request) {
     	if (e.getMacDinh()==1) {
+    		HttpServletRequest req = (HttpServletRequest) request;
+    		PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
+    		phienKetNoi.setMaKy(e.getMaKy());
+    		req.getSession().setAttribute("phienKetNoi",phienKetNoi);
     		service.updateInBulkByMacDinh(Long.parseLong("0"));
     	}
         return service.update(e, id);

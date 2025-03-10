@@ -21,6 +21,7 @@ public interface KyService {
 		Ky findById(Long id);
 		
 		Ky findByMaKy(String e);
+		Ky findByMacDinh(Integer macDinh);
 		
 		List<Ky> findAllByOrderByMacDinhDescIdDesc();
 		

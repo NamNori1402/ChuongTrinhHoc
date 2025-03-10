@@ -233,11 +233,7 @@ function list() {
 		url 		: URL + '/giangvien',
 		type		: 'GET',
 		success : function(resp) {
-			if (resp == -9){
-				alert("Phiên truy cập không hợp lệ")
-				window.location.replace("login.html");
-				return;
-			}
+			checkResponse(resp);
 			DATA = JSON.parse(JSON.stringify(resp), (key, value) => {
 			    return value === null ? '' : value;
 			});
@@ -328,9 +324,7 @@ function list() {
 			$('#dataTable').bootstrapTable({
 				columns: cols,
 			    data: DATA,
-			    exportTypes: ['txt', 'sql', 'excel'],
-			    pageSize: 15,
-			    search: true
+			    exportTypes: ['txt', 'sql', 'excel']
 			});			
 		}
 	});

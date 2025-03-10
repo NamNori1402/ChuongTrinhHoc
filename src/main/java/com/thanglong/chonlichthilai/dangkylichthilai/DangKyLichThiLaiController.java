@@ -2,16 +2,22 @@ package com.thanglong.chonlichthilai.dangkylichthilai;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.json.JSONObject;
 // Importing required classes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.thanglong.chonlichthilai.bangdiem.BangDiem;
 import com.thanglong.chonlichthilai.dangnhap.PhienKetNoi;
 import com.thanglong.chonlichthilai.email.EmailDetails;
 import com.thanglong.chonlichthilai.email.EmailService;
+import com.thanglong.chonlichthilai.entity.CanThiLai;
+import com.thanglong.chonlichthilai.entity.ThiLaiResp;
+import com.thanglong.chonlichthilai.tkb.TKB;
 import com.thanglong.chonlichthilai.utils.Message;
 
 import jakarta.servlet.ServletRequest;
@@ -33,9 +39,21 @@ public class DangKyLichThiLaiController {
     	HttpServletRequest req = (HttpServletRequest) request;
 		PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
 		e.setMsv(phienKetNoi.getUserName());
+		e.setMaKy(phienKetNoi.getMaKy());
         return service.save(e);
     }
-	
+    @PostMapping("/dangkylichthilai/ky")
+    public List<ThiLaiResp>  getTKBKy(@Valid @RequestBody DangKyLichThiLai e, ServletRequest request)  {
+        List<ThiLaiResp> thiLaiList = service.findByMaKy(e.getMaKy());
+        return thiLaiList;
+    }
+    @PostMapping("/dangkylichthilai/canThiLai")
+    public List<CanThiLai>  dsCanThiLai(ServletRequest request)  {
+    	HttpServletRequest req = (HttpServletRequest) request;
+		PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
+        List<CanThiLai> thiLaiList = service.findDsCanThiLai(phienKetNoi.getMaKy());
+        return thiLaiList;
+    } 
     // Read operation
     @GetMapping("/dangkylichthilai/tb")
     public List<DangKyLichThiLai> findAll()  {
@@ -55,8 +73,8 @@ public class DangKyLichThiLaiController {
     			+ "INNER JOIN dang_ky_lich_thi_lai y ON x.id = y.tkb_id\r\n"
     			+ "INNER JOIN sinh_vien k ON y.msv = k.ma_sinh_vien;";
 //    	sql = "Select y.msv, y.id AS chon_lich_id from dang_ky_lich_thi_lai y";
-        String result = service.querySQL(sql); // Trả về danh sách map
-        return ResponseEntity.ok(result);
+//        String result = service.querySQL(sql); // Trả về danh sách map
+        return ResponseEntity.ok(null);
     }    
     
     @PutMapping("/dangkylichthilai/{id}")

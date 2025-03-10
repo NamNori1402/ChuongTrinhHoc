@@ -202,7 +202,7 @@ public class RestUploadController {
 	  	                TKB tkbLast = null;
 	  	                TKB tkb = null;
 	  	                for (Row row : (Iterable<Row>) sheet) {
-	  	                    if (row.getRowNum() == 0) continue; // Bỏ qua dòng tiêu đề
+	  	                    if (!getStringValueFromCell(row.getCell(1)).equals("TT")) continue;
 	  	                    maLopHocPhanNew = getStringValueFromCell(row.getCell(1));
 	  	                    if (maLopHocPhanNew == null || maLopHocPhanNew.length()  < 5) {
 	  	                    	break;

@@ -266,6 +266,9 @@
 								</tr></table>
 							</h6>
                         </div>
+						<div class="form-group">
+							<div id="loading" style="width: 40%; margin:0 auto"></div>
+						</div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -355,7 +358,8 @@
 	var action
 	var crd
 	var rUpdate;
-	const trangThaiArray = ['Mở', 'Đóng', 'Khóa'];	
+	const trangThaiArray = ['Mở', 'Đóng', 'Khóa'];
+	tk=JSON.parse(localStorage.getItem('taiKhoan'));
 	THP=JSON.parse(localStorage.getItem('TAB_HOC_PHAN'));
 	TGV=JSON.parse(localStorage.getItem('TAB_GIANG_VIEN'));
 	CA_THI=JSON.parse(localStorage.getItem('TAB_CA_THI'));
@@ -364,17 +368,20 @@
 </script>
 <script>
 function list() {
+	$('#loading').html(loading)
 	maKy = $('#ky').val();
 	if (maKy === ''){
 		maKy = getKyMacDinh().maKy;
 	}
 	data = {maKy : maKy}
+	var checkMsv = '';
 	$.ajax({
-		url 		: URL + '/tkb/ky',
+		url 		: URL + '/dangkylichthilai/canThiLai',
 		type		: 'POST',
 		contentType	: 'application/json',
 		data		: JSON.stringify(data),
 		success : function(resp) {
+			$('#loading').html('')
 			checkResponse(resp);
 			DATA = JSON.parse(JSON.stringify(resp), (key, value) => {
 			    return value === null ? '' : value;
@@ -390,112 +397,79 @@ function list() {
 			    }
 			});
 			cols.push({ 
-			    title: 'TT_TKB',
+			    title: 'MSV',
+				field: 'msv',
+			    valign: 'middle',
+			    align: 'center',
+				formatter: function(value, row, index) {
+					txt = '';
+					if (checkMsv != row.msv) {
+						txt = '<font color=red>'+row.msv+'</font>'
+						checkMsv =  row.msv
+					} else {
+						txt = row.msv;
+					}
+				    return txt;
+				}
+			});
+			cols.push({ 
+			    title: 'Tên',
+				field: 'maHocPhan',
 			    valign: 'middle',
 			    align: 'center',
 			    formatter: function(value, row, index) {
-			        return (index + 1);
+					row.hoTenDem = row.hoTenDem == null ? '' : row.hoTenDem;
+					let txt = row.hoTenDem +' ' + row.ten + '<br/>'+row.dienThoai1;
+			        return txt
 			    }
 			});
 			cols.push({ 
-				field: 'maLopHocPhan',
-				title: 'Mã Lớp HP',
-				valign: 'middle',
-				formatter : function(value,row,index) {
-					var txt='';
-					trangThai = row.trangThai == 0? 'Mở' : row.trangThai == 1 ? '<font color="blue">Đóng</font>' : '<font color="red">Khóa</font>';
-					txt = row.maLopHocPhan + '('+trangThai+')';
-					return txt
-				}
+			    title: 'Học phần',
+				field: 'maHocPhan',
+			    valign: 'middle',
+			    align: 'left',
+			    formatter: function(value, row, index) {
+			        return row.maHocPhan + '.' + getHocPhan(row.maHocPhan).tenHocPhan + ' ('+row.soTinChi+' tín)'
+			    }
 			});
 			cols.push({ 
-				field: 'tt',
-				title: 'Tên học phần',
-				valign: 'middle',
-				formatter : function(value,row,index) {
-					var obj = getHocPhan(row.maHocPhan);
-					return obj.tenHocPhan
-				}
+			    title: 'Điểm TK',
+				field: 'diemTongKet',
+			    valign: 'middle',
+			    align: 'center',
+			    formatter: function(value, row, index) {
+			        return row.diemTongKet
+			    }
 			});
 			cols.push({ 
-				field: 'tt',
-				title: 'Ca học',
-				valign: 'middle',
-				formatter : function(value,row,index) {
-					var txt = '';
-					for (i=0; i < row.tkbChiTietList.length; i++){
-						oi = row.tkbChiTietList[i];
-						txt += 'T'+oi.thu + '('+oi.batDau+'-'+oi.ketThuc+') '+oi.phong+'.'+oi.ghiChuCa+'<br/>';
-					}
-					return txt;
-				}
-			});
-			cols.push({ 
-				field: 'tt',
-				title: 'Lịch thi',
-				valign: 'middle',
-				align: 'center',
-				formatter : function(value,row,index) {
-					var txt = 'Chưa có';
-					if (row.caThi !=0 && row.ngayThi !=''){
-						txt = 'Ca '+ row.caThi +'<br/>' + row.ngayThi;	
-					}					
-					return txt;
-				}
-			});			
-			cols.push({ 
-				field: 'maGiangVien',
-				title: 'Mã GV',
+				field: 'lopChuyenNganh',
+				title: 'Lớp CN',
 				valign: 'middle',
 				align: 'center'
 			});
-			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
-				cols.push({ 
-					field: 'B',
-					title: 'Sửa',
-					align: 'center',
-					valign: 'middle',
-					clickToSelect: false,
-					formatter : function(value,row,index) {
-						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == row.maGiangVien) {
-							return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
-					   	}
-					}
-				});
-				cols.push({ 
-					field: 'X',
-					title: 'Xóa',
-					align: 'center',
-					valign: 'middle',
-					clickToSelect: false,
-					formatter : function(value,row,index) {
-						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == row.maGiangVien) {
-							return '<button id="'+row.id+'" class="btn btn-danger btn-xs"  title="'+row.id+'" onclick="del(this)">x</button>';
-						}
-					}					
-				});
-			} else {
-				cols.push({ 
-					field: 'Chọn lịch thi',
-					title: 'Chọn lịch thi',
-					align: 'center',
-					valign: 'middle',
-					clickToSelect: false,
-					formatter : function(value,row,index) {
-						if (tk.dsQuyen == 'sinhVien') {
-							return '<button id="'+row.id+'" class="btn btn-primary btn-xs"  title="'+row.id+'" onclick="frmInsertUpdate(this)">x</button>';
-						}
-					}					
-				});	
-			}
+			cols.push({ 
+				field: 'tt',
+				title: 'Cập nhật',
+				valign: 'middle',
+				align: 'center',
+				formatter : function(value,row,index) {
+					var txt = '';
+					return row.time;
+				}
+			});			
+			
+
+			
 			$('#dataTable').bootstrapTable("destroy");
 			$('#dataTable').bootstrapTable({
 				columns: cols,
+				showExport: true,
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
 			    pageSize: 15,
 			    search: true
-			});			
+			});
+				
 		}
 	});
 }
@@ -506,7 +480,7 @@ function del(ts) {
 		return;
 	}
 	$.ajax({
-		url 		: URL + '/tkb/'+ts.id,
+		url 		: URL + '/dangkylichthilai/'+ts.id,
 		type		: 'DELETE',
 		data 		: {action: 'list'},
 		success : function(resp) {
@@ -516,441 +490,11 @@ function del(ts) {
 	});
 }
 </script>
-<script>
-	$('#Save1,#Save2').click(function() {
-		id 				= $('#id').val();
-		tt				= $('#tt').val();
-		maKy 			= $('#maKy').val();
-		maHocPhan 		= $('#maHocPhan').val();
-		maLopHocPhan 	= $('#maLopHocPhan').val();
-		maGiangVien 	= $('#maGiangVien').val();
-		ttTkbTruong		= $('#ttTkbTruong').val();
-		tenLop			= $('#tenLop').val();
-		ttTkbTruong		= $('#ttTkbTruong').val();
-		trangThai		= $('#trangThai').val();
-		ghiChu			= $('#ghiChu').val();
-		
-		if (tt =='') {
-			alert('Bạn chưa nhập số thứ tự');
-			$('#tt').focus();
-			return;
-		}
-		if (maKy =='') {
-				alert('Bạn chưa nhập mã kỳ');
-				$('#maKy').focus();
-				return;
-		}
-		if (maHocPhan =='') {
-				alert('Bạn chưa chọn học phần');
-				$('#maHocPhan').focus();
-				return;
-		}
-		if (ttTkbTruong =='') {
-				alert('Bạn chưa nhập số thứ tự môn học này trong tkb Trường');
-				$('#ttTkbTruong').focus();
-				return;
-		}
-		if (tenLop =='') {
-			alert('Bạn chưa nhập tên lớp');
-			$('#tenLop').focus();
-			return;
-		}
-			
-		var tkbChiTietList =  [];
-		for(i = 1 ; i <= crd.soCa; i++){
-			let batDau = ($('#batDau'+i).val()) * 1;
-			let ketThuc= ($('#ketThuc'+i).val()) * 1;
-			if (batDau >= ketThuc ) {
-				alert('Kiểm tra lại Thời gian bắt đầu và thời gian kết thúc của (Ca học số '+i +')');
-				$('#batDau').focus();
-				return;
-			}
-			tkbChiTietList.push({ 
-				id		: $('#id'+i).val(),
-				ca		: i,
-				thu		: $('#thu'+i).val(),
-				batDau	: batDau,
-				ketThuc	: ketThuc,
-				phong	: $('#phong'+i).val(),
-				ghiChuCa: $('#ghiChuCa'+i).val()
-			});
-		}
-		console.log('Ghi chu: ' + tkbChiTietList);
-		for(i = 0; i < DATA.length; i++){
-			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
-				alert('Đã có Lớp học phần '+maLopHocPhan+ ' này rồi');
-				$('#maLopHocPhan').focus();
-				return;
-			}
-			if (action == 'insert' && ttTkbTruong == DATA[i].ttTkbTruong){
-				alert('Đã có STT ('+ttTkbTruong+') này trong Thời khóa biểu trường');
-				$('#ttTkbTruong').focus();
-				return;
-			}
-			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
-				alert('Đã có Mã lớp học phần '+ maLopHocPhan+' rồi');
-				$('#tenLop').focus();
-				return;
-			}
-		}
-		api  = ''
-		if (tk.dsQuyen == 'sinhVien'){
-			data = {tkbId : id};
-			api  = '/dangkylichthilai';
-			type = 'POST'
-		} else {
-			if (action == 'update') {
-				id = $('#id').val();
-				ngayThi			= $('#ngayThi').val();
-				caThi			= $('#caThi').val();
-				phongThi 		= $('#phongThi').val();
-				hinhThucThi 	= $('#hinhThucThi').val();
-				maNguoiCoiThi 	= $('#maNguoiCoiThi').val();
-				ghiChuLichThi 	= $('#ghiChuLichThi').val();
-				data = 		{	
-					id   			: id        ,
-					maKy 			: maKy  ,
-					maHocPhan 		: maHocPhan  ,
-					maLopHocPhan	: maLopHocPhan ,
-					tkbChiTietList	: tkbChiTietList,
-					maGiangVien		: maGiangVien,
-					tenLop			: tenLop,
-					ttTkbTruong		: ttTkbTruong,
-					trangThai		: trangThai,
-					ghiChu			: ghiChu,
-					
-					ngayThi			: ngayThi,
-					caThi			: caThi,
-					phongThi		: phongThi,
-					hinhThucThi		: hinhThucThi,
-					maNguoiCoiThi	: maNguoiCoiThi,
-					ghiChuLichThi	: ghiChuLichThi,
-					}
-				api  = '/tkb/'+id;
-				type = 'PUT'
-			} else {
-				data = 		{
-					maKy 			: maKy  ,
-					maHocPhan 		: maHocPhan  ,
-					maLopHocPhan	: maLopHocPhan ,
-					tkbChiTietList	: tkbChiTietList,
-					maGiangVien		: maGiangVien,
-					tenLop			: tenLop,
-					ttTkbTruong		: ttTkbTruong,
-					trangThai		: trangThai,
-					ghiChu			: ghiChu
-					}	
-				api  = '/tkb';
-				type = 'POST'
-			}
-		}
-		console.log('Content: ' + JSON.stringify(data))
-		$.ajax({
-			url 		: URL + api,
-			type		: type,
-			dataType	: 'json',
-			contentType : 'application/json; charset=UTF-8',
-			data 		:  JSON.stringify(data),
-			success : function(resp) {
-				if (resp == -9){
-					alert("Phiên truy cập không hợp lệ")
-					window.location.replace("login.html");
-					return;
-				} else if (resp == -8){
-					alert("Bạn không có quyền này")
-					window.location.replace("login.html");
-					return;
-				}
-				data = resp;
-	//			alert(data.code + ': ' +data.message);
-	//			if (data.code==1000){
-					$('#frm').modal('hide');
-					list();
-	//			}
-			}
-		});	
-	});
 
-</script>
-
-
-<script>
-	function frmInsertUpdate(act) {
-		$('#frm-extent1').html('');
-		$('#frm-extent2').html('');
-		var record = {};
-		var disable = ''
-		if (tk.dsQuyen == 'sinhVien') {
-			disable = 'disabled'
-		}
-		if (act == 'insert') {
-			action = 'insert';
-			record.maKy 		= CFG_KY_MAC_DINH;
-			record.maHocPhan 	= '';	// CS100
-			record.maLopHocPhan	= '';  	// 242_CS100_01
-			record.trangThai 	= 1;
-			record.ttTkbTruong	= 1;	
-			record.tenLop		= '';
-			record.ghiChu 		= '';
-		} else {
-			action = 'update';
-		    for (let i = 0; i < DATA.length; i++) {
-		        if (act.id == DATA[i].id) {
-		            record = DATA[i];
-		        }
-		    }
-		}		
-		html = '';
-		html = '<table>';
-		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
-		html = html + '<tr><td>STT trong TKB Trường</td><td><input '+disable+' type="text" id="ttTkbTruong" value="'+record.ttTkbTruong+'"/></td><tr>'
-		html = html + '<tr><td>Mã kỳ học </td><td><input '+disable+' type="text" id="maKy" value="'+record.maKy+'"/></td><tr>'
-		html = html + '<tr>'
-		html = html + '   <td>Mã học phần</td>'
-		html = html + '   <td>'
-		html = html + '			<Select id="maHocPhan" style="width: 250px" onchange=lichHoc() '+disable+' > '
-		html = html + '				<option value="">--------- Chọn học phần ---------</option>'
-		for(i = 0; i < THP.length; i++){
-			var selected='';
-			if (action == 'update' && record.maHocPhan==THP[i].maHocPhan) {
-				selected = 'Selected'
-			}
-			html = html + '				<option value="'+THP[i].maHocPhan+'" '+selected+'>'+THP[i].maHocPhan+' - '+THP[i].tenHocPhan+'</option>'	
-		}	
-		html = html + '			</Select> '
-		html = html + '   </td>'
-		html = html + '</tr>'
-		html = html + '<tr><td>Tên lớp (lớp thứ)</td><td><input  '+disable+' type="text" id="tenLop" value="'+record.tenLop+'" onchange=lichHoc() /></td><tr>'
-		html = html + '<tr><td>Lớp học phần</td><td><input  '+disable+' type="text" id="maLopHocPhan" value="'+record.maLopHocPhan+'"/></td><tr>'
-		html = html + '<tr>'
-		html = html + '   <td>Giảng viên</td>'
-		html = html + '   <td>'
-		var disabled = ''
-		if (tk.dsQuyen == 'giangVien') {
-			disabled = 'disabled'
-		}
-		html = html + '			<Select  '+disable+' id="maGiangVien" style="width: 250px" '+disabled+'> '
-		for(i = 0; i < TGV.length; i++){
-			var selected='';
-			if (action == 'update' && record.maGiangVien==TGV[i].maGiangVien) {
-				selected = 'Selected'
-			} else if (tk.dsQuyen == 'giangVien' && TGV[i].maGiangVien == tk.userName) {
-				selected = 'Selected'
-			}			
-			html = html + '	<option '+selected+' value="'+TGV[i].maGiangVien+'">'+TGV[i].maGiangVien+' - '+TGV[i].hoTenDem+' '+TGV[i].ten+'</option>'	
-		}
-		html = html + '			</Select> '
-		html = html + '   </td>'
-		html = html + '</tr>'
-		html = html + '<tr>'
-		html = html + '   <td>Trạng thái</td>'	
-		html = html + '   <td>'
-		html = html + '   		<Select '+disable+'  id="trangThai">'
-		
-		for(i = 0; i < trangThaiArray.length; i++) {
-			var trangThai = ''
-			if (action == 'update' && record.trangThai==i) {
-				trangThai = 'Selected'
-			}
-			html = html + ' <option value='+i+' '+trangThai+'>'+trangThaiArray[i]+'</option>'	
-		}
-		html = html + '   		</Select>'
-		html = html + '   </td>'
-		html = html + '</tr>'
-
-		html += '<tr><td>Ghi chú</td>';
-		html += '<td><textarea '+disable+' class="form-control bg-light border-1" height=50 width=70 id="ghiChu">'+record.ghiChu+'</textarea>';
-		html += '</td>';
-		html += '</select>';
-		html += '</td>';
-		html += '</tr>';				
-		
-		html = html + '</table>'
-		$('#frm-content').html(html);
-
-		if (action == 'update') {
-			$('#modal-title').html("Sửa học phần");
-			rUpdate = record.tkbChiTietList
-			lichHoc();
-		} else {
-			$('#modal-title').html("Thêm học phần");
-		}
-		if (action =='update'){
-			lichThi(record);
-		}
-		if (tk.dsQuyen =='sinhVien'){
-			$('#Save1').html('Đăng ký chọn lịch thi này');
-			$('#Save2').html('Đăng ký chọn lịch thi này');
-			$('#modal-title').html("Đăng ký chon lịch thi");
-		}
-		$('#frm').modal('show');		
-	}
-</script>
-<script>
-function lichHoc(){
-	let disable = '';
-	if (tk.dsQuyen == 'sinhVien') {
-		disable = 'disabled'
-	}
-	maHocPhan = $('#maHocPhan').val();
-	for(i = 0; i < THP.length; i++){
-		if (maHocPhan == THP[i].maHocPhan){
-			crd = THP[i]
-		}
-	}
-	var txt  = '<hr/>'
-		txt += '<center>Lịch học</center>'
-	 	txt += '<table border=0 align="center" style="padding: 3px">';
-		txt += '<tr><td>Ca</td><td>Thứ</td><td>Bắt đầu</td><td>Kết thúc</td><td>Phòng</td><td>Ghi chú</td></tr>'
-		for (k = 1; k <= crd.soCa; k++){
-			if (action =='update'){
-				txt += '<input '+disable+' type="hidden" id="id' + k + '" value="' + rUpdate[k-1].thu + '"/>';
-			}
-			txt += '<tr>';
-			txt += '	<td align="right">'+k+'</td>';
-			txt += ' 	<td>'
-			txt += ' 		<select  '+disable+' id="thu'+k+'">'		
-			for (i=2 ; i<=8; i++){
-				var thu = ''
-				if (action =='update' && rUpdate[k-1].thu == i){
-					thu = 'Selected'
-				}
-				txt += '<option value="'+i+'" '+thu+'>Thứ '+i+'</option>'
-			}
-			txt += ' 		</select>'	
-			txt += '	</td>'
-			txt += ' 	<td>'
-			txt += ' 		<select  '+disable+' id="batDau'+k+'">'
-			for (i=1 ; i<=13; i++){
-				var batDau = ''
-				if (action =='update' && rUpdate[k-1].batDau == i){
-					batDau = 'Selected'
-				}
-				txt += '<option value='+i+' '+batDau+'>Tiết '+i+'</option>'
-			}
-			txt += ' 		</select>'	
-			txt += '	</td>'
-			txt += ' 	<td>'
-			txt += ' 		<select  '+disable+' id="ketThuc'+k+'">'
-			for (i=1 ; i<=13; i++){
-				var ketThuc = ''
-				if (action =='update' && rUpdate[k-1].ketThuc == i){
-					ketThuc = 'Selected'
-				}
-				txt += '<option value='+i+' '+ketThuc+'>Tiết '+i+'</option>'
-			}
-			txt += ' 		</select>'	
-			txt += '	</td>'
-			
-			txt += ' 	<td>'
-			txt += ' 		<select '+disable+'  id="phong'+k+'">'
-			for (i=1 ; i<=9; i++){
-				var phong = ''
-				if (action =='update' && rUpdate[k-1].phong == 'A70'+i){
-					phong = 'Selected'
-				}
-				txt += '<option value="A70'+i+'" '+phong+'>A70'+i+'</option>'
-			}
-			txt += ' 		</select>'	
-			txt += '	</td>'
-			txt += '   <td>'
-			txt += '   		<Select  '+disable+'  id="ghiChuCa'+k+'">'
-			if (action =='update' && rUpdate[k-1].ghiChuCa == 'LT'){
-				txt += '   			<option value="LT" selected>LT</option>'
-				txt += '   			<option value="BT" >BT</option>'
-			} else {
-				txt += '   			<option value="BT" selected>BT</option>'	
-				txt += '   			<option value="LT" >LT</option>'
-			}
-			txt += '		</Select> '
-			txt += '   </td>'
-			txt += '</tr>';			
-		}
-		txt += '</table>';
-	$('#frm-extent1').html(txt);
-	txt = '242_' + crd.maHocPhan + '_' + $('#tenLop	').val();
-	$('#maLopHocPhan').val(txt);	
-}
-</script>
-<script>
-	function lichThi(rds) {
-		let disable = ''
-		if (tk.dsQuyen == 'sinhVien') {
-			disable = 'disabled'
-		}
-		let today = formatDate(new Date(), 0);
-		if (rds.ngayThi != null){
-			today = rds.ngayThi
-		}
-	    var txt  = '<hr/>';
-	    txt += '<center>Lịch thi</center>';
-	    txt += '<table border="0" align="center" style="padding: 3px">';
-	    txt += '<tr><td>Ngày thi</td><td><input '+disable+' type="date" id="ngayThi" value="'+today+'"/></td></tr>';
-	    txt += '<tr><td>Ca thi</td>'
-		txt += '<td><Select '+disable+' id="caThi">'
-		for (let i = 0; i < CA_THI.length; i++) {
-		    let select = '';
-		    console.log(rds.caThi + ',' + CA_THI[i].id + ': ' );
-			let a1 = CA_THI[i].id;
-			let a2 = rds.caThi
-		    if (a1 == a2) {
-		        select = 'selected'; // Properly format selected attribute
-		        console.log("Selected:", CA_THI[i].caThi); // Debugging log instead of alert
-		    }
-		    txt += `<option ${select} value="${CA_THI[i].id}">${CA_THI[i].tenCa} (${CA_THI[i].gioBatDau}-${CA_THI[i].gioKetThuc})</option>`;
-		}
-		txt += '<tr><td>Phòng thi</td>'
-		txt += '<td><Select '+disable+' id="phongThi">'
-		for(i = 0; i < PHONG_HOC.length; i++){
-			let select = '';
-			if (rds.phongThi == PHONG_HOC[i].id){
-				select = 'Selected'
-			}
-			txt += '<option '+select+' value='+PHONG_HOC[i].id+'>'+PHONG_HOC[i].tenPhong+'</option>'
-		}
-		txt += '<tr><td>Hình thức thi</td>'
-		txt += '<td><Select '+disable+' id="hinhThucThi">'
-		for(i = 0; i < HINH_THUC_THI.length; i++){
-			var select = '';
-			if (HINH_THUC_THI[i].id == rds.hinhThucThi){
-				select = 'Selected'
-			}
-			txt += '<option '+select+' value='+HINH_THUC_THI[i].id+'>'+HINH_THUC_THI[i].tenHinhThucThi+'</option>'
-		}
-	    txt += '<tr><td>Giảng viên coi thi</td>';
-	    txt += '<td>';
-	    txt += '<select '+disable+' id="maNguoiCoiThi" style="width: 250px">';
-	    
-	    // Kiểm tra nếu rds tồn tại và có mã giảng viên
-        for (var i = 0; i < TGV.length; i++) {
-            var selected = '';
-            if (rds.maNguoiCoiThi !=null && rds.maNguoiCoiThi.length > 3){
-				if (rds.maNguoiCoiThi == TGV[i].maGiangVien) {
-					selected = 'Selected'
-				}		
-			} else {
-				if (TGV[i].maGiangVien === tk.userName) {
-					selected = 'selected';
-				}
-			}
-            txt += '<option ' + selected + ' value="' + TGV[i].maGiangVien + '">' + TGV[i].maGiangVien + ' - ' + TGV[i].hoTenDem + ' ' + TGV[i].ten + '</option>';
-        }
-	    
-		txt += '<tr><td>Ghi chú</td>';
-		txt += '<td><textarea class="form-control bg-light border-1" height=50 width=70 id="ghiChuLichThi" '+disable+'>'+rds.ghiChuLichThi+'</textarea>';
-		txt += '</td>';
-	    txt += '</select>';
-	    txt += '</td>';
-	    txt += '</tr>';
-	    txt += '</table>';
-
-	    $('#frm-extent2').html(txt);
-	}
-</script>
 <script>includeHTML();</script> 
 <script>
 	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
-		$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
+		//$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
 	}
 	$('#userID').html(tk.ten +' | '+ tk.userName)
 </script>
@@ -961,7 +505,7 @@ function lichHoc(){
 			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
 		}
 		$('#ky').html(txt);
-		$('#tkbText').html('Thời khóa biểu: ' + getKyMacDinh().tenKy);
+		$('#tkbText').html('Đăng ký lịch thi lại: ' + getKyMacDinh().tenKy);
 		list();
 	})
 </script>
