@@ -344,13 +344,23 @@
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 	
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/sb-admin-2.min.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-    <script src="js/demo/datatables-demo.js"></script>
+
+
+	<!-- jQuery -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap -->
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Bootstrap Table -->
 	<script src="js/bootstrap-table.min.js"></script>
+
+	<!-- Table Export Plugin -->
+	<script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.22.3/extensions/export/bootstrap-table-export.min.js"></script>
+
+	
+	
 
 </body>
 <script>
@@ -462,12 +472,17 @@ function list() {
 			
 			$('#dataTable').bootstrapTable("destroy");
 			$('#dataTable').bootstrapTable({
-				columns: cols,
-				showExport: true,
+			    columns: cols,
+			    showExport: true,
+			    buttonsClass: "primary",
+			    exportDataType: "all",
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
-			    pageSize: 15,
-			    search: true
+			    pageSize: 15,   // Số dòng hiển thị trên mỗi trang
+			    search: true,    // Cho phép tìm kiếm
+			    pagination: false, // ✅ Bật phân trang
+			    pageList: [10, 15, 25, 50, 100], // Danh sách số dòng có thể chọn
+			    sidePagination: "client" // Hoặc "server" nếu tải dữ liệu từ API
 			});
 				
 		}

@@ -266,9 +266,12 @@
 								</tr></table>
 							</h6>
                         </div>
+						<div class="form-group">
+							<div id="loading" style="width: 40%; margin:0 auto"></div>
+						</div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="tableData" width="100%" cellspacing="0">
                                 </table>
                             </div>
                         </div>
@@ -364,8 +367,9 @@
 </script>
 <script>
 function list() {
+	$('#loading').html(loading)
 	maKy = $('#ky').val();
-	$('#tkbText').html('Thời khóa biểu: ' + getTenKy(maKy).tenKy);
+	$('#tkbText').html('Thời khóa biểu <font color="red"> ' + getTenKy(maKy).tenKy) + '</font>';
 	if (maKy === ''){
 		maKy = getKyMacDinh().maKy;
 	}
@@ -376,12 +380,13 @@ function list() {
 		contentType	: 'application/json',
 		data		: JSON.stringify(data),
 		success : function(resp) {
-			console.log(resp)
 			checkResponse(resp);
-			DATA = JSON.parse(JSON.stringify(resp), (key, value) => {
-			    return value === null ? '' : value;
+			$('#loading').html('')
+			DATA = resp.map(item => {
+			    return Object.fromEntries(
+			        Object.entries(item).map(([key, value]) => [key, value === null ? '' : value])
+			    );
 			});
-			console.log(DATA)
 			var cols = [];
 			cols.push({ 
 			    title: 'TT',
@@ -396,7 +401,7 @@ function list() {
 			    valign: 'middle',
 			    align: 'center',
 			    formatter: function(value, row, index) {
-			        return (index + 1);
+			        return row.ttTkbTruong
 			    }
 			});
 			cols.push({ 
@@ -407,11 +412,11 @@ function list() {
 					var txt='';
 					trangThai = row.trangThai == 0? 'Mở' : row.trangThai == 1 ? '<font color="blue">Đóng</font>' : '<font color="red">Khóa</font>';
 					var obj = getHocPhan(row.maHocPhan);
-					let skdk = row.sldk;
+					let skdk = row.sldk +'/'+row.sucChua;
 					if (row.sldk < 35) {
-					    skdk = `<span style="background: yellow">${row.sldk}</span>`;
+					    skdk = `<span style="background: yellow">${row.sldk}/${row.sucChua}</span>`;
 					}
-					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>Đăng ký: ' + skdk + ' sinh viên';
+					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>Đăng ký: ' + skdk +' sinh viên';
 					return txt
 				}
 			});
@@ -433,8 +438,28 @@ function list() {
 				}
 			});
 			cols.push({ 
+			    field: 'maGiangVien',
+			    title: 'Mã GV',
+			    valign: 'middle',
+			    align: 'center',
+				formatter: function(value, row, index) {
+				    var x1 = getGiangVien(row.maGiangVien);
+				    if (!x1) {
+				        return `<span style="color: red;">`+row.maGiangVien+`</span>`;
+				    }
+
+				    var txt = row.maGiangVien + '<br/>' + x1.ten;
+
+				    if (x1.ten === 'BoMon') {  
+				        txt = `<span style="background: yellow">${row.maGiangVien}<br/>${x1.ten}</span>`;
+				    }                    
+				    return txt;
+				}
+			});
+
+			cols.push({ 
 				field: 'tt',
-				title: 'Lịch thi',
+				title: 'Ngày thi',
 				valign: 'middle',
 				align: 'center',
 				formatter : function(value,row,index) {
@@ -445,19 +470,6 @@ function list() {
 					return txt;
 				}
 			});			
-			cols.push({ 
-				field: 'maGiangVien',
-				title: 'Mã GV',
-				valign: 'middle',
-				align: 'center',
-				formatter : function(value,row,index) {
-					var txt = row.maGiangVien;
-					if (txt=='BoMon'){
-						txt = `<span style="background: yellow">${row.maGiangVien}</span>`;
-					}					
-					return txt;
-				}	
-			});
 			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
 				cols.push({ 
 					field: 'B',
@@ -497,8 +509,8 @@ function list() {
 					}					
 				});	
 			}
-			$('#dataTable').bootstrapTable("destroy");
-			$('#dataTable').bootstrapTable({
+			$('#tableData').bootstrapTable("destroy");
+			$('#tableData').bootstrapTable({
 				columns: cols,
 			    data: DATA,
 			    exportTypes: ['txt', 'sql', 'excel'],
@@ -584,7 +596,6 @@ function del(ts) {
 				ghiChuCa: $('#ghiChuCa'+i).val()
 			});
 		}
-		console.log('Ghi chu: ' + tkbChiTietList);
 		for(i = 0; i < DATA.length; i++){
 			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
 				alert('Đã có Lớp học phần '+maLopHocPhan+ ' này rồi');
@@ -653,7 +664,6 @@ function del(ts) {
 				type = 'POST'
 			}
 		}
-		console.log('Content: ' + JSON.stringify(data))
 		$.ajax({
 			url 		: URL + api,
 			type		: type,
@@ -671,10 +681,8 @@ function del(ts) {
 					return;
 				}
 				data = resp;
-	//			alert(data.code + ': ' +data.message);
-	//			if (data.code==1000){
-					$('#frm').modal('hide');
-					list();
+				$('#frm').modal('hide');
+				list();
 	//			}
 			}
 		});	
@@ -899,12 +907,10 @@ function lichHoc(){
 		txt += '<td><Select '+disable+' id="caThi">'
 		for (let i = 0; i < CA_THI.length; i++) {
 		    let select = '';
-		    console.log(rds.caThi + ',' + CA_THI[i].id + ': ' );
 			let a1 = CA_THI[i].id;
 			let a2 = rds.caThi
 		    if (a1 == a2) {
 		        select = 'selected'; // Properly format selected attribute
-		        console.log("Selected:", CA_THI[i].caThi); // Debugging log instead of alert
 		    }
 		    txt += `<option ${select} value="${CA_THI[i].id}">${CA_THI[i].tenCa} (${CA_THI[i].gioBatDau}-${CA_THI[i].gioKetThuc})</option>`;
 		}
@@ -970,7 +976,7 @@ function lichHoc(){
 			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
 		}
 		$('#ky').html(txt);
-		$('#tkbText').html('Thời khóa biểu: ' + getTenKy(getKyMacDinh().maKy).tenKy);;
+		$('#tkbText').html('Thời khóa biểu <font color="red"> ' + getKyMacDinh().tenKy + '</font>');
 		list();
 	})
 </script>

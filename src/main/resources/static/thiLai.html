@@ -521,7 +521,7 @@ function del(ts) {
 			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
 		}
 		$('#ky').html(txt);
-		$('#tkbText').html('Danh sách các môn kỳ này sinh viên có thể thi lại: ' + getKyMacDinh().tenKy);
+		$('#tkbText').html('Danh sách sinh viên đã chọn lịch thi <font color="red"> ' + getKyMacDinh().tenKy + '</font>');
 		list();
 	})
 </script>

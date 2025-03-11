@@ -32,7 +32,7 @@ public class TKBController {
     @PostMapping("/tkb/ky")
     public List<TKB>  getTKBKy(@Valid @RequestBody TKB e, ServletRequest request)  {
         List<TKB> tkbList = service.findByMaKy(e.getMaKy());
-        tkbList.forEach(tkb -> Hibernate.initialize(tkb.getTkbChiTietList())); // Force initialization
+//        tkbList.forEach(tkb -> Hibernate.initialize(tkb.getTkbChiTietList())); // Force initialization
         return tkbList;
     } 
     // Read operation

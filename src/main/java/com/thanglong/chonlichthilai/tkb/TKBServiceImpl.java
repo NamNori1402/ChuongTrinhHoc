@@ -40,6 +40,8 @@ public class TKBServiceImpl implements TKBService {
                 .trangThai(e.getTrangThai())
                 .maNguoiNhap(e.getMaNguoiNhap())
                 .ghiChu(e.getGhiChu())
+                .sucChua(e.getSucChua())
+                .sldk(e.getSldk())
                 .build();
 
         TKB savedTKB = repository.save(tkb);
