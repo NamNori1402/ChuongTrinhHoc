@@ -19,7 +19,6 @@ public interface TKBService {
 	
 	TKB findById(Long Id);
 	
-	TKB findByTtTkbTruong(Long tt);
 		
  // Delete operation //Delete
 	void deleteById(Long Id);
@@ -29,4 +28,6 @@ public interface TKBService {
 	void saveAllBatch(List<TKB> tkbBatch);
 
 	List<TKB> findByMaKy(String maKy);
+
+	TKB findByTtTkbTruongAndMaKy(Long ttTkbTruong, String maKy);
 }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 //Interface
 public interface TKBRepository extends JpaRepository<TKB, Long> {
     Optional<TKB> findById(Long id);
-    Optional<TKB> findByTtTkbTruong(Long ttTkbTruong);
+    Optional<TKB> findByTtTkbTruongAndMaKy(Long ttTkbTruong, String maKy);
     void deleteAllByMaLopHocPhanIn(Set<String> maLopHocPhanSet);
 	List<TKB> findByMaKy(String maKy);
 }

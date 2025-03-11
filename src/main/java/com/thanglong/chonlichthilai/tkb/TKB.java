@@ -20,12 +20,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 
+@Table(name = "tkb", 
+uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"ttTkbTruong", "maKy"}),
+    @UniqueConstraint(columnNames = {"maLopHocPhan", "maKy"})
+}
+)
 public class TKB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    @Column(unique = true) 
     private Integer ttTkbTruong; 
     
     private String tenLop; 
@@ -33,8 +38,6 @@ public class TKB {
     
     private String maKy;
     private String maHocPhan;
-    
-    @Column(unique = true)
     private String maLopHocPhan;  	
     private String maGiangVien;
     private Integer trangThai;
@@ -51,7 +54,7 @@ public class TKB {
     private String hinhThucThi;
     private String maNguoiCoiThi;
     private String ghiChuLichThi;
-    
+    private Integer sldk;    
     
     
     

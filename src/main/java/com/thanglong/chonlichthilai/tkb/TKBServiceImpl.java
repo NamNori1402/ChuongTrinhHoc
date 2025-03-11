@@ -77,8 +77,8 @@ public class TKBServiceImpl implements TKBService {
     @Override public TKB findById(Long id){
         return repository.findById(id).orElse(null);
     }
-    @Override public TKB findByTtTkbTruong(Long ttTkbTruong){
-        return repository.findByTtTkbTruong(ttTkbTruong).orElse(null);
+    @Override public TKB findByTtTkbTruongAndMaKy(Long ttTkbTruong, String maKy){
+        return repository.findByTtTkbTruongAndMaKy(ttTkbTruong, maKy).orElse(null);
     }
     // Update operation
 
@@ -104,7 +104,7 @@ public class TKBServiceImpl implements TKBService {
         tkb.setHinhThucThi(e.getHinhThucThi());
         tkb.setMaNguoiCoiThi(e.getMaNguoiCoiThi());
         tkb.setGhiChuLichThi(e.getGhiChuLichThi());
-
+        tkb.setSldk(e.getSldk());
         // Xóa danh sách chi tiết cũ bằng cách duyệt danh sách hiện có
         if (tkb.getTkbChiTietList() != null) {
             tkb.getTkbChiTietList().clear();

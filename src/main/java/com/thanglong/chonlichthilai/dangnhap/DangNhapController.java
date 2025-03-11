@@ -15,6 +15,7 @@ import com.thanglong.chonlichthilai.email.EmailDetails;
 import com.thanglong.chonlichthilai.email.EmailService;
 import com.thanglong.chonlichthilai.giangvien.GiangVien;
 import com.thanglong.chonlichthilai.giangvien.GiangVienService;
+import com.thanglong.chonlichthilai.ky.Ky;
 import com.thanglong.chonlichthilai.ky.KyService;
 import com.thanglong.chonlichthilai.sinhvien.SinhVien;
 import com.thanglong.chonlichthilai.sinhvien.SinhVienService;
@@ -94,7 +95,8 @@ public class DangNhapController {
        		PhienKetNoi phienKetNoi = new PhienKetNoi();
        		
     		phienKetNoi.setUserName(userName);
-    		phienKetNoi.setMaKy(kyService.findByMacDinh(1).getMaKy());
+    		Ky s1 = kyService.findByMacDinh(1);
+    		phienKetNoi.setMaKy(s1.getMaKy());
     		phienKetNoi.setNamHoc(e.getNamHoc());
     		if (userName.indexOf("A")==0) {
     			SinhVien sinhVien = (SinhVien)obj;

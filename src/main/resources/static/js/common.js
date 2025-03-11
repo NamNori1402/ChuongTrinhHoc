@@ -11,6 +11,13 @@ function getKyMacDinh() {
 		}
 	}
 }
+function getTenKy(maKy) {
+	for(i = 0; i < TAB_KY.length; i++){
+		if(TAB_KY[i].maKy == maKy){
+			return TAB_KY[i];
+		}
+	}
+}
 //-------------------------------------------------------------------------------------------------------------------------
 var URL = '/api/v1'
 tk=JSON.parse(localStorage.getItem('taiKhoan'));

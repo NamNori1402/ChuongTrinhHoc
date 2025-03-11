@@ -365,6 +365,7 @@
 <script>
 function list() {
 	maKy = $('#ky').val();
+	$('#tkbText').html('Thời khóa biểu: ' + getTenKy(maKy).tenKy);
 	if (maKy === ''){
 		maKy = getKyMacDinh().maKy;
 	}
@@ -375,6 +376,7 @@ function list() {
 		contentType	: 'application/json',
 		data		: JSON.stringify(data),
 		success : function(resp) {
+			console.log(resp)
 			checkResponse(resp);
 			DATA = JSON.parse(JSON.stringify(resp), (key, value) => {
 			    return value === null ? '' : value;
@@ -404,17 +406,14 @@ function list() {
 				formatter : function(value,row,index) {
 					var txt='';
 					trangThai = row.trangThai == 0? 'Mở' : row.trangThai == 1 ? '<font color="blue">Đóng</font>' : '<font color="red">Khóa</font>';
-					txt = row.maLopHocPhan + '('+trangThai+')';
-					return txt
-				}
-			});
-			cols.push({ 
-				field: 'tt',
-				title: 'Tên học phần',
-				valign: 'middle',
-				formatter : function(value,row,index) {
 					var obj = getHocPhan(row.maHocPhan);
-					return obj.tenHocPhan
+					let skdk = row.sldk;
+					if (row.sldk < 35) {
+					    skdk = `<span style="background: yellow">${row.sldk}</span>`;
+					}
+
+					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>S.lượng đăng ký: ' + skdk;
+					return txt
 				}
 			});
 			cols.push({ 
@@ -961,7 +960,7 @@ function lichHoc(){
 			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
 		}
 		$('#ky').html(txt);
-		$('#tkbText').html('Thời khóa biểu: ' + getKyMacDinh().tenKy);
+		$('#tkbText').html('Thời khóa biểu: ' + getTenKy(getKyMacDinh().maKy).tenKy);;
 		list();
 	})
 </script>
