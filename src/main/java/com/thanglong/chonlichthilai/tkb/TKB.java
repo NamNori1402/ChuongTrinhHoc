@@ -41,6 +41,7 @@ public class TKB {
     private String maLopHocPhan;  	
     private String maGiangVien;
     private Integer trangThai;
+    private Integer sucChua;
     private String maNguoiNhap;
     private String ghiChu;
     private Date time;

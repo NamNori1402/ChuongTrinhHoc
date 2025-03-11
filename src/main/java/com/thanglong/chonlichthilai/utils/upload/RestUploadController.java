@@ -195,7 +195,6 @@ public class RestUploadController {
 	                    System.out.println("File không có sheet nào hợp lệ: " + file.getOriginalFilename());
 	                    continue;
 	                }
-
 	                Sheet sheet = (Sheet)workbook.getSheetAt(0);
 	                if (up.equals("tkb")) {
 	                	List<TkbChiTiet> tkbChiTietList = new ArrayList<>();
@@ -204,8 +203,8 @@ public class RestUploadController {
 	  	                TKB tkb = null;
 	  	                for (Row row : (Iterable<Row>) sheet) {
 	  	                	try {
-	  	                		if (row.getRowNum() == 0) continue; // Bỏ qua dòng tiêu đề
-		  	                    maLopHocPhanNew = getStringValueFromCell(row.getCell(1));
+	  	                		if (row.getRowNum() <= 1) continue; // Bỏ qua dòng tiêu đề
+	  	                		maLopHocPhanNew = getStringValueFromCell(row.getCell(1));
 		  	                    if (maLopHocPhanNew == null || maLopHocPhanNew.length()  < 5) {
 		  	                    	break;
 		  	                    }
@@ -228,15 +227,22 @@ public class RestUploadController {
 		                      		} catch (Exception e) {
 		                      			str = "Không phân tích được Mã LHP "+maLopHocPhanNew+" định được STT ở dòng số " + row.getRowNum();
 		                      			break;
-		                      		} 	                    	
+		                      		} 	            
 		                      		try {
-		 		                    	tkb.setSldk(getIntValueFromCell(row.getCell(3)));
+			   		                    String sucChua = getStringValueFromCell(row.getCell(5));			   		                    
+			   		                    tkb.setSucChua(Integer.parseInt(sucChua));
+		                      		} catch (Exception e) {
+		                      			tkb.setSucChua(0);
+		                      		}
+		                      		
+		                      		try {
+		 		                    	tkb.setSldk(getIntValueFromCell(row.getCell(6)));
 		                      		} catch (Exception e) {
 		                      			str = "Không phân tích được Số lượng đăng ký "+maLopHocPhanNew+" định được STT ở dòng số " + row.getRowNum();
 		                      			break;
 		                      		}
 		                      		try {
-			   		                    String maGV = getStringValueFromCell(row.getCell(4));
+			   		                    String maGV = getStringValueFromCell(row.getCell(7));
 			   		                    if (maGV==null || maGV.length() < 3) {
 			   		                    	maGV = "BoMon";
 			   		                    }		   		                    
@@ -263,19 +269,19 @@ public class RestUploadController {
 		  	                    }
 		  	                    TkbChiTiet tkbChiTiet = new TkbChiTiet();
 	                      		try {
-	                      			tkbChiTiet.setLoaiHocPhan(getStringValueFromCell(row.getCell(2)));
+	                      			tkbChiTiet.setLoaiHocPhan(getStringValueFromCell(row.getCell(4)));
 	                      		} catch (Exception e) {
 	                      			str = "Không phân tích Loại học phần (LT/BT) "+maLopHocPhanNew+" định được STT ở dòng số " + row.getRowNum();
 	                      			break;
 	                      		}	  	                    
 	                      		try {
-	                      			Integer thu = getThu(getStringValueFromCell(row.getCell(5)));
+	                      			Integer thu = getThu(getStringValueFromCell(row.getCell(8)));
 	                      			 tkbChiTiet.setThu(thu);
 	                      		} catch (Exception e) {
 	                      			str = "Không phân tích thứ học trong tuần "+maLopHocPhanNew+" định được STT ở dòng số " + row.getRowNum();
 	                      			break;
 	                      		}
-    	  	                    String tiet = getStringValueFromCell(row.getCell(6)).trim();
+    	  	                    String tiet = getStringValueFromCell(row.getCell(9)).trim();
     	  	                    String arr [];
     	  	                    try {
     	  	                    	arr = tiet.split("-");
@@ -286,8 +292,8 @@ public class RestUploadController {
 	    	  	                    tkbChiTiet.setKetThuc(0);
     	  	                    }
 		  	                    tkbChiTiet.setTt(getIntValueFromCell(row.getCell(0)));
-	                  			tkbChiTiet.setGhiChuCa(getStringValueFromCell(row.getCell(2)));
-		  	                    tkbChiTiet.setPhong(getStringValueFromCell(row.getCell(7)));
+	                  			tkbChiTiet.setGhiChuCa(getStringValueFromCell(row.getCell(4)));
+		  	                    tkbChiTiet.setPhong(getStringValueFromCell(row.getCell(10)));
 		  	                    tkbChiTiet.setMaNguoiNhap(phienKetNoi.getUserName());
 		  	                    tkbChiTiet.setTkb(tkbLast);
 		  	                    tkbChiTiet.setTime(t);
@@ -456,17 +462,17 @@ public class RestUploadController {
 	    private Integer getThu(String str) {
 	    	if (str.indexOf("Hai") > 0) {
 	    		return 2 ;	    		
-	    	} else if (str.indexOf("Ba") > 0) {
+	    	} else if (str.indexOf("Ba") >= 0) {
 	    		return 3 ;	
-	    	} else if (str.indexOf("Tư") > 0) {
+	    	} else if (str.indexOf("Tư") >= 0) {
 	    		return 4;	
-	    	} else if (str.indexOf("Năm") > 0) {
+	    	} else if (str.indexOf("Năm") >= 0) {
 	    		return 5;	
-	    	} else if (str.indexOf("Sáu") > 0) {
+	    	} else if (str.indexOf("Sáu") >= 0) {
 	    		return 6;	
-	    	} else if (str.indexOf("Bảy") > 0) {
+	    	} else if (str.indexOf("Bảy") >= 0) {
 	    		return 7;	
-	    	} else if (str.indexOf("Chủ Nhật") > 0) {
+	    	} else if (str.indexOf("Nhật") > 0) {
 	    		return 8 ;
 	    	}
 	        return 0;

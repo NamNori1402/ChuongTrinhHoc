@@ -105,6 +105,7 @@ public class TKBServiceImpl implements TKBService {
         tkb.setMaNguoiCoiThi(e.getMaNguoiCoiThi());
         tkb.setGhiChuLichThi(e.getGhiChuLichThi());
         tkb.setSldk(e.getSldk());
+        tkb.setSucChua(e.getSucChua());
         // Xóa danh sách chi tiết cũ bằng cách duyệt danh sách hiện có
         if (tkb.getTkbChiTietList() != null) {
             tkb.getTkbChiTietList().clear();

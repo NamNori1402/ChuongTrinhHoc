@@ -411,8 +411,7 @@ function list() {
 					if (row.sldk < 35) {
 					    skdk = `<span style="background: yellow">${row.sldk}</span>`;
 					}
-
-					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>S.lượng đăng ký: ' + skdk;
+					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>Đăng ký: ' + skdk + ' sinh viên';
 					return txt
 				}
 			});
@@ -424,7 +423,11 @@ function list() {
 					var txt = '';
 					for (i=0; i < row.tkbChiTietList.length; i++){
 						oi = row.tkbChiTietList[i];
-						txt += 'T'+oi.thu + '('+oi.batDau+'-'+oi.ketThuc+') '+oi.phong+'.'+oi.ghiChuCa+'<br/>';
+						let t = oi.thu;
+						if (oi.thu == 0 || oi.batDau  == 0 || oi.ketThuc ==0) {
+							t = `<span style="background: yellow">${oi.thu}</span>`;
+						}
+						txt += 'T'+ t + '('+oi.batDau+'-'+oi.ketThuc+') '+oi.phong+'.'+oi.loaiHocPhan+'<br/>';
 					}
 					return txt;
 				}
@@ -446,7 +449,14 @@ function list() {
 				field: 'maGiangVien',
 				title: 'Mã GV',
 				valign: 'middle',
-				align: 'center'
+				align: 'center',
+				formatter : function(value,row,index) {
+					var txt = row.maGiangVien;
+					if (txt=='BoMon'){
+						txt = `<span style="background: yellow">${row.maGiangVien}</span>`;
+					}					
+					return txt;
+				}	
 			});
 			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
 				cols.push({ 

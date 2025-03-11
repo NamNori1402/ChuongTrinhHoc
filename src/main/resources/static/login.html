@@ -133,7 +133,6 @@ $("#login").click(function(){
 				data 		:  JSON.stringify(data),
 				contentType : 'application/json; charset=UTF-8',
 				success : function(resp) {
-					alert('')
 					mess = resp.content
 					if (resp.code==-1){
 						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ');
