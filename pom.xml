@@ -101,7 +101,11 @@
             <artifactId>fastexcel-reader</artifactId>
             <version>0.18.1</version>
         </dependency>
-        
+        <dependency>
+		   <groupId>net.sf.jasperreports</groupId>
+		   <artifactId>jasperreports</artifactId>
+		   <version>6.21.2</version>
+		</dependency>
         <dependency>
             <groupId>org.dhatim</groupId>
             <artifactId>fastexcel</artifactId>

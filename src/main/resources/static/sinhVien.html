@@ -242,7 +242,7 @@
 </script>
 <script>
 function list() {
-	maSinhVien = $('#maSinhVien').val();
+	maSinhVien = $('#maSinhVien').val().trim();
 	if (maSinhVien=='') {
 		alert('Bạn chưa nhập mã sinh viên');
 		document.getElementById('maSinhVien').focus();
@@ -337,12 +337,14 @@ function list() {
 					columns: cols,
 				    data: resp,
 				    exportTypes: ['txt', 'sql', 'excel'],
+					search: true,
+					showSearchClearButton: true
 				});
 				$('#dataTable2').bootstrapTable("destroy");
 				$('#dataTable2').bootstrapTable({
 					columns: cols,
 				    data: chuaHoanThanh,
-				    exportTypes: ['txt', 'sql', 'excel'],
+				    exportTypes: ['txt', 'sql', 'excel']
 				});
 				//
 				$.ajax({
@@ -373,7 +375,7 @@ function list() {
 							field: 'ten',
 							title: 'Tên',
 							valign: 'middle',
-							align: 'right',
+							align: 'left',
 							formatter : function(value,row,index) {
 								txt = '';
 								row.hoTenDem = row.hoTenDem == null ? '' : row.hoTenDem
@@ -381,7 +383,24 @@ function list() {
 								return txt
 							}
 						});
-						// Cot 4
+						cols.push({ 
+							field: 'soTin',
+							title: 'Tổng số tín',
+							align: 'center',
+							valign: 'middle',
+							formatter : function(value,row,index) {		
+								return soTin;
+							}
+						});
+						cols.push({ 
+							field: 'Khoa',
+							title: 'Khóa',
+							align: 'center',
+							valign: 'middle',
+							formatter : function(value,row,index) {					
+								return '<span title="Khóa hiện tại">' + row.khoa + '</span>/<span title="Khóa nhập học">' + row.khoaNhapHoc + '</span>'
+							}				
+						});
 						cols.push({ 
 							field: 'dienThoai1',
 						 	title: 'Đ.thoại 1',
@@ -429,121 +448,11 @@ function list() {
 						$('#dataTable1').bootstrapTable({
 							columns: cols,
 						    data: DATA,
-						    exportTypes: ['txt', 'sql', 'excel'],
-						    pageSize: 15,
-						    search: true
+						    exportTypes: ['txt', 'sql', 'excel']
 						});
 					}
 				});
-				//
-				$.ajax({
-						url 		: URL + '/sinhvien/'+maSinhVien,
-						type		: 'GET',
-						success : function(resp) {
-							checkResponse(resp)
-							DATA = [];
-							resp.soTin = soTin;
-							DATA.push(resp);
-							console.log(resp)
-							var cols = [];
-							cols.push({ 
-							    title: 'STT',
-							    valign: 'middle',
-							    align: 'center',
-							    formatter: function(value, row, index) {
-							        return index + 1;
-							    }
-							});
-							// Cot 1
-							cols.push({ 
-								field: 'maSinhVien',
-								title: 'MSV',
-								align: 'center',
-								valign: 'middle'
-							});
-							cols.push({ 
-								field: 'soTin',
-								title: 'Tổng số tín',
-								align: 'center',
-								valign: 'middle',
-								formatter : function(value,row,index) {		
-									return soTin;
-								}
-							});
-							cols.push({ 
-								field: 'Khoa',
-								title: 'Khóa',
-								align: 'center',
-								valign: 'middle',
-								formatter : function(value,row,index) {					
-									return '<span title="Khóa hiện tại">' + row.khoa + '</span>/<span title="Khóa nhập học">' + row.khoaNhapHoc + '</span>'
-								}				
-							});
-							// Cot 3
-							cols.push({ 
-								field: 'ten',
-								title: 'Tên',
-								valign: 'middle',
-								align: 'left',
-								formatter : function(value,row,index) {
-									txt = '';
-									row.hoTenDem = row.hoTenDem == null ? '' : row.hoTenDem
-									txt += row.hoTenDem + ' ' + row.ten
-									return txt
-								}
-							});
-							// Cot 4
-							cols.push({ 
-								field: 'dienThoai1',
-							 	title: 'Đ.thoại 1',
-							 	valign: 'middle',
-							 	align: 'center'
-							});
-							cols.push({ 
-								field: 'dienThoai2',
-							 	title: 'Đ.thoại 2',
-							 	valign: 'middle',
-							 	align: 'center'
-							});
-							// Cot 4
-							cols.push({ 
-								field: 'lopChuyenNganh',
-					         	title: 'Lớp chuyên ngành',
-					         	valign: 'middle',
-					         	align: 'center'
-							});
-							cols.push({ 
-								field: 'email1',
-								title: 'Email1',
-								align: 'left',
-								valign: 'middle'
-							});
-							cols.push({ 
-								field: 'email2',
-								title: 'Email 2',
-								align: 'center',
-								valign: 'middle'
-							});
-							if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
-								cols.push({ 
-									field: 'B',
-									title: 'Sửa',
-									align: 'center',
-									valign: 'middle',
-									clickToSelect: false,
-									formatter : function(value,row,index) {
-										return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
-									}
-								});
-							}
-							$('#dataTable1').bootstrapTable("destroy");
-							$('#dataTable1').bootstrapTable({
-								columns: cols,
-							    data: DATA,
-							    exportTypes: ['txt', 'sql', 'excel'],
-							});
-						}
-					});
+			
 		}
 	});
 }
@@ -638,7 +547,7 @@ function del(ts) {
 	let txt = `
 		<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 			<div class="input-group">
-				<input id="maSinhVien" value="A28198" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
+				<input id="maSinhVien" value="" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
 				<div class="input-group-append">
 					<button class="btn btn-primary" type="button"  onclick="list();">
 						<i class="fas fa-search fa-sm"></i>

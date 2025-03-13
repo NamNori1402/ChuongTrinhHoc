@@ -520,7 +520,7 @@ function del(ts) {
 			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
 		}
 		$('#ky').html(txt);
-		$('#tkbText').html('Đăng ký lịch thi lại: ' + getKyMacDinh().tenKy);
+		$('#tkbText').html('Cần đăng ký thi lại: <font color=red>' + getKyMacDinh().tenKy + '</font>');
 		list();
 	})
 </script>

@@ -105,6 +105,7 @@
 </body>
 <script>
 	var status = 0;
+	var clicka = 0;
 </script>
 <script>
 $("#login").click(function(){
@@ -155,6 +156,7 @@ $("#login").click(function(){
 		});	
 	} else if (status == 0){
 		$('#loading').html(loading)
+		$("#login").prop('disabled', true);
 		$.ajax({
 				url 		: '/dangnhap/'+userName,
 				type		: 'GET',
@@ -175,6 +177,7 @@ $("#login").click(function(){
 						alert('Đã gửi mật khẩu đến email: ' + resp.content);
 						$('#password').focus();	
 						status = 1
+						$("#login").prop('disabled', false);
 					}
 				}
 		});	

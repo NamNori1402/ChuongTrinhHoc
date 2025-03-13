@@ -1,6 +1,8 @@
 package com.thanglong.chonlichthilai.dangnhap;
 
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -32,10 +34,14 @@ import jakarta.validation.Valid;
 public class DangNhapController {
  
     // Annotation
+	static HashMap<String,String> loginKey = new HashMap<String,String>();
+	static HashMap<String,Long> loginTime = new HashMap<String,Long>();
     @Autowired private GiangVienService service;
     @Autowired private SinhVienService sinhVienService;
 	@Autowired private EmailService emailService;
 	@Autowired private KyService kyService;
+	boolean bTrue = true;
+
     // Read operation
     @GetMapping("/dangnhap")
     public List<GiangVien> findAll()  {
@@ -53,19 +59,26 @@ public class DangNhapController {
     	} else {
     		obj = service.findByMaGiangVien(userName);
     	}
+    	int status = 1;
 		if (obj != null) {
 			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	    	String json = ow.writeValueAsString(obj);
 	    	JSONObject jobj = new JSONObject(json);
 	    	String email = jobj.getString("email1");
+            Long l = System.currentTimeMillis();
+            String randomKey = generateKey(6);
+            loginTime.put(userName, System.currentTimeMillis());
     		if (email != null) {
-//    			EmailDetails emailDetails = new EmailDetails();
-//                Long l = System.currentTimeMillis();
-//                emailDetails.setSubject("TLU#"+l+" Mat khau dang nhap Chon lich thi lai");
-//                emailDetails.setMsgBody("123456");
-//                emailDetails.setRecipient(email);
-//                int status = emailService.sendSimpleMail(emailDetails);
-    			int status = 1;
+    			if (bTrue) {
+    	            loginKey.put(userName,randomKey);
+        			EmailDetails emailDetails = new EmailDetails();                 
+                    emailDetails.setSubject("TLU#"+l+" Mat khau dang nhap Chon lich thi lai");
+                    emailDetails.setMsgBody(randomKey);
+                    emailDetails.setRecipient(email);
+                    status = emailService.sendSimpleMail(emailDetails);
+    			} else {
+    	            loginKey.put(userName,"123456");
+    			}
                 if (status == 1) {
                 	message.setCode(0);
                     message.setContent(email);
@@ -84,60 +97,68 @@ public class DangNhapController {
     @PostMapping("/dangnhap")
     public Message kiemTraMatKhau(HttpServletRequest request, HttpServletResponse response,@Valid @RequestBody PhienKetNoi e) throws IOException  {
 		Message message = new Message();
-    	if (e.getPassword().equals("123456")) {
-    		String userName = e.userName.trim().toUpperCase();
-        	Object obj = null;
-        	if (userName.indexOf("A")==0) {
-        		obj = sinhVienService.findByMaSinhVien(userName);
-        	} else {
-        		obj = service.findByMaGiangVien(userName);
-        	}
-       		PhienKetNoi phienKetNoi = new PhienKetNoi();
-       		
-    		phienKetNoi.setUserName(userName);
-    		Ky s1 = kyService.findByMacDinh(1);
-    		phienKetNoi.setMaKy(s1.getMaKy());
-    		phienKetNoi.setNamHoc(e.getNamHoc());
-    		if (userName.indexOf("A")==0) {
-    			SinhVien sinhVien = (SinhVien)obj;
-    			phienKetNoi.setUserName(userName);
-    			phienKetNoi.setDsQuyen("sinhVien");   
-    			phienKetNoi.setTen(sinhVien.getTen());
-    			phienKetNoi.setHoTenDem(sinhVien.getHoTenDem());
-    			message.setCode(0);
-    			message.setContent("sinhVien");    			
-    		} else {
-    			GiangVien giangVien = (GiangVien)obj;
-    			phienKetNoi.setTen(giangVien.getTen());
-    			phienKetNoi.setHoTenDem(giangVien.getHoTenDem());
-    			int quanTri = giangVien.getQuanTri();
-    			int thuKy = giangVien.getThuKy();
-    			if (quanTri == 1) {
-    				phienKetNoi.setDsQuyen("quanTri");
-        			message.setCode(0);
-        			message.setContent("quanTri");
-    			} else if (thuKy == 1){
-    				phienKetNoi.setDsQuyen("thuKy");
-        			request.getSession().setAttribute("session",phienKetNoi);
-        			message.setCode(0);
-        			message.setContent("thuKy");
-    			} else {
-    				phienKetNoi.setDsQuyen("giangVien");
-        			message.setCode(0);
-        			message.setContent("giangVien");        			
-    			}
-    		}
-    		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-	    	String json = ow.writeValueAsString(phienKetNoi);
-	    	JSONObject jobj = new JSONObject(json);
-	    	
-    		message.setExtent(json);
-    		phienKetNoi.setExtent(json);
-    		request.getSession().setAttribute("phienKetNoi",phienKetNoi);
-    	} else {
+		String pass = e.getPassword();
+		if ((loginKey.containsKey(e.userName) && loginKey.get(e.userName).equals(pass))) {
+			Long now = System.currentTimeMillis();
+			long diff = now - loginTime.get(e.userName);
+			if (diff < 60*5*1000) {
+				String userName = e.userName.trim().toUpperCase();
+	        	Object obj = null;
+	        	if (userName.indexOf("A")==0) {
+	        		obj = sinhVienService.findByMaSinhVien(userName);
+	        	} else {
+	        		obj = service.findByMaGiangVien(userName);
+	        	}
+	       		PhienKetNoi phienKetNoi = new PhienKetNoi();
+	       		
+	    		phienKetNoi.setUserName(userName);
+	    		Ky s1 = kyService.findByMacDinh(1);
+	    		phienKetNoi.setMaKy(s1.getMaKy());
+	    		phienKetNoi.setNamHoc(e.getNamHoc());
+	    		if (userName.indexOf("A")==0) {
+	    			SinhVien sinhVien = (SinhVien)obj;
+	    			phienKetNoi.setUserName(userName);
+	    			phienKetNoi.setDsQuyen("sinhVien");   
+	    			phienKetNoi.setTen(sinhVien.getTen());
+	    			phienKetNoi.setHoTenDem(sinhVien.getHoTenDem());
+	    			message.setCode(0);
+	    			message.setContent("sinhVien");    			
+	    		} else {
+	    			GiangVien giangVien = (GiangVien)obj;
+	    			phienKetNoi.setTen(giangVien.getTen());
+	    			phienKetNoi.setHoTenDem(giangVien.getHoTenDem());
+	    			int quanTri = giangVien.getQuanTri();
+	    			int thuKy = giangVien.getThuKy();
+	    			if (quanTri == 1) {
+	    				phienKetNoi.setDsQuyen("quanTri");
+	        			message.setCode(0);
+	        			message.setContent("quanTri");
+	    			} else if (thuKy == 1){
+	    				phienKetNoi.setDsQuyen("thuKy");
+	        			request.getSession().setAttribute("session",phienKetNoi);
+	        			message.setCode(0);
+	        			message.setContent("thuKy");
+	    			} else {
+	    				phienKetNoi.setDsQuyen("giangVien");
+	        			message.setCode(0);
+	        			message.setContent("giangVien");        			
+	    			}
+	    		}
+	    		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		    	String json = ow.writeValueAsString(phienKetNoi);
+		    	JSONObject jobj = new JSONObject(json);
+		    	
+	    		message.setExtent(json);
+	    		phienKetNoi.setExtent(json);
+	    		request.getSession().setAttribute("phienKetNoi",phienKetNoi);
+			} else {
+				message.setCode(-1);
+				message.setContent("Tên đăng nhập hoặc tài khoản không hợp lệ, vui lòng liên hệ 0904.222.294");
+			}		
+		} else {
 			message.setCode(-1);
-			message.setContent("Tên đăng nhập hoặc tài khoản không hợp lệ, vui lòng liên hệ 0904.222.294");
-    	}
+			message.setContent("Tên đăng nhập hoặc tài khoản không hợp lệ, vui lòng liên hệ 0904.222.294");			
+		}
     	return message;
     }
 
@@ -177,4 +198,14 @@ public class DangNhapController {
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
+    private static final String CHARACTERS = "0123456789";
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    public static String generateKey(int length) {
+        StringBuilder key = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            key.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return key.toString();
+    }
 }
