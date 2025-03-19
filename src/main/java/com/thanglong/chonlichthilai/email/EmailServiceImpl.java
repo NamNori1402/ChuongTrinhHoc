@@ -64,8 +64,7 @@ public class EmailServiceImpl implements EmailService {
 
             // Setting multipart as true for attachments to
             // be send
-            mimeMessageHelper
-                = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
             mimeMessageHelper.setText(details.getMsgBody());

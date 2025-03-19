@@ -55,6 +55,7 @@ public class TKBServiceImpl implements TKBService {
         		.thu(detail.getThu())
         		.phong(detail.getPhong())
         		.ghiChuCa(detail.getGhiChuCa())
+        		.loaiHocPhan(detail.getLoaiHocPhan())
                 .tkb(savedTKB) // Associate with saved TKB
                 .build())
                 .collect(Collectors.toList())

@@ -564,6 +564,7 @@ function del(ts) {
     $(document).ready(function() {
         setTimeout(function() {
 			if (tk.dsQuyen == 'sinhVien') {
+				$('#maSinhVien').val(tk.userName);
 				list();
 				$('#maSinhVien').prop("disabled", true);
 			}            
