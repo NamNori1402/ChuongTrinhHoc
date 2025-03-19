@@ -364,6 +364,7 @@
 	CA_THI=JSON.parse(localStorage.getItem('TAB_CA_THI'));
 	PHONG_HOC=JSON.parse(localStorage.getItem('TAB_PHONG_HOC'));
 	HINH_THUC_THI=JSON.parse(localStorage.getItem('TAB_HINH_THUC_THI'));
+	TKY=JSON.parse(localStorage.getItem('TAB_KY'));
 </script>
 <script>
 function list() {
@@ -551,6 +552,7 @@ function del(ts) {
 		trangThai		= $('#trangThai').val();
 		ghiChu			= $('#ghiChu').val();
 		
+		
 		if (tt =='') {
 			alert('Bạn chưa nhập số thứ tự');
 			$('#tt').focus();
@@ -593,9 +595,10 @@ function del(ts) {
 				batDau	: batDau,
 				ketThuc	: ketThuc,
 				phong	: $('#phong'+i).val(),
-				ghiChuCa: $('#ghiChuCa'+i).val()
+				loaiHocPhan: $('#loaiHocPhan'+i).val()
 			});
 		}
+		console.log(tkbChiTietList)
 		for(i = 0; i < DATA.length; i++){
 			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
 				alert('Đã có Lớp học phần '+maLopHocPhan+ ' này rồi');
@@ -645,6 +648,8 @@ function del(ts) {
 					hinhThucThi		: hinhThucThi,
 					maNguoiCoiThi	: maNguoiCoiThi,
 					ghiChuLichThi	: ghiChuLichThi,
+					sldk: $('#sldk').val(),
+					sucChua: $('#sucChua').val()
 					}
 				api  = '/tkb/'+id;
 				type = 'PUT'
@@ -658,7 +663,9 @@ function del(ts) {
 					tenLop			: tenLop,
 					ttTkbTruong		: ttTkbTruong,
 					trangThai		: trangThai,
-					ghiChu			: ghiChu
+					ghiChu			: ghiChu,
+					sldk: $('#sldk').val(),
+					sucChua: $('#sucChua').val()
 					}	
 				api  = '/tkb';
 				type = 'POST'
@@ -702,11 +709,13 @@ function del(ts) {
 		}
 		if (act == 'insert') {
 			action = 'insert';
-			record.maKy 		= CFG_KY_MAC_DINH;
+			record.maKy 		= getKyMacDinh().maKy;
 			record.maHocPhan 	= '';	// CS100
 			record.maLopHocPhan	= '';  	// 242_CS100_01
 			record.trangThai 	= 1;
-			record.ttTkbTruong	= 1;	
+			record.ttTkbTruong	= 1;
+			record.sldk			= 0;
+			record.sucChua		= 0;
 			record.tenLop		= '';
 			record.ghiChu 		= '';
 		} else {
@@ -721,7 +730,18 @@ function del(ts) {
 		html = '<table>';
 		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
 		html = html + '<tr><td>STT trong TKB Trường</td><td><input '+disable+' type="text" id="ttTkbTruong" value="'+record.ttTkbTruong+'"/></td><tr>'
-		html = html + '<tr><td>Mã kỳ học </td><td><input '+disable+' type="text" id="maKy" value="'+record.maKy+'"/></td><tr>'
+		html = html + '<tr><td>Mã kỳ học </td>'
+		html = html + '	   <td> '
+		html = html + '	<Select id="maKy" style="width: 250px" '+disable+' > '
+		for(i = 0; i < TKY.length; i++){
+			var selected='';
+			if (action == 'update' && record.maKy==TKY[i].maKy) {
+				selected = 'Selected'
+			}
+			html = html + '<option value="'+TKY[i].maKy+'" '+selected+'>'+TKY[i].maKy+'</option>'	
+		}	
+		html = html + '</td>'
+		html = html + '</tr>'
 		html = html + '<tr>'
 		html = html + '   <td>Mã học phần</td>'
 		html = html + '   <td>'
@@ -774,6 +794,8 @@ function del(ts) {
 		html = html + '   		</Select>'
 		html = html + '   </td>'
 		html = html + '</tr>'
+		html += '<tr><td>Số lượng đăng Ký</td><td><span><input ' + disable + ' type="number" min="0" max="150" id="sldk" value="' + (record.sldk || 0) + '"/></span>';
+		html += '&nbsp;&nbsp;&nbsp;&nbsp;<span>Sức chứa</span><input ' + disable + ' type="number" min="0" max="150" id="sucChua" value="' + (record.sucChua || 0) + '"/></td></tr>';
 
 		html += '<tr><td>Ghi chú</td>';
 		html += '<td><textarea '+disable+' class="form-control bg-light border-1" height=50 width=70 id="ghiChu">'+record.ghiChu+'</textarea>';
@@ -871,8 +893,8 @@ function lichHoc(){
 			txt += ' 		</select>'	
 			txt += '	</td>'
 			txt += '   <td>'
-			txt += '   		<Select  '+disable+'  id="ghiChuCa'+k+'">'
-			if (action =='update' && rUpdate[k-1].ghiChuCa == 'LT'){
+			txt += '   		<Select  '+disable+'  id="loaiHocPhan'+k+'">'
+			if (action =='update' && rUpdate[k-1].loaiHocPhan == 'LT'){
 				txt += '   			<option value="LT" selected>LT</option>'
 				txt += '   			<option value="BT" >BT</option>'
 			} else {

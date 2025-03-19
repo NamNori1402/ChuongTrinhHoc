@@ -124,6 +124,7 @@ public class TKBServiceImpl implements TKBService {
                         .thu(detail.getThu())
                         .phong(detail.getPhong())
                         .ghiChuCa(detail.getGhiChuCa())
+                        .loaiHocPhan(detail.getLoaiHocPhan())
                         .tkb(tkb) // Liên kết với TKB
                         .build();
                 tkb.getTkbChiTietList().add(newDetail);
