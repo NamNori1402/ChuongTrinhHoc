@@ -485,6 +485,12 @@ function del(ts) {
 </script>
 <script>
 	$('#Save').click(function() {
+		if (!validatePhoneNumber("dienThoai1") || !validatePhoneNumber("dienThoai2") || 
+		       !validateEmail("email1") || !validateEmail("email2")) {
+		       alert("Vui lòng nhập đầy đủ và đúng định dạng các trường trước khi lưu!");
+		       return; // Chặn lưu nếu có lỗi
+		   }
+		   
 		id 		= $('#id').val();
 		ten 	= $('#ten').val();
 		dienThoai1 	= $('#dienThoai1').val();
@@ -578,7 +584,7 @@ function del(ts) {
 	function validatePhoneNumber(id) {
 			    var phoneNumber = document.getElementById(id).value;
 			    var errorElement = document.getElementById(id + "-error");
-			    var regex = /^[0-9]{10}$/; // Chỉ chấp nhận số và có đúng 10 chữ số
+			    var regex = /^0\d{9}$/; // Chỉ chấp nhận số và có đúng 10 chữ số
 
 			    if (!regex.test(phoneNumber)) {
 			        errorElement.innerHTML = "Số điện thoại không hợp lệ. Vui lòng nhập 10 chữ số.";
@@ -646,13 +652,7 @@ function del(ts) {
 		$('#trangThai').prop('checked', false); // Reset trước khi set giá trị mới
 		console.log("Trạng thái hiện tại:", record.trangThai);
 		$('#trangThai').prop('checked', record.trangThai == 1);
-		$('#frm').modal('show');
-		
-
-		if (!validatePhoneNumber("dienThoai1") || !validatePhoneNumber("dienThoai2")) {
-				        alert("Vui lòng nhập số điện thoại hợp lệ trước khi lưu!");
-				        return;
-				    }	
+		$('#frm').modal('show');	
 		
 	}
 	
