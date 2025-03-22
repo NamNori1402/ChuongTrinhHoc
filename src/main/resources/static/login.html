@@ -134,7 +134,14 @@ $("#login").click(function(){
 				data 		:  JSON.stringify(data),
 				contentType : 'application/json; charset=UTF-8',
 				success : function(resp) {
+					let extentData = JSON.parse(resp.extent); // 🔥 Parse extent thành JSON
+	                let trangThai = extentData.trangThai;
 					mess = resp.content
+					// 🛑 Kiểm tra trạng thái tài khoản có bị khóa hay không
+				if (trangThai === 1) {
+					    alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên để mở khóa.');
+					    return;
+					   }
 					if (resp.code==-1){
 						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ');
 						window.location.replace("login.html");
@@ -163,7 +170,13 @@ $("#login").click(function(){
 				dataType	: 'json',
 				contentType : 'application/json; charset=UTF-8',
 				success : function(resp) {
-					$('#loading').html('')
+					$('#loading').html('');
+					let extentData = JSON.parse(resp.extent); // 🔥 Parse extent thành JSON
+	                let trangThai = extentData.trangThai;
+					if (trangThai === 1) {
+	                    alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên để mở khóa.');
+	                    return;
+	                }
 					if (resp.code==-1){
 						alert(resp.content);
 						window.location.replace("login.html");

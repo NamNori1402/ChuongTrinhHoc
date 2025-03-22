@@ -242,10 +242,10 @@
 </script>
 <script>
 function list() {
-	maSinhVien = $('#maSinhVien').val().trim();
+	maSinhVien = $('#maSinhVienSearch').val().trim();
 	if (maSinhVien=='') {
 		alert('Bạn chưa nhập mã sinh viên');
-		document.getElementById('maSinhVien').focus();
+		document.getElementById('maSinhVienSearch').focus();
 		return;
 	}
 	//--------------------------------------------------------------------
@@ -415,7 +415,7 @@ function list() {
 						});
 						// Cot 4
 						cols.push({ 
-							field: 'lopChuyeNganh',
+							field: 'lopChuyenNganh',
 				         	title: 'Lớp CN',
 				         	valign: 'middle',
 				         	align: 'center'
@@ -431,6 +431,16 @@ function list() {
 							title: 'Email 2',
 							align: 'center',
 							valign: 'middle'
+						});
+						cols.push({ 
+							field: 'trangThai',
+							title: 'Trạng thái',
+							align: 'center',
+							valign: 'middle',
+							formatter: function(value, row, index) {
+								 return value == 0 ? "Mở" : "Khóa";
+							 },
+							
 						});
 						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == resp.maSinhVien) {
 							cols.push({ 
@@ -474,10 +484,65 @@ function del(ts) {
 }
 </script>
 <script>
+	$('#Save').click(function() {
+		id 		= $('#id').val();
+		ten 	= $('#ten').val();
+		dienThoai1 	= $('#dienThoai1').val();
+		dienThoai2 	= $('#dienThoai2').val();
+		lopChuyenNganh 	= $('#lopChuyenNganh').val();
+		email1 	= $('#email1').val();
+		email2 	= $('#email2').val();
+		trangThai = $('#trangThai').is(':checked') ? 1 : 0;
+		api  = ''
 
+		if (action == 'update') {
+			id = $('#id').val();
+			data = 		{	
+				id   				:id        ,
+				maSinhVien 			:maSinhVien,
+				ten 				:ten  ,
+				dienThoai1 				:dienThoai1  ,
+				dienThoai2 				:dienThoai2 ,
+				lopChuyenNganh 			:lopChuyenNganh  ,
+				email1 				:email1 ,
+				email2 				:email2  ,
+				trangThai 				:trangThai ,
+						}
+			api  = '/sinhvien/'+id;
+			type = 'PUT'
+		} else {
+			data = 		{
+				maSinhVien 			:maSinhVien,
+				ten 				:ten  ,
+				dienThoai1 				:dienThoai1  ,
+				dienThoai2 				:dienThoai2 ,
+				lopChuyenNganh 			:lopChuyenNganh  ,
+				email1 				:email1 ,
+				email2 				:email2  ,
+				trangThai 				:trangThai ,
+				}	
+			api  = '/sinhvien';
+			type = 'POST'
+		}
+		console.log(data)
+		$.ajax({
+			url 		: URL + api,
+			type		: type,
+			dataType	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			data 		:  JSON.stringify(data),
+			success : function(resp) {
+				data = resp;
+	//			alert(data.code + ': ' +data.message);
+	//			if (data.code==1000){
+					$('#frm').modal('hide');
+					list();
+	//			}
+			}
+		});	
+	});
 </script>
-
-
+<script>list()</script>
 <script>
 	function formatDate(date, daysToAdd = 0) {
 	    let d = new Date(date);
@@ -488,6 +553,43 @@ function del(ts) {
 	}
 </script>
 <script>
+	function validateEmail(id) {
+	    var inputField = document.getElementById(id);
+	    var errorElement = document.getElementById(id + "-error");
+
+	    if (!inputField) {
+	        console.error("Không tìm thấy phần tử có ID: " + id);
+	        return false;
+	    }
+
+	    var email = inputField.value;
+	    var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng email hợp lệ
+
+	    if (!regex.test(email)) {
+	        errorElement.innerHTML = "Email không hợp lệ. Vui lòng nhập đúng định dạng (example@domain.com).";
+	        errorElement.style.color = "red";
+	        return false;
+	    } else {
+	        errorElement.innerHTML = ""; // Xóa cảnh báo nếu hợp lệ
+	        return true;
+	    }
+	}
+	
+	function validatePhoneNumber(id) {
+			    var phoneNumber = document.getElementById(id).value;
+			    var errorElement = document.getElementById(id + "-error");
+			    var regex = /^[0-9]{10}$/; // Chỉ chấp nhận số và có đúng 10 chữ số
+
+			    if (!regex.test(phoneNumber)) {
+			        errorElement.innerHTML = "Số điện thoại không hợp lệ. Vui lòng nhập 10 chữ số.";
+			        errorElement.style.color = "red";
+			        return false;
+			    } else {
+			        errorElement.innerHTML = ""; // Xóa cảnh báo nếu hợp lệ
+			        return true;
+			    }
+			}
+		
 	function frmInsertUpdate(act) {
 		var record = {};
 		if (act == 'insert') {
@@ -505,37 +607,52 @@ function del(ts) {
 		    record.trangThai = 0;
 		} else {
 			action = 'update';
-		    for (let i = 0; i < DATA1.length; i++) {
-		        if (act.id == DATA1[i].id) {
-		            record = DATA1[i];
-					record.ten 		= record.ten;
-					record.dienThoai1 	= record.dienThoai1;
-					record.dienThoai2 	= record.dienThoai2;
-					record.lopChuyenNganh	= record.lopChuyenNganh;
-					record.email1 	= record.email1;
-					record.email2 	= record.email2;
-					record.trangThai = $('#trangThai').is(':checked') ? 1 : 0;
+		    for (let i = 0; i < DATA.length; i++) {
+		        if (act.id == DATA[i].id) {
+		            record = DATA[i];
+					break;
 		        }
 		    }
 		}
+		// Kiểm tra số điện thoại hợp lệ trước khi tiếp tục
+	
+				
 		html = '';
 		html = '<table>';
 		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
-		html = html + '<tr><td>Mã sinh viên </td><td><input type="text" class="form-control" id="maSinhVien" value="'+record.maSinhVien+'"/></td><tr>'
+		html = html + '		<tr><td>Mã sinh viên </td><td><input type="text" class="form-control" id="maSinhVien" value="'+record.maSinhVien+'"/></td></tr>'
 		html = html + '<tr><td>Tên</td><td><input type="text" class="form-control" id="ten" value="'+record.ten+'"/></td><tr>'
 		html = html + '<tr><td>Lớp chuyên ngành</td><td><input type="text" class="form-control" id="lopChuyenNganh" value="'+record.lopChuyenNganh+'"/></td><tr>'
 		html = html + '<tr><td colspan=2><hr/></td></tr>'		
-		html = html + '<tr><td>Điện thoại 1</td><td><input type="text" class="form-control" id="dienThoai1" value="'+record.dienThoai1+'"/></td><tr>'
-		html = html + '<tr><td>Điện thoại 2</td><td><input type="text"  class="form-control" id="dienThoai2" value="'+record.dienThoai2+'"/></td><tr>'
+		html = html + '<tr><td>Điện thoại 1</td><td><input type="text" class="form-control" id="dienThoai1" value="'+record.dienThoai1+'" onblur="validatePhoneNumber(\'dienThoai1\')"/><br><span id="dienThoai1-error"></span></td><tr>'
+		html = html + '<tr><td>Điện thoại 2</td><td><input type="text"  class="form-control" id="dienThoai2" value="'+record.dienThoai2+'" onblur="validatePhoneNumber(\'dienThoai2\')"/><br><span id="dienThoai2-error"></span></td><tr>'
 		html = html + '<tr><td colspan=2><hr/></td></tr>'
-		html = html + '<tr><td>Email trường</td><td><input type="text" class="form-control" id="email1" value="'+record.email1+'"/></td><tr>'
-		html = html + '<tr><td>Email cá nhân</td><td><input type="text" class="form-control"  style="width:300px;" id="email2" value="'+record.email2+'"/></td><tr>'
+		html = html + '<tr><td>Email trường</td><td><input type="text" class="form-control" id="email1" value="'+record.email1+'"onblur="validateEmail(\'email1\')"/><br><span id="email1-error"></span></td><tr>'
+		html = html + '<tr><td>Email cá nhân</td><td><input type="text" class="form-control"  style="width:300px;" id="email2" value="'+record.email2+'"onblur="validateEmail(\'email2\')"/><br><span id="email2-error"></span></td><tr>'
 		html = html + '<tr><td colspan=2><hr/></td></tr>'			
-		html = html + '<tr><td>Trạng thái Khóa?</td><td><input type="checkbox" id="trangThai" '+record.trangThai+'/></td><tr>'
+		html = html + '<tr><td>Trạng thái Khóa?</td><td><input type="checkbox" id="trangThai" /></td><tr>'
 
 		$('#modal-title').html("Sinh viên");
 		$('#frm-content').html(html);
+		setTimeout(function() {
+		    if (tk.dsQuyen == 'sinhVien') {
+		        $('#maSinhVien').prop('disabled', true);
+		        $('#ten').prop('disabled', true);
+		        $('#lopChuyenNganh').prop('disabled', true);
+		        $('#email1').prop('disabled', true);
+				$('#trangThai').prop('disabled', true);
+		    }
+		}, 100); 
+		$('#trangThai').prop('checked', false); // Reset trước khi set giá trị mới
+		console.log("Trạng thái hiện tại:", record.trangThai);
+		$('#trangThai').prop('checked', record.trangThai == 1);
 		$('#frm').modal('show');
+		
+
+		if (!validatePhoneNumber("dienThoai1") || !validatePhoneNumber("dienThoai2")) {
+				        alert("Vui lòng nhập số điện thoại hợp lệ trước khi lưu!");
+				        return;
+				    }	
 		
 	}
 	
@@ -547,7 +664,7 @@ function del(ts) {
 	let txt = `
 		<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 			<div class="input-group">
-				<input id="maSinhVien" value="" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
+				<input id="maSinhVienSearch" value="" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
 				<div class="input-group-append">
 					<button class="btn btn-primary" type="button"  onclick="list();">
 						<i class="fas fa-search fa-sm"></i>
@@ -564,11 +681,10 @@ function del(ts) {
     $(document).ready(function() {
         setTimeout(function() {
 			if (tk.dsQuyen == 'sinhVien') {
-				$('#maSinhVien').val(tk.userName);
+				$('#maSinhVienSearch').val(tk.userName).prop("disabled", true);
 				list();
-				$('#maSinhVien').prop("disabled", true);
 			}            
-        }, 1000); // Executes list() after 1 second (1000ms)
+        }, 100); // Executes list() after 1 second (1000ms)
     });
 </script>
 </html>
