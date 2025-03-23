@@ -132,7 +132,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+				<div class="container-fluid">
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -140,24 +140,75 @@
                             <h6 class="m-0 font-weight-bold text-primary">
 								<table width="100%" border="0">
 									<tr>
-										<td>Thông tin sinh viên</td>
+										<td>Thời khóa biểu</td>
 								<td align="right" id="btn_InsertUpdate">
 								</td>
 								</tr></table>
 							</h6>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+						<div class="card-body">
+		                    <div class="table-responsive">
+                                <table class="table table-bordered" id="dTable" width="100%" cellspacing="0">
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+				<div class="container-fluid">
+	                  <!-- DataTales Example -->
+	                  <div class="card shadow mb-4">
+	                      <div class="card-header py-3">
+	                          <h6 class="m-0 font-weight-bold text-primary">
+								<table width="100%" border="0">
+									<tr>
+										<td>Thông tin chính</td>
+								<td align="right" id="btn_InsertUpdate">
+								</td>
+								</tr></table>
+							</h6>
+	                      </div>
+	                      <div class="card-body">
+	                          <div class="table-responsive">
+	                              <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+	                              </table>
+	                          </div>
+	                      </div>
+	                  </div>
+	            </div>
+				<div class="container-fluid">
+	                <!-- DataTales Example -->
+	                <div class="card shadow mb-4">
+	                    <div class="card-header py-3">
+	                        <h6 class="m-0 font-weight-bold text-primary">
+								<table width="100%" border="0">
+									<tr>
+										<td>Số học phần chưa qua</td>
+								<td align="right" id="btn_InsertUpdate">
+								</td>
+								</tr></table>
+							</h6>
+	                    </div>
 						<div class="card-body">
 						    <div class="table-responsive">
 						        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
 						        </table>
 						    </div>
-						</div>
+						</div>						
+	                </div>
+	            </div>
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+								<table width="100%" border="0">
+									<tr>
+										<td>Chi tiết quá trình tích lũy</td>
+								<td align="right" id="btn_InsertUpdate">
+								</td>
+								</tr></table>
+							</h6>
+                        </div>
 						<div class="card-body">
 						    <div class="table-responsive">
 						        <table class="table table-bordered" id="dataTable3" width="100%" cellspacing="0">
@@ -248,6 +299,8 @@ function list() {
 		document.getElementById('maSinhVien').focus();
 		return;
 	}
+	//
+	hienTkb(maSinhVien,"sinhVien");
 	//--------------------------------------------------------------------
 	data = {maSinhVien: maSinhVien}
 	var chuaHoanThanh = [];
@@ -547,7 +600,7 @@ function del(ts) {
 	let txt = `
 		<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 			<div class="input-group">
-				<input id="maSinhVien" value="" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
+				<input id="maSinhVien" value="A42159" type="text" class="form-control bg-green border-0 small" placeholder="Tìm theo mã sinh viên" aria-label="Search" aria-describedby="basic-addon2" >
 				<div class="input-group-append">
 					<button class="btn btn-primary" type="button"  onclick="list();">
 						<i class="fas fa-search fa-sm"></i>

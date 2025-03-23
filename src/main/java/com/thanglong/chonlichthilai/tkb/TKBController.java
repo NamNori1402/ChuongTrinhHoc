@@ -1,6 +1,7 @@
 package com.thanglong.chonlichthilai.tkb;
 
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Hibernate;
 // Importing required classes
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.thanglong.chonlichthilai.dangnhap.PhienKetNoi;
+import com.thanglong.chonlichthilai.entity.ThoiKhoaBieu;
 
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +49,15 @@ public class TKBController {
     public TKB getId(@PathVariable("id") Long Id)  {
         return service.findById(Id);
     }
+    @PostMapping("/tkb/caNhan")
+    public List<ThoiKhoaBieu> getThoiKhoaBieu(@RequestBody Map<String, String> requestBody, ServletRequest request) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        PhienKetNoi phienKetNoi = (PhienKetNoi) req.getSession().getAttribute("phienKetNoi");
+        String userName = requestBody.get("userName");
+        String doiTuong = requestBody.get("doiTuong");
+        List<ThoiKhoaBieu> tkb = service.findByMaGiangVienMaKy(userName, doiTuong, phienKetNoi.getMaKy());
+        return tkb;
+    }
     // Update operation
     @PutMapping("/tkb/{id}")
     public TKB update(@RequestBody TKB e, @PathVariable("id") Long Id, ServletRequest request) {
@@ -55,7 +66,7 @@ public class TKBController {
 		e.setMaNguoiNhap(phienKetNoi.getUserName());
         return service.update(e, Id);
     }
- 
+
     // Delete operation
     @DeleteMapping("/tkb/{id}")
     public String deleteById(@PathVariable("id") Long Id)  {

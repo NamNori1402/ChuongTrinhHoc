@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.thanglong.chonlichthilai.entity.ThiLaiResp;
+import com.thanglong.chonlichthilai.entity.ThoiKhoaBieu;
 import com.thanglong.chonlichthilai.tkb.chitiet.TkbChiTiet;
 import com.thanglong.chonlichthilai.tkb.chitiet.TkbChiTietRepository;
 
@@ -171,4 +173,33 @@ public class TKBServiceImpl implements TKBService {
     public List<TKB> findByMaKy(String maKy) {
     	return repository.findByMaKy(maKy);
     }
+    
+    
+    @Transactional
+    @Override
+    public List<ThoiKhoaBieu> findByMaGiangVienMaKy(String maDoiTuong, String doiTuong, String maKy) {
+        String sql = "";
+        if (doiTuong.equals("giangVien")) {
+            sql = "SELECT ma_ky, ma_hoc_phan, ma_lop_hoc_phan, tt_tkb_truong, Y.loai_hoc_phan,  " +
+            "Y.thu, Y.phong, Y.bat_dau, Y.ket_thuc " +
+            "FROM tkb X INNER JOIN tkb_chi_tiet Y ON (X.id = Y.tkb_id) " +
+            "WHERE ma_giang_vien = :maDoiTuong "
+//            + " AND ma_ky = :maKy " +
+            + "ORDER BY Y.thu";
+        } else if (doiTuong.equals("sinhVien")) {
+        	 sql = "SELECT X.ma_ky, X.ma_hoc_phan, X.ma_lop_hoc_phan, X.tt_tkb_truong, Y.loai_hoc_phan,  Y.thu, Y.phong, Y.bat_dau, Y.ket_thuc \r\n"
+        	 		+ "FROM tkb X INNER JOIN tkb_chi_tiet Y ON (X.id = Y.tkb_id) INNER JOIN dang_ky Z ON (X.ma_lop_hoc_phan=Z.ma_lop_hoc_phan) \r\n"
+        	 		+ "WHERE Z.msv = :maDoiTuong\r\n"
+//            + " AND ma_ky = :maKy " +
+            + " ORDER BY Y.thu";	
+        }
+        System.out.println( maDoiTuong +" > "+ doiTuong+" > "+maKy+" > "+sql);
+        Query query = entityManager.createNativeQuery(sql, ThoiKhoaBieu.class);
+        query.setParameter("maDoiTuong", maDoiTuong);
+//        query.setParameter("maKy", maKy);
+        
+        return query.getResultList();
+    }
+
+    
 }

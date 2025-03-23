@@ -281,6 +281,25 @@
 												</form>
 											</td>
 										</tr>
+										<tr><td>Upload Đăng ký học</td><td></td><td>Upload Điểm sinh viên</td></tr>
+										<tr><td><a href='files/dangKyHoc.xls'>Tải file mẫu</a></td><td></td><td><a href='files/Diem.xlsx'>Tải file mẫu</a></td></tr>
+										<tr>
+											<td>
+												<form method="POST" enctype="multipart/form-data" id="fileUploadForm3">
+												    <input type="text" name="extraField3"/><br/>
+												    <input type="file" name="files3"/><br/>
+												    <input type="submit" value="Submit" id="btnSubmi3"/>
+												</form>
+											</td>										
+											<td></td>
+											<td>
+												<form method="POST" enctype="multipart/form-data" id="fileUploadForm4">
+												    <input type="text" name="extraField4"/><br/>
+												    <input type="file" name="files4"/><br/>
+												    <input type="submit" value="Submit" id="btnSubmi4"/>
+												</form>
+											</td>
+										</tr>
                                 </table>
                             </div>
                         </div>
@@ -370,11 +389,14 @@
 		    event.preventDefault();
 		    fire_ajax_submit('btnSubmitBangDiem','/api/v1/u/diemsinhvien','fileUploadForm2');
 		});
+		$("#btnSubmi3").click(function (event) {
+		    event.preventDefault();
+		    fire_ajax_submit('btnSubmi3','/api/v1/u/dangkyhoc','fileUploadForm3');
+		});
 		
 	});
 
 	function fire_ajax_submit(btn,api,fileUploadForm) {
-
 	    // Get form
 	    var form = $('#'+fileUploadForm)[0];
 

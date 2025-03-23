@@ -2,6 +2,12 @@ var CFG_KY_MAC_DINH='2526K2';
 var TAB_GIANG_VIEN = '';
 var TAB_HOC_PHAN = '';
 var CFG_NAM_HOC_MAC_DINH='';
+THP=JSON.parse(localStorage.getItem('TAB_HOC_PHAN'));
+TGV=JSON.parse(localStorage.getItem('TAB_GIANG_VIEN'));
+CA_THI=JSON.parse(localStorage.getItem('TAB_CA_THI'));
+PHONG_HOC=JSON.parse(localStorage.getItem('TAB_PHONG_HOC'));
+HINH_THUC_THI=JSON.parse(localStorage.getItem('TAB_HINH_THUC_THI'));
+TKY=JSON.parse(localStorage.getItem('TAB_KY'));
 //-------------------------------------------------------------------------------------------------------------------------
 var TAB_KY=JSON.parse(localStorage.getItem('TAB_KY'));
 function getKyMacDinh() {
@@ -68,6 +74,113 @@ function checkResponse(resp) {
 		window.location.replace("login.html");
 		return;
 	}	
+}
+//---------------------------------------------------------------------------------------------
+function hienTkb(user,doiTuong){
+	let userName = '';
+	if (tk.userName == user) {
+		userName = user;
+	} else {
+		userName = $('#maGiangVien').val()===undefined?$('#maSinhVien').val():$('#maGiangVien').val();
+	}
+	data = {userName : userName, doiTuong: doiTuong}
+	$.ajax({
+		url 		: URL + '/tkb/caNhan',
+		type		: 'POST',
+		data		: JSON.stringify(data),	
+		contentType : 'application/json; charset=UTF-8',
+		success : function(resp) {
+			checkResponse(resp);
+			console.log(resp)
+			DATA = resp;
+			let txt = '<table border=1>';
+			txt += '<tr>'
+			txt += '<td align="center">Thứ</td>'
+			for(j=1; j < 14; j++){
+				txt += '<td align="center">'+j+'</td>'
+			}
+			txt += '</tr>'
+			const myMap = new Map();
+			const myCho = new Map();
+			let tongSoTin = 0;
+			for (let i = 2; i < 9; i++) {
+			    txt += '<tr><td align="center">' + i;
+			    let j = 1;			    
+			    while (j < 14) {
+			        let check = 0;
+			        let rcord = '';
+			        let bgcolor = '';
+
+			        for (let k = 0; k < DATA.length; k++) {
+			            if (DATA[k].thu == i && j >= DATA[k].batDau && j <= DATA[k].ketThuc) {
+			                check = (DATA[k].ketThuc - DATA[k].batDau) + 1;
+			                hp = DATA[k];
+			                break;
+			            }
+			        }
+			        if (check > 0) {
+			            if (!myMap.has(hp.maLopHocPhan)) {
+							while(true){
+								bgcolor = getRandomColor();								
+								if(myCho.has(bgcolor)) {
+									continue;
+								} else {
+									break;
+								}
+							}
+			                myMap.set(hp.maLopHocPhan, bgcolor);
+							let hocPhanTemp1 = getHocPhan(hp.maHocPhan)
+							tongSoTin += hocPhanTemp1.soTin;
+							myCho.set(bgcolor,"");
+			            } else {
+			                bgcolor = myMap.get(hp.maLopHocPhan);
+			            }
+						let lopHocPhanTem = hp.maLopHocPhan;
+						let kyID = lopHocPhanTem.substring(0,3);
+						let hocPhanID = lopHocPhanTem.substring(3,8);
+						let lopID = lopHocPhanTem.substring(8,10);
+						hpTen = getHocPhan(hp.maHocPhan);
+						hp.maKy = (hp.maKy).split("2425").join("");
+			            txt += `<td colspan="${check}" align="center" width="7%" title="${lopHocPhanTem} - ${hpTen.tenHocPhan}"
+						style="
+						background-color: ${bgcolor.bg}; 
+						color: ${bgcolor.cl};
+						border-color: ${bgcolor.bg}
+						">${kyID}.${hocPhanID}.${lopID}.${hp.phong}.${hp.maKy}</td>`;
+			            j += check; // Nhảy đến tiết tiếp theo
+			        } else {
+			            txt += '<td width="7%">&nbsp;</td>';
+			            j++; // Duyệt tiếp
+			        }
+			    }
+			    txt += '</tr>';
+			}
+			alert(tongSoTin);
+			txt += '</table>';
+			$('#dTable').html(txt);
+		}
+	});
+}
+//---------------------------------------------------------------------------------------------
+const colors = [ 
+	{"bg":"#CC99FF","cl":"#D9D9D9"},
+	{"bg":"#FFD154","cl":"#002795"},
+	{"bg":"#6D24CF","cl":"#FFE06F"},
+	{"bg":"#68D69D","cl":"#401D83"},
+	{"bg":"#FF9240","cl":"#FFFFA9"},
+	{"bg":"#0063EC","cl":"#FFFFFF"},
+	{"bg":"#D9D9D9","cl":"#C20000"},
+	{"bg":"#FF83A9","cl":"#FFFFFF"},
+	{"bg":"#3D3D3D","cl":"#FFD154"},
+	{"bg":"#D4B5FF","cl":"#002795"},
+	{"bg":"#96D6FF","cl":"#FFFFFF"},
+	{"bg":"#FFC0B9","cl":"#FFFFC5"}
+	]
+function getRandomColor() {
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+function getRandomFont(str) {
+  return fonts[Math.floor(Math.random() * colors.length)];
 }
 //
 function khoiTao() {

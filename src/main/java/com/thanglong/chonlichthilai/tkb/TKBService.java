@@ -4,6 +4,8 @@ package com.thanglong.chonlichthilai.tkb;
 import java.util.List;
 import java.util.Set;
 
+import com.thanglong.chonlichthilai.entity.ThoiKhoaBieu;
+
 
 //Interface
 public interface TKBService {
@@ -30,4 +32,6 @@ public interface TKBService {
 	List<TKB> findByMaKy(String maKy);
 
 	TKB findByTtTkbTruongAndMaKy(Long ttTkbTruong, String maKy);
+
+	List<ThoiKhoaBieu> findByMaGiangVienMaKy(String maGiangVien, String doiTuong, String maKy);
 }
