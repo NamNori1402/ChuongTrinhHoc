@@ -123,12 +123,14 @@ public class DangNhapController {
 	    			phienKetNoi.setDsQuyen("sinhVien");   
 	    			phienKetNoi.setTen(sinhVien.getTen());
 	    			phienKetNoi.setHoTenDem(sinhVien.getHoTenDem());
+	    			phienKetNoi.setTrangThai(sinhVien.getTrangThai());
 	    			message.setCode(0);
 	    			message.setContent("sinhVien");    			
 	    		} else {
 	    			GiangVien giangVien = (GiangVien)obj;
 	    			phienKetNoi.setTen(giangVien.getTen());
 	    			phienKetNoi.setHoTenDem(giangVien.getHoTenDem());
+	    			phienKetNoi.setTrangThai(giangVien.getTrangThai()); 
 	    			int quanTri = giangVien.getQuanTri();
 	    			int thuKy = giangVien.getThuKy();
 	    			if (quanTri == 1) {

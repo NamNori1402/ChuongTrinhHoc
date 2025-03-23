@@ -20,4 +20,5 @@ public class PhienKetNoi {
 	String maKy;
 	String namHoc;
 	String extent;
+	private int trangThai;
 }
