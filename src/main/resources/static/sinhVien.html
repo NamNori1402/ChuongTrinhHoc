@@ -140,7 +140,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">
 								<table width="100%" border="0">
 									<tr>
-										<td>Thời khóa biểu</td>
+										<td id="tkbTitle">Thời khóa biểu</td>
 								<td align="right" id="btn_InsertUpdate">
 								</td>
 								</tr></table>
@@ -293,10 +293,10 @@
 </script>
 <script>
 function list() {
-	maSinhVien = $('#maSinhVienSearch').val().trim();
+	maSinhVien = $('#maSinhVien').val().trim();
 	if (maSinhVien=='') {
 		alert('Bạn chưa nhập mã sinh viên');
-		document.getElementById('maSinhVienSearch').focus();
+		$('#maSinhVien').focus();
 		return;
 	}
 	//

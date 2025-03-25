@@ -47,9 +47,16 @@ public class SinhVienServiceImpl implements SinhVienService {
  // Update operation
  @Override
  public SinhVien update(SinhVien e, Long Id) {
-	 SinhVien k= repository.findById(Id).get();
-     k = e;
-     return repository.save(k);
+	 SinhVien sinhVien= repository.findById(Id).get();
+	 sinhVien.setDienThoai1(e.getDienThoai1());
+	 sinhVien.setDienThoai2(e.getDienThoai2());
+	 sinhVien.setEmail1(e.getEmail1());
+	 sinhVien.setEmail2(e.getEmail2());
+	 sinhVien.setTen(e.getTen());
+	 sinhVien.setHoTenDem(e.getHoTenDem());
+	 sinhVien.setTrangThai(e.getTrangThai());
+	 sinhVien.setGhiChu(e.getGhiChu());
+     return repository.save(sinhVien);
  }
  // Delete operation
  @Override

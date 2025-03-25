@@ -36,6 +36,7 @@ public class GiangVienServiceImpl implements GiangVienService {
     public GiangVien update(GiangVien e, Long Id) {
     	GiangVien edb= repository.findById(Id).get();
     	edb.setDienThoai(e.getDienThoai());
+    	edb.setMaGiangVien(e.getMaGiangVien());
     	edb.setEmail1(e.getEmail1());
     	edb.setEmail2(e.getEmail2());
     	edb.setHoTenDem(e.getHoTenDem());

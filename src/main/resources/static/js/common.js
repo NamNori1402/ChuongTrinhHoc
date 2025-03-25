@@ -130,7 +130,7 @@ function hienTkb(user,doiTuong){
 							}
 			                myMap.set(hp.maLopHocPhan, bgcolor);
 							let hocPhanTemp1 = getHocPhan(hp.maHocPhan)
-							tongSoTin += hocPhanTemp1.soTin;
+							tongSoTin += hocPhanTemp1.soTinChi;
 							myCho.set(bgcolor,"");
 			            } else {
 			                bgcolor = myMap.get(hp.maLopHocPhan);
@@ -141,7 +141,7 @@ function hienTkb(user,doiTuong){
 						let lopID = lopHocPhanTem.substring(8,10);
 						hpTen = getHocPhan(hp.maHocPhan);
 						hp.maKy = (hp.maKy).split("2425").join("");
-			            txt += `<td colspan="${check}" align="center" width="7%" title="${lopHocPhanTem} - ${hpTen.tenHocPhan}"
+			            txt += `<td colspan="${check}" align="center" width="7%" title="${lopHocPhanTem} - ${hpTen.tenHocPhan} (${hpTen.soTinChi} tín chỉ)"
 						style="
 						background-color: ${bgcolor.bg}; 
 						color: ${bgcolor.cl};
@@ -155,9 +155,9 @@ function hienTkb(user,doiTuong){
 			    }
 			    txt += '</tr>';
 			}
-			alert(tongSoTin);
 			txt += '</table>';
-			$('#dTable').html(txt);
+			$('#dTable').html(txt);			
+			$('#tkbTitle').html('Thời khóa biểu: <font color="red">' + myMap.size + ' học phần (' + tongSoTin + ' tín chỉ)</font>  ');
 		}
 	});
 }
