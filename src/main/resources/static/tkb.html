@@ -444,7 +444,7 @@ function list() {
 				        return `<span style="color: red;">`+row.maGiangVien+`</span>`;
 				    }
 
-				    var txt = row.maGiangVien + '<br/>' + x1.ten;
+				    var txt = row.maGiangVien + '<br/>' + x1.ten + '<br/>' + x1.dienThoai;
 
 				    if (x1.ten === 'BoMon') {  
 				        txt = `<span style="background: yellow">${row.maGiangVien}<br/>${x1.ten}</span>`;
