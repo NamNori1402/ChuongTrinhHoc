@@ -48,7 +48,6 @@
         .tab-content {
             padding: 20px 0;
         }
-        /* CSS mới cho hiển thị theo khóa và chuyên ngành */
         .khoa-group {
             margin-bottom: 30px;
             border: 1px solid #e3e6f0;
@@ -97,20 +96,6 @@
         }
         .mon-hoc-table th {
             background-color: #f8f9fc;
-        }
-        .is-invalid {
-            border-color: #e74a3b;
-            padding-right: calc(1.5em + 0.75rem);
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23e74a3b' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74a3b' stroke='none'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right calc(0.375em + 0.1875rem) center;
-            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
-        }
-        .invalid-feedback {
-            display: none;
-            color: #e74a3b;
-            font-size: 0.875em;
-            margin-top: 0.25rem;
         }
     </style>
 </head>
@@ -321,8 +306,6 @@
     <script>
         // Biến lưu trữ danh sách chương trình học
         let danhSachChuongTrinhHoc = [];
-        // Biến theo dõi lỗi trùng mã học phần
-        let hasDuplicateError = false;
         
         $(document).ready(function() {
             // Load menu
@@ -494,6 +477,7 @@
                                         <th>Tên môn học</th>
                                         <th>Số TC</th>
                                         <th>ĐK tiên quyết</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="mon-hoc-${loaiHocPhan}"></tbody>
@@ -512,11 +496,17 @@
                                 <td>${monHoc.tenMonHoc}</td>
                                 <td>${monHoc.soTinChi}</td>
                                 <td>${monHoc.dieuKienTienQuyet || 'Không'}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" 
+                                            onclick="xoaMonHocTrongChuongTrinh('${khoa}', '${chuyenNganh}', '${loaiHocPhan}', '${monHoc.maHocPhan}', this)">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                </td>
                             </tr>
                         `);
                     });
                 } else {
-                    monHocBody.append('<tr><td colspan="4" class="text-center">Không có môn học</td></tr>');
+                    monHocBody.append('<tr><td colspan="5" class="text-center">Không có môn học</td></tr>');
                 }
 
                 container.append(loaiHocPhanDiv);
@@ -524,6 +514,93 @@
 
             // Hiển thị modal
             $('#detailModal').modal('show');
+        }
+
+        // Hàm xóa môn học trong chương trình học
+        function xoaMonHocTrongChuongTrinh(khoa, chuyenNganh, loaiHocPhan, maHocPhan, buttonElement) {
+            if (!confirm(`Bạn có chắc chắn muốn xóa môn học ${maHocPhan} khỏi chương trình học?`)) {
+                return;
+            }
+            
+            // Tìm chương trình học chứa môn học này
+            const chuongTrinhIndex = danhSachChuongTrinhHoc.findIndex(item => 
+                item.khoa === khoa && 
+                item.chuyenNganh === chuyenNganh && 
+                item.loaiHocPhan === loaiHocPhan
+            );
+            
+            if (chuongTrinhIndex === -1) {
+                alert('Không tìm thấy chương trình học');
+                return;
+            }
+            
+            const chuongTrinh = danhSachChuongTrinhHoc[chuongTrinhIndex];
+            
+            // Lọc bỏ môn học cần xóa
+            const updatedMonHocList = chuongTrinh.monHocList.filter(
+                monHoc => monHoc.maHocPhan !== maHocPhan
+            );
+            
+            // Nếu không còn môn học nào thì xóa luôn chương trình học
+            if (updatedMonHocList.length === 0) {
+                xoaChuongTrinhHoc(chuongTrinh.id, buttonElement);
+                return;
+            }
+            
+            // Cập nhật danh sách môn học
+            const updateData = {
+                ...chuongTrinh,
+                monHocList: updatedMonHocList
+            };
+            
+            // Gọi API cập nhật bằng POST (vì không có PUT)
+            $.ajax({
+                url: '/api/v1/chuongtrinhhoc',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(updateData),
+                success: function(response) {
+                    // Xóa chương trình học cũ
+                    xoaChuongTrinhHoc(chuongTrinh.id, buttonElement, false);
+                    
+                    // Xóa dòng chứa môn học vừa xóa
+                    $(buttonElement).closest('tr').remove();
+                    
+                    // Kiểm tra nếu không còn môn học nào thì ẩn bảng
+                    const tableBody = $(buttonElement).closest('tbody');
+                    if (tableBody.find('tr').length === 1) { // Chỉ còn dòng "Không có môn học"
+                        tableBody.html('<tr><td colspan="5" class="text-center">Không có môn học</td></tr>');
+                    }
+                    
+                    // Load lại danh sách
+                    loadDanhSachChuongTrinhHoc();
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi khi xóa môn học: ' + (xhr.responseJSON?.message || error));
+                    console.error('Error:', xhr.responseJSON);
+                }
+            });
+        }
+        
+        // Hàm xóa chương trình học
+        function xoaChuongTrinhHoc(id, buttonElement, showAlert = true) {
+            $.ajax({
+                url: `/api/v1/chuongtrinhhoc/${id}`,
+                type: 'DELETE',
+                success: function(response) {
+                    if (showAlert) {
+                        alert('Xóa chương trình học thành công');
+                    }
+                    if (buttonElement) {
+                        $(buttonElement).closest('tr').remove();
+                    }
+                    loadDanhSachChuongTrinhHoc();
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi khi xóa chương trình học: ' + (xhr.responseJSON?.message || error));
+                    console.error('Error:', xhr.responseJSON);
+                }
+            });
         }
 
         // Hàm xóa chương trình học theo chuyên ngành và khóa
@@ -542,20 +619,20 @@
                 return;
             }
             
-            // Gọi API xóa (giả sử API hỗ trợ xóa nhiều)
-            $.ajax({
-                url: '/api/v1/chuongtrinhhoc/delete-multiple',
-                type: 'DELETE',
-                contentType: 'application/json',
-                data: JSON.stringify({ ids: idsToDelete }),
-                success: function(response) {
-                    alert('Xóa chương trình học thành công');
-                    loadDanhSachChuongTrinhHoc(); // Load lại danh sách
-                },
-                error: function(xhr, status, error) {
-                    alert('Có lỗi khi xóa chương trình học: ' + (xhr.responseJSON?.message || error));
-                    console.error('Error:', xhr.responseJSON);
-                }
+            // Gọi API xóa từng cái một
+            const deletePromises = idsToDelete.map(id => {
+                return $.ajax({
+                    url: `/api/v1/chuongtrinhhoc/${id}`,
+                    type: 'DELETE'
+                });
+            });
+            
+            $.when(...deletePromises).done(function() {
+                alert('Xóa chương trình học thành công');
+                loadDanhSachChuongTrinhHoc();
+            }).fail(function(xhr, status, error) {
+                alert('Có lỗi khi xóa chương trình học: ' + (xhr.responseJSON?.message || error));
+                console.error('Error:', xhr.responseJSON);
             });
         }
 
@@ -597,15 +674,9 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Mã học phần</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control ma-hoc-phan-input" 
+                            <input type="text" class="form-control" 
                                    id="maHocPhan_${monHocId}" 
-                                   data-id="${monHocId}"
-                                   oninput="checkDuplicateMaHocPhan(this)"
-                                   onblur="checkDuplicateMaHocPhan(this)"
                                    required>
-                            <div class="invalid-feedback" id="maHocPhanFeedback_${monHocId}">
-                                Mã học phần đã tồn tại
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -632,52 +703,10 @@
             $('#monHocListContainer').append(monHocHtml);
         }
 
-        // Hàm kiểm tra mã học phần trùng
-        function checkDuplicateMaHocPhan(inputElement) {
-            const currentId = $(inputElement).data('id');
-            const currentMaHocPhan = $(inputElement).val().trim().toUpperCase();
-            
-            if (!currentMaHocPhan) {
-                hasDuplicateError = false;
-                $(inputElement).removeClass('is-invalid');
-                $(`#maHocPhanFeedback_${currentId}`).hide();
-                return true;
-            }
-            
-            let isDuplicate = false;
-            $('.ma-hoc-phan-input').each(function() {
-                const id = $(this).data('id');
-                if (id !== currentId) { // Không kiểm tra với chính nó
-                    const maHocPhan = $(this).val().trim().toUpperCase();
-                    if (maHocPhan && maHocPhan === currentMaHocPhan) {
-                        isDuplicate = true;
-                        return false; // Break vòng lặp
-                    }
-                }
-            });
-            
-            const feedbackElement = $(`#maHocPhanFeedback_${currentId}`);
-            if (isDuplicate) {
-                $(inputElement).addClass('is-invalid');
-                feedbackElement.show();
-                hasDuplicateError = true;
-            } else {
-                $(inputElement).removeClass('is-invalid');
-                feedbackElement.hide();
-                hasDuplicateError = false;
-            }
-            
-            return !isDuplicate;
-        }
-
-        // Hàm xóa môn học
+        // Hàm xóa môn học trong form thêm mới
         function xoaMonHoc(monHocId) {
             if (confirm('Bạn có chắc chắn muốn xóa môn học này?')) {
                 $(`#monHoc_${monHocId}`).remove();
-                // Sau khi xóa, kiểm tra lại các mã học phần còn lại
-                $('.ma-hoc-phan-input').each(function() {
-                    checkDuplicateMaHocPhan(this);
-                });
             }
         }
         
@@ -685,25 +714,10 @@
         function resetForm() {
             $('#chuongTrinhHocForm')[0].reset();
             $('#monHocListContainer').empty();
-            hasDuplicateError = false;
         }
         
         // Hàm lưu chương trình học
         function luuChuongTrinhHoc() {
-            // Reset trạng thái lỗi trước khi kiểm tra
-            hasDuplicateError = false;
-            
-            // Kiểm tra tất cả các mã học phần
-            $('.ma-hoc-phan-input').each(function() {
-                checkDuplicateMaHocPhan(this);
-            });
-            
-            // Nếu có lỗi trùng thì dừng lại
-            if (hasDuplicateError) {
-                alert('Có mã học phần bị trùng. Vui lòng kiểm tra lại!');
-                return;
-            }
-            
             // Kiểm tra các trường bắt buộc
             const chuyenNganh = $('#chuyenNganh').val();
             const khoa = $('#khoa').val();
