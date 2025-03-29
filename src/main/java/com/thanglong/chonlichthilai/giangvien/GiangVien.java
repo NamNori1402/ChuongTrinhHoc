@@ -33,7 +33,7 @@ public class GiangVien
     private String ghiChu;
     private String hocHam;
     private String hocVi;
-    private int giangVien;
+    private int giangVien; // giang_vien
     private int coHuu1;
     private int coHuu2;
     private int thinhGiang;

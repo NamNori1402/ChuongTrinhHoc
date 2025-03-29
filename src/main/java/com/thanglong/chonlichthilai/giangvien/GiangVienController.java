@@ -15,12 +15,13 @@ import jakarta.validation.Valid;
  
 // Annotation
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1") //ặt đường dẫn gốc cho tất cả các API trong controller này là /api/v1.
 public class GiangVienController {
  
     // Annotation
     @Autowired private GiangVienService service;
-	@Autowired private EmailService emailService;
+    //service: Để sử dụng các phương thức CRUD đã được định nghĩa trong GiangVienServiceImpl
+	@Autowired private EmailService emailService; //dùng để gửi email
 	
     @PostMapping("/giangvien")
     public GiangVien save(@Valid @RequestBody GiangVien e)  {
