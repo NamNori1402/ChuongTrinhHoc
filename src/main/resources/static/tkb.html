@@ -878,12 +878,12 @@ function lichHoc(){
 			
 			txt += ' 	<td>'
 			txt += ' 		<select '+disable+'  id="phong'+k+'">'
-			for (i=1 ; i<=9; i++){
+			for (i=0 ; i< PHONG_HOC.length; i++){
 				var phong = ''
 				if (action =='update' && rUpdate[k-1].phong == 'A70'+i){
 					phong = 'Selected'
 				}
-				txt += '<option value="A70'+i+'" '+phong+'>A70'+i+'</option>'
+				txt += '<option value="'+PHONG_HOC[i].tenPhong+'">'+PHONG_HOC[i].tenPhong+'</option>'
 			}
 			txt += ' 		</select>'	
 			txt += '	</td>'
@@ -902,7 +902,7 @@ function lichHoc(){
 		}
 		txt += '</table>';
 	$('#frm-extent1').html(txt);
-	txt = '242_' + crd.maHocPhan + '_' + $('#tenLop	').val();
+	txt = '242' + crd.maHocPhan + '' + $('#tenLop	').val();
 	$('#maLopHocPhan').val(txt);	
 }
 </script>

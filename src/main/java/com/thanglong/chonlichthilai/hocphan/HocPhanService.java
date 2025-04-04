@@ -16,6 +16,7 @@ public interface HocPhanService {
 
 	 // Read operation
 		List<HocPhan> findAll();
+		List<HocPhan> findAllByOrderByMaHocPhanAsc();
 
 	 // Update operation
 		HocPhan update(HocPhan e, Long id);

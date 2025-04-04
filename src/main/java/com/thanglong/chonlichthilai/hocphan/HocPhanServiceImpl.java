@@ -27,6 +27,10 @@ public class HocPhanServiceImpl implements HocPhanService {
  @Override public List<HocPhan> findAll(){
      return (List<HocPhan>) repository.findAll();
  }
+ @Override public List<HocPhan> findAllByOrderByMaHocPhanAsc(){
+     return (List<HocPhan>) repository.findAllByOrderByMaHocPhanAsc();
+ }
+
  // Read operation
  @Override public HocPhan findById(Long id){
      return repository.findById(id).orElse(null);

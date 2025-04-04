@@ -24,8 +24,8 @@ public class HocPhanController {
  
     // Read operation
     @GetMapping("/hocphan")
-    public List<HocPhan> findAll()  {
-        return service.findAll();
+    public List<HocPhan> findAllByOrderByMaHocPhanAsc()  {
+        return service.findAllByOrderByMaHocPhanAsc();
     }
     @GetMapping("/hocphan/{id}")
     public HocPhan getKyId(@PathVariable("id") Long id)  {
