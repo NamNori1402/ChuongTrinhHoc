@@ -20,6 +20,7 @@
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="js/common.js"></script>
+	<script src="https://www.w3schools.com/lib/w3.js"></script>
     <style>
         .mon-hoc-item {
             border: 1px solid #ddd;
@@ -91,12 +92,150 @@
             color: #2e59d9;
             margin-bottom: 10px;
         }
+		#detailModal .modal-lg {
+		    max-width: 90%;
+		    width: 95%;
+		}
         .mon-hoc-table {
             width: 100%;
+			font-size: 14px;
         }
-        .mon-hoc-table th {
-            background-color: #f8f9fc;
-        }
+		.mon-hoc-table th {
+		    white-space: nowrap;
+		    background-color: #f8f9fc;
+		    padding: 10px 12px;
+		}
+
+		.mon-hoc-table td {
+		    padding: 8px 12px;
+		    vertical-align: top;
+		}
+		/* Cho phép ngắt dòng cho các ô dài */
+		.mon-hoc-table td.wrap-text {
+		    white-space: normal;
+		    word-break: break-word;
+		    max-width: 200px;
+		}
+		/* Tiêu đề loại học phần nổi bật */
+		.loai-hoc-phan-title {
+		    font-weight: bold;
+		    color: #2e59d9;
+		    margin: 15px 0 10px 0;
+		    font-size: 16px;
+		    border-bottom: 1px solid #eee;
+		    padding-bottom: 5px;
+		}
+		/* Modal body scroll nếu nội dung dài */
+		.modal-body {
+		    max-height: 70vh;
+		    overflow-y: auto;
+		}
+		@media (max-width: 992px) {
+		    .mon-hoc-table {
+		        display: block;
+		        overflow-x: auto;
+		    }
+		    
+		    #detailModal .modal-lg {
+		        max-width: 100%;
+		        width: 100%;
+		        margin: 10px;
+		    }
+		    
+		    .mon-hoc-table th, 
+		    .mon-hoc-table td {
+		        min-width: 120px;
+		    }
+		}
+		.search-container {
+		    padding: 0.5rem 1rem;
+		}
+
+		#searchMonHocInput {
+		    min-width: 250px;
+		}
+
+		.search-result-item {
+			border: 1px solid #e3e6f0;
+		    border-radius: 5px;
+		    margin-bottom: 20px;
+		    background-color: #fff;
+		}
+
+		.search-result-header {
+			padding: 15px;
+			border-bottom: 1px solid #e3e6f0;
+			background-color: #f8f9fc !important;
+		}
+		.search-result-header h5 {
+		    color: #2e59d9;
+		    font-weight: bold;
+		    margin-bottom: 5px;
+		}
+
+		.search-monhoc-table {
+		    width: 100%;
+		    font-size: 14px;
+		}
+
+		.search-monhoc-table th {
+		    background-color: #f8f9fc;
+		    padding: 8px 12px;
+		}
+		/* Thêm vào phần style */
+		.search-result-item {
+		    border-left: 4px solid #4e73df;
+		    margin-bottom: 20px;
+		    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+		}
+
+		
+		.badge-khoa {
+		    background-color: #2e59d9;
+		    color: white;
+		    padding: 5px 10px;
+		    border-radius: 15px;
+		    font-size: 0.8rem;
+		}
+
+		.chuyen-nganh-card {
+		    transition: all 0.3s;
+		    border: 1px solid #e3e6f0;
+		}
+
+		.chuyen-nganh-card:hover {
+		    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+		}
+
+		.chuyen-nganh-header {
+		    cursor: pointer;
+		    padding: 10px 15px;
+		    background-color: #f8f9fc;
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		}
+
+		.chuyen-nganh-body {
+		    padding: 15px;
+		    background-color: white;
+		}
+		.mon-hoc-table {
+		    margin-bottom: 0;
+		}
+
+		.mon-hoc-table th {
+		    background-color: #f8f9fc;
+		    white-space: nowrap;
+		}
+
+		.mon-hoc-table td {
+		    vertical-align: middle;
+		}
+
+		.table-responsive {
+		    border: none;
+		}
     </style>
 </head>
 
@@ -104,7 +243,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <div w3-include-html="_menu.html"></div>
+       <div w3-include-html="_menu.html"></div>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -138,6 +277,19 @@
                         <li class="nav-item">
                             <a class="nav-link" id="add-tab" data-toggle="tab" href="#add" role="tab" aria-controls="add" aria-selected="false">Thêm chương trình học</a>
                         </li>
+						<li class="nav-item">
+						    <div class="nav-link search-container">
+						        <div class="input-group">
+						            <input type="text" class="form-control" id="searchMonHocInput" 
+						                   placeholder="Tìm theo mã hoặc tên môn học">
+						            <div class="input-group-append">
+						                <button class="btn btn-primary" id="btnSearchMonHoc">
+						                    <i class="fas fa-search"></i>
+						                </button>
+						            </div>
+						        </div>
+						    </div>
+						</li>
                     </ul>
 
                     <!-- Tab Content -->
@@ -169,11 +321,33 @@
                                             <div class="col-sm-10">
                                                 <select class="form-control" id="chuyenNganh" required>
                                                     <option value="">-- Chọn chuyên ngành --</option>
-                                                    <option value="CONG_NGHE_THONG_TIN">Công nghệ thông tin</option>
-                                                    <option value="KE_TOAN">Kế toán</option>
-                                                    <option value="KHOA_HOC_MAY_TINH">Khoa học máy tính</option>
-                                                    <option value="TRI_TUE_NHAN_TAO">Trí tuệ nhân tạo</option>
-                                                    <option value="QUAN_TRI_KINH_DOANH">Quản trị kinh doanh</option>
+													<option value="CONG_NGHE_THONG_TIN">Công nghệ thông tin</option>
+													<option value="KHOA_HOC_MAY_TINH">Khoa học máy tính</option>
+													<option value="TRI_TUE_NHAN_TAO">Trí tuệ nhân tạo</option>
+													<option value="HE_THONG_THONG_TIN">Hệ thống thông tin</option>
+													<option value="MANG_MAY_TINH">Mạng máy tính và truyền thông dữ liệu</option>
+													<option value="KE_TOAN">Kế toán</option>
+													<option value="TAI_CHINH_NGAN_HANG">Tài chính - Ngân hàng</option>
+													<option value="LOGISTIC">Logistics</option>
+													<option value="QUAN_TRI_KINH_DOANH">Quản trị kinh doanh</option>
+													<option value="QUAN_TRI_KHACH_SAN">Quản trị khách sạn</option>
+													<option value="MARKETING">Marketing</option>
+													<option value="KINH_TE_QUOC_TE">Kinh tế quốc tế</option>
+													<option value="LUAT_KINH_TE">Luật kinh tế</option>
+													<option value="THUONG_MAI_DIEN_TU">Thương mại điện tử</option>
+													<option value="DICH_VU_DU_LICH_LU_HANH">Dịch vụ du lịch - lữ hành</option>
+													<option value="NGON_NGU_ANH">Ngôn ngữ Anh</option>
+													<option value="NGON_NGU_TRUNG">Ngôn ngữ Trung</option>
+													<option value="NGON_NGU_NHAT">Ngôn ngữ Nhật</option>
+													<option value="NGON_NGU_HAN">Ngôn ngữ Hàn</option>
+													<option value="VIET_NAM_HOC">Việt Nam học</option>
+													<option value="CONG_TAC_XA_HOI">Công tác xã hội</option>
+													<option value="TRUYEN_THONG_DA_PHUONG_TIEN">Truyền thông đa phương tiện</option>
+													<option value="THIET_KE_DO_HOA">Thiết kế đồ họa</option>
+													<option value="DIEU_DUONG">Điều dưỡng</option>
+													<option value="DINH_DUONG">Dinh dưỡng</option>
+													<option value="THANH_NHAC">Thanh nhạc</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -193,6 +367,9 @@
                                                     <option value="K37">K37</option>
                                                     <option value="K38">K38</option>
                                                     <option value="K39">K39</option>
+													<option value="K39">K40</option>
+													<option value="K39">K41</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -207,6 +384,7 @@
                                                     <option value="HOC_PHAN_BAT_BUOC_NGANH">Học phần bắt buộc ngành</option>
                                                     <option value="HOC_PHAN_LUA_CHON_NGANH">Học phần lựa chọn ngành</option>
                                                     <option value="HOC_PHAN_TU_DO">Học phần tự do</option>
+													<option value="KLTN_CĐTN_THUC_TAP">KLTN - CĐTN - Thực tập</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -283,7 +461,25 @@
             </div>
         </div>
     </div>
-
+	<!-- Thêm modal hiển thị kết quả -->
+	<div class="modal fade" id="searchResultModal" tabindex="-1" role="dialog" aria-hidden="true">
+	    <div class="modal-dialog modal-xl" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Kết quả tìm kiếm môn học</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div id="searchResultsContainer"></div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -304,9 +500,109 @@
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <script>
-        // Biến lưu trữ danh sách chương trình học
+        // ===== KHAI BÁO BIẾN VÀ ENUM =====
         let danhSachChuongTrinhHoc = [];
+
+        // Enum tương ứng với Java
+        const ChuyenNganh = {
+            CONG_NGHE_THONG_TIN: 'CONG_NGHE_THONG_TIN',
+            KHOA_HOC_MAY_TINH: 'KHOA_HOC_MAY_TINH',
+            TRI_TUE_NHAN_TAO: 'TRI_TUE_NHAN_TAO',
+            HE_THONG_THONG_TIN: 'HE_THONG_THONG_TIN',
+            MANG_MAY_TINH: 'MANG_MAY_TINH',
+            KE_TOAN: 'KE_TOAN',
+            TAI_CHINH_NGAN_HANG: 'TAI_CHINH_NGAN_HANG',
+            LOGISTIC: 'LOGISTIC',
+            QUAN_TRI_KINH_DOANH: 'QUAN_TRI_KINH_DOANH',
+            QUAN_TRI_KHACH_SAN: 'QUAN_TRI_KHACH_SAN',
+            MARKETING: 'MARKETING',
+            KINH_TE_QUOC_TE: 'KINH_TE_QUOC_TE',
+            LUAT_KINH_TE: 'LUAT_KINH_TE',
+            THUONG_MAI_DIEN_TU: 'THUONG_MAI_DIEN_TU',
+            DICH_VU_DU_LICH_LU_HANH: 'DICH_VU_DU_LICH_LU_HANH',
+            NGON_NGU_ANH: 'NGON_NGU_ANH',
+            NGON_NGU_TRUNG: 'NGON_NGU_TRUNG',
+            NGON_NGU_NHAT: 'NGON_NGU_NHAT',
+            NGON_NGU_HAN: 'NGON_NGU_HAN',
+            VIET_NAM_HOC: 'VIET_NAM_HOC',
+            CONG_TAC_XA_HOI: 'CONG_TAC_XA_HOI',
+            TRUYEN_THONG_DA_PHUONG_TIEN: 'TRUYEN_THONG_DA_PHUONG_TIEN',
+            THIET_KE_DO_HOA: 'THIET_KE_DO_HOA',
+            DIEU_DUONG: 'DIEU_DUONG',
+            DINH_DUONG: 'DINH_DUONG',
+            THANH_NHAC: 'THANH_NHAC'
+        };
+
+        const KhoaHoc = {
+            K30: 'K30',
+            K31: 'K31',
+            K32: 'K32',
+            K33: 'K33',
+            K34: 'K34',
+            K35: 'K35',
+            K36: 'K36',
+            K37: 'K37',
+            K38: 'K38',
+            K39: 'K39',
+            K40: 'K40',
+            K41: 'K41'
+        };
+
+        const LoaiHocPhan = {
+            HOC_PHAN_DAI_CUONG: 'HOC_PHAN_DAI_CUONG',
+            HOC_PHAN_CO_SO_NGANH: 'HOC_PHAN_CO_SO_NGANH',
+            HOC_PHAN_BAT_BUOC_NGANH: 'HOC_PHAN_BAT_BUOC_NGANH',
+            HOC_PHAN_LUA_CHON_NGANH: 'HOC_PHAN_LUA_CHON_NGANH',
+            HOC_PHAN_TU_DO: 'HOC_PHAN_TU_DO',
+            KLTN_CDTN_THUC_TAP: 'KLTN_CĐTN_THUC_TAP'
+        };
+
+        // ===== CÁC HÀM CHUYỂN ĐỔI HIỂN THỊ =====
+        function convertChuyenNganh(enumValue) {
+            const mapping = {
+                'CONG_NGHE_THONG_TIN': 'Công nghệ thông tin',
+                'KHOA_HOC_MAY_TINH': 'Khoa học máy tính',
+                'TRI_TUE_NHAN_TAO': 'Trí tuệ nhân tạo',
+                'HE_THONG_THONG_TIN': 'Hệ thống thông tin',
+                'MANG_MAY_TINH': 'Mạng máy tính',
+                'KE_TOAN': 'Kế toán',
+                'TAI_CHINH_NGAN_HANG': 'Tài chính - Ngân hàng',
+                'LOGISTIC': 'Logistics',
+                'QUAN_TRI_KINH_DOANH': 'Quản trị kinh doanh',
+                'QUAN_TRI_KHACH_SAN': 'Quản trị khách sạn',
+                'MARKETING': 'Marketing',
+                'KINH_TE_QUOC_TE': 'Kinh tế quốc tế',
+                'LUAT_KINH_TE': 'Luật kinh tế',
+                'THUONG_MAI_DIEN_TU': 'Thương mại điện tử',
+                'DICH_VU_DU_LICH_LU_HANH': 'Dịch vụ du lịch - lữ hành',
+                'NGON_NGU_ANH': 'Ngôn ngữ Anh',
+                'NGON_NGU_TRUNG': 'Ngôn ngữ Trung',
+                'NGON_NGU_NHAT': 'Ngôn ngữ Nhật',
+                'NGON_NGU_HAN': 'Ngôn ngữ Hàn',
+                'VIET_NAM_HOC': 'Việt Nam học',
+                'CONG_TAC_XA_HOI': 'Công tác xã hội',
+                'TRUYEN_THONG_DA_PHUONG_TIEN': 'Truyền thông đa phương tiện',
+                'THIET_KE_DO_HOA': 'Thiết kế đồ họa',
+                'DIEU_DUONG': 'Điều dưỡng',
+                'DINH_DUONG': 'Dinh dưỡng',
+                'THANH_NHAC': 'Thanh nhạc'
+            };
+            return mapping[enumValue] || enumValue;
+        }
         
+        function convertLoaiHocPhan(enumValue) {
+            const mapping = {
+                'HOC_PHAN_DAI_CUONG': 'Học phần đại cương',
+                'HOC_PHAN_CO_SO_NGANH': 'Học phần cơ sở ngành',
+                'HOC_PHAN_BAT_BUOC_NGANH': 'Học phần bắt buộc ngành',
+                'HOC_PHAN_LUA_CHON_NGANH': 'Học phần lựa chọn ngành',
+                'HOC_PHAN_TU_DO': 'Học phần tự do',
+                'KLTN_CĐTN_THUC_TAP': 'KLTN - CĐTN - Thực tập'
+            };
+            return mapping[enumValue] || enumValue;
+        }
+
+        // ===== CÁC HÀM XỬ LÝ CHƯƠNG TRÌNH HỌC =====
         $(document).ready(function() {
             // Load menu
             includeHTML();
@@ -328,9 +624,14 @@
                 e.preventDefault();
                 luuChuongTrinhHoc();
             });
+
+            // Xử lý sự kiện tìm kiếm
+            $('#btnSearchMonHoc').click(searchMonHoc);
+            $('#searchMonHocInput').keypress(function(e) {
+                if (e.which === 13) searchMonHoc();
+            });
         });
-        
-        // Hàm load danh sách chương trình học từ API
+
         function loadDanhSachChuongTrinhHoc() {
             $.ajax({
                 url: '/api/v1/chuongtrinhhoc',
@@ -345,8 +646,8 @@
                 }
             });
         }
-        
         // Hàm hiển thị danh sách chương trình học theo khóa và chuyên ngành
+
         function renderDanhSachChuongTrinhHoc(data) {
             const container = $('#chuongTrinhHocContainer');
             container.empty();
@@ -424,12 +725,11 @@
             });
         }
 
-        // Hàm toggle hiển thị body của chuyên ngành
+		//Hàm toggle hiển thị body của chuyên ngành
         function toggleChuyenNganhBody(khoa, chuyenNganh) {
             $(`#chuyen-nganh-${khoa}-${chuyenNganh}`).slideToggle();
         }
 
-        // Hàm xem chi tiết theo chuyên ngành và khóa
         function xemChiTietTheoChuyenNganh(khoa, chuyenNganh) {
             const chuongTrinhs = danhSachChuongTrinhHoc.filter(item => 
                 item.khoa === khoa && item.chuyenNganh === chuyenNganh
@@ -474,10 +774,15 @@
                                 <thead>
                                     <tr>
                                         <th>Mã HP</th>
-                                        <th>Tên môn học</th>
-                                        <th>Số TC</th>
+                                        <th>Tên học phần</th>
+                                        <th>Số tín chỉ</th>
+										<th>Số giờ</th>
                                         <th>ĐK tiên quyết</th>
-                                        <th>Thao tác</th>
+										<th>Hệ số</th>
+										<th>GV phụ trách</th>
+										<th>Mã GV</th>
+										<th>Môn thay thế</th>
+										<th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="mon-hoc-${loaiHocPhan}"></tbody>
@@ -495,7 +800,12 @@
                                 <td>${monHoc.maHocPhan}</td>
                                 <td>${monHoc.tenMonHoc}</td>
                                 <td>${monHoc.soTinChi}</td>
+								<td>${monHoc.soGio}</td>
                                 <td>${monHoc.dieuKienTienQuyet || 'Không'}</td>
+								<td>${monHoc.heSo}</td>
+								<td>${monHoc.giangVienPhuTrach}</td>
+								<td>${monHoc.maGiangVien}</td>
+								<td>${monHoc.monThayThe}</td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" 
                                             onclick="xoaMonHocTrongChuongTrinh('${khoa}', '${chuyenNganh}', '${loaiHocPhan}', '${monHoc.maHocPhan}', this)">
@@ -506,7 +816,7 @@
                         `);
                     });
                 } else {
-                    monHocBody.append('<tr><td colspan="5" class="text-center">Không có môn học</td></tr>');
+                    monHocBody.append('<tr><td colspan="10" class="text-center">Không có môn học</td></tr>');
                 }
 
                 container.append(loaiHocPhanDiv);
@@ -516,7 +826,7 @@
             $('#detailModal').modal('show');
         }
 
-        // Hàm xóa môn học trong chương trình học
+
         function xoaMonHocTrongChuongTrinh(khoa, chuyenNganh, loaiHocPhan, maHocPhan, buttonElement) {
             if (!confirm(`Bạn có chắc chắn muốn xóa môn học ${maHocPhan} khỏi chương trình học?`)) {
                 return;
@@ -581,8 +891,8 @@
                 }
             });
         }
-        
-        // Hàm xóa chương trình học
+
+
         function xoaChuongTrinhHoc(id, buttonElement, showAlert = true) {
             $.ajax({
                 url: `/api/v1/chuongtrinhhoc/${id}`,
@@ -602,6 +912,7 @@
                 }
             });
         }
+
 
         // Hàm xóa chương trình học theo chuyên ngành và khóa
         function xoaChuongTrinhHocTheoChuyenNganh(khoa, chuyenNganh) {
@@ -636,157 +947,346 @@
             });
         }
 
-        // Hàm chuyển đổi enum chuyên ngành thành tên hiển thị
-        function convertChuyenNganh(enumValue) {
-            const mapping = {
-                'CONG_NGHE_THONG_TIN': 'Công nghệ thông tin',
-                'KE_TOAN': 'Kế toán',
-                'KHOA_HOC_MAY_TINH': 'Khoa học máy tính',
-                'TRI_TUE_NHAN_TAO': 'Trí tuệ nhân tạo',
-                'QUAN_TRI_KINH_DOANH': 'Quản trị kinh doanh'
-            };
-            return mapping[enumValue] || enumValue;
-        }
-        
-        // Hàm chuyển đổi enum loại học phần thành tên hiển thị
-        function convertLoaiHocPhan(enumValue) {
-            const mapping = {
-                'HOC_PHAN_DAI_CUONG': 'Học phần đại cương',
-                'HOC_PHAN_CO_SO_NGANH': 'Học phần cơ sở ngành',
-                'HOC_PHAN_BAT_BUOC_NGANH': 'Học phần bắt buộc ngành',
-                'HOC_PHAN_LUA_CHON_NGANH': 'Học phần lựa chọn ngành',
-                'HOC_PHAN_TU_DO': 'Học phần tự do'
-            };
-            return mapping[enumValue] || enumValue;
-        }
-        
-        // Hàm thêm môn học mới vào form
+
         function themMonHoc() {
-            const monHocId = Date.now(); // Tạo ID duy nhất cho mỗi môn học
+            const monHocId = Date.now();
             const monHocHtml = `
-                <div class="mon-hoc-item" id="monHoc_${monHocId}">
-                    <div class="mon-hoc-header">
-                        <h6>Môn học mới</h6>
-                        <span class="remove-mon-hoc" onclick="xoaMonHoc(${monHocId})">
-                            <i class="fas fa-trash-alt"></i> Xóa
-                        </span>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Mã học phần</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" 
-                                   id="maHocPhan_${monHocId}" 
-                                   required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Tên môn học</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="tenMonHoc_${monHocId}" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Số tín chỉ</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" id="soTinChi_${monHocId}" min="1" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Điều kiện tiên quyết</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="dieuKienTienQuyet_${monHocId}">
-                        </div>
-                    </div>
-                </div>
-            `;
-            
+			<div class="mon-hoc-item" id="monHoc_${monHocId}">
+	            <div class="mon-hoc-header">
+	                <h6>Môn học mới</h6>
+	                <span class="remove-mon-hoc" onclick="xoaMonHoc(${monHocId})">
+	                    <i class="fas fa-trash-alt"></i> Xóa
+	                </span>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Mã học phần</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" 
+	                           id="maHocPhan_${monHocId}" 
+	                           required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Tên môn học</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" id="tenMonHoc_${monHocId}" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Số tín chỉ</label>
+	                <div class="col-sm-10">
+	                    <input type="number" class="form-control" id="soTinChi_${monHocId}" min="1" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Số giờ</label>
+	                <div class="col-sm-10">
+	                    <input type="number" class="form-control" id="soGio_${monHocId}" min="1" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Số ca</label>
+	                <div class="col-sm-10">
+	                    <input type="number" class="form-control" id="soCa_${monHocId}" min="1" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Hệ số</label>
+	                <div class="col-sm-10">
+	                    <input type="number" class="form-control" id="heSo_${monHocId}" min="1" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Giảng viên phụ trách</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" id="giangVienPhuTrach_${monHocId}" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Mã giảng viên</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" id="maGiangVien_${monHocId}" required>
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Môn thay thế</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" id="monThayThe_${monHocId}">
+	                </div>
+	            </div>
+	            <div class="form-group row">
+	                <label class="col-sm-2 col-form-label">Điều kiện tiên quyết</label>
+	                <div class="col-sm-10">
+	                    <input type="text" class="form-control" id="dieuKienTienQuyet_${monHocId}">
+	                </div>
+	            </div>
+	        </div>
+	    `;
             $('#monHocListContainer').append(monHocHtml);
         }
 
-        // Hàm xóa môn học trong form thêm mới
         function xoaMonHoc(monHocId) {
             if (confirm('Bạn có chắc chắn muốn xóa môn học này?')) {
                 $(`#monHoc_${monHocId}`).remove();
             }
         }
-        
-        // Hàm reset form
+
         function resetForm() {
             $('#chuongTrinhHocForm')[0].reset();
             $('#monHocListContainer').empty();
         }
-        
-        // Hàm lưu chương trình học
+
         function luuChuongTrinhHoc() {
-            // Kiểm tra các trường bắt buộc
-            const chuyenNganh = $('#chuyenNganh').val();
-            const khoa = $('#khoa').val();
-            const loaiHocPhan = $('#loaiHocPhan').val();
-            
-            if (!chuyenNganh || !khoa || !loaiHocPhan) {
-                alert('Vui lòng điền đầy đủ thông tin chuyên ngành, khóa học và loại học phần');
-                return;
-            }
-            
-            // Thu thập danh sách môn học
-            const monHocList = [];
-            let hasEmptyField = false;
-            
-            $('.mon-hoc-item').each(function() {
-                const id = $(this).attr('id').split('_')[1];
-                const maHocPhan = $(`#maHocPhan_${id}`).val();
-                const tenMonHoc = $(`#tenMonHoc_${id}`).val();
-                const soTinChi = $(`#soTinChi_${id}`).val();
-                const dieuKienTienQuyet = $(`#dieuKienTienQuyet_${id}`).val();
+            try {
+                console.log("Bắt đầu lưu chương trình học");
                 
-                if (!maHocPhan || !tenMonHoc || !soTinChi) {
-                    hasEmptyField = true;
-                    return false; // Break vòng lặp each
+                // Validate dữ liệu chính
+                const chuyenNganh = $('#chuyenNganh').val();
+                const khoa = $('#khoa').val();
+                const loaiHocPhan = $('#loaiHocPhan').val();
+                
+                if (!chuyenNganh || !khoa || !loaiHocPhan) {
+                    alert('Vui lòng điền đầy đủ thông tin chương trình học');
+                    return;
                 }
+
+                // Validate enum values
+                if (!Object.values(ChuyenNganh).includes(chuyenNganh)) {
+                    alert('Chuyên ngành không hợp lệ');
+                    return;
+                }
+                if (!Object.values(KhoaHoc).includes(khoa)) {
+                    alert('Khóa học không hợp lệ');
+                    return;
+                }
+                if (!Object.values(LoaiHocPhan).includes(loaiHocPhan)) {
+                    alert('Loại học phần không hợp lệ');
+                    return;
+                }
+
+                // Thu thập danh sách môn học
+                const monHocList = [];
+                let hasEmptyField = false;
                 
-                monHocList.push({
-                    maHocPhan: maHocPhan,
-                    tenMonHoc: tenMonHoc,
-                    soTinChi: parseInt(soTinChi),
-                    dieuKienTienQuyet: dieuKienTienQuyet || "Không"
+                $('.mon-hoc-item').each(function() {
+                    const id = $(this).attr('id').split('_')[1];
+                    const maHocPhan = $(`#maHocPhan_${id}`).val();
+                    const tenMonHoc = $(`#tenMonHoc_${id}`).val();
+                    const soTinChi = $(`#soTinChi_${id}`).val();
+                    const soGio = $(`#soGio_${id}`).val();
+                    const soCa = $(`#soCa_${id}`).val();
+                    const heSo = $(`#heSo_${id}`).val();
+                    const giangVienPhuTrach = $(`#giangVienPhuTrach_${id}`).val();
+                    const maGiangVien = $(`#maGiangVien_${id}`).val();
+                    const monThayThe = $(`#monThayThe_${id}`).val();
+                    const dieuKienTienQuyet = $(`#dieuKienTienQuyet_${id}`).val();
+                    
+                    if (!maHocPhan || !tenMonHoc || !soTinChi || !soGio || !soCa || !heSo || !giangVienPhuTrach || !maGiangVien) {
+                        hasEmptyField = true;
+                        return false; // Break vòng lặp each
+                    }
+                    
+                    monHocList.push({
+                        maHocPhan: maHocPhan,
+                        tenMonHoc: tenMonHoc,
+                        soTinChi: parseInt(soTinChi),
+                        soGio: parseInt(soGio),
+                        soCa: parseInt(soCa),
+                        heSo: parseInt(heSo),
+                        giangVienPhuTrach: giangVienPhuTrach,
+                        maGiangVien: maGiangVien,
+                        monThayThe: monThayThe || "Không",
+                        dieuKienTienQuyet: dieuKienTienQuyet || "Không"
+                    });
                 });
-            });
-            
-            if (hasEmptyField) {
-                alert('Vui lòng điền đầy đủ thông tin cho tất cả môn học');
-                return;
-            }
-            
-            if (monHocList.length === 0) {
-                alert('Vui lòng thêm ít nhất một môn học');
-                return;
-            }
-            
-            // Gửi dữ liệu lên server
-            const data = {
-                chuyenNganh: chuyenNganh,
-                khoa: khoa,
-                loaiHocPhan: loaiHocPhan,
-                monHocList: monHocList
-            };
-            
-            $.ajax({
-                url: '/api/v1/chuongtrinhhoc',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                success: function(response) {
-                    alert('Thêm chương trình học thành công!');
-                    resetForm();
-                    loadDanhSachChuongTrinhHoc();
-                    $('#myTab a[href="#view"]').tab('show');
-                },
-                error: function(xhr, status, error) {
-                    alert('Có lỗi xảy ra: ' + (xhr.responseJSON?.message || error));
-                    console.error('Error:', xhr.responseJSON);
+                
+                if (hasEmptyField) {
+                    alert('Vui lòng điền đầy đủ thông tin cho tất cả môn học');
+                    return;
                 }
-            });
+                
+                if (monHocList.length === 0) {
+                    alert('Vui lòng thêm ít nhất một môn học');
+                    return;
+                }
+
+                // Gửi dữ liệu lên server
+                const data = {
+                    chuyenNganh: chuyenNganh,
+                    khoa: khoa,
+                    loaiHocPhan: loaiHocPhan,
+                    monHocList: monHocList
+                };
+
+                console.log("Dữ liệu sẽ gửi:", data);
+                
+                $.ajax({
+                    url: '/api/v1/chuongtrinhhoc',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        console.log("Phản hồi từ server:", response);
+                        if (response && response.id) {
+                            alert('Thêm chương trình học thành công!');
+                            resetForm();
+                            loadDanhSachChuongTrinhHoc();
+                            $('#myTab a[href="#view"]').tab('show');
+                        } else {
+                            alert('Có lỗi xảy ra khi lưu dữ liệu');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Lỗi khi gọi API:", {
+                            status: xhr.status,
+                            response: xhr.responseText,
+                            error: error
+                        });
+                        alert('Có lỗi xảy ra: ' + (xhr.responseJSON?.message || error));
+                    }
+                });
+            } catch (error) {
+                console.error('Lỗi trong hàm luuChuongTrinhHoc:', error);
+                alert('Có lỗi xảy ra khi xử lý dữ liệu');
+            }
         }
+
+        // ===== CÁC HÀM XỬ LÝ TÌM KIẾM =====
+		// ===== CÁC HÀM XỬ LÝ TÌM KIẾM =====
+		function searchMonHoc() {
+		    const keyword = $('#searchMonHocInput').val().trim();
+		    
+		    if (!keyword) {
+		        alert('Vui lòng nhập mã hoặc tên môn học');
+		        return;
+		    }
+
+		    // Hiển thị loading
+		    $('#searchResultsContainer').html('<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Đang tìm kiếm...</div>');
+		    $('#searchResultModal').modal('show');
+
+		    $.ajax({
+		        url: '/api/v1/chuongtrinhhoc/search',
+		        type: 'GET',
+		        data: { 
+		            keyword: keyword 
+		        },
+		        success: function(response) {
+		            if (!response || response.length === 0) {
+		                $('#searchResultsContainer').html('<div class="alert alert-info">Không tìm thấy kết quả nào phù hợp</div>');
+		                return;
+		            }
+
+		            displaySearchResults(response, keyword);
+		        },
+		        error: function(xhr) {
+		            let errorMsg = 'Có lỗi khi tìm kiếm';
+		            if (xhr.responseJSON?.message) {
+		                errorMsg = xhr.responseJSON.message;
+		            }
+		            $('#searchResultsContainer').html(`<div class="alert alert-danger">${errorMsg}</div>`);
+		            console.error('Lỗi tìm kiếm:', xhr.responseJSON);
+		        }
+		    });
+		}
+
+		function displaySearchResults(results, keyword) {
+		    const container = $('#searchResultsContainer');
+		    container.empty();
+
+		    if (!results || results.length === 0) {
+		        container.html('<div class="alert alert-info">Không tìm thấy kết quả nào phù hợp</div>');
+		        return;
+		    }
+
+		    // Nhóm kết quả theo môn học (mã học phần + tên môn học)
+		    const monHocMap = new Map();
+		    
+		    results.forEach(chuongTrinh => {
+		        if (chuongTrinh.monHocList && chuongTrinh.monHocList.length > 0) {
+		            chuongTrinh.monHocList.forEach(monHoc => {
+		                const key = `${monHoc.maHocPhan}_${monHoc.tenMonHoc}`;
+		                if (!monHocMap.has(key)) {
+		                    monHocMap.set(key, {
+		                        monHoc: monHoc,
+		                        chuongTrinhList: []
+		                    });
+		                }
+		                // Lưu cả thông tin môn học kèm theo chương trình
+		                monHocMap.get(key).chuongTrinhList.push({
+		                    ...chuongTrinh,
+		                    monHocDetails: monHoc // Giữ lại thông tin môn học cụ thể
+		                });
+		            });
+		        }
+		    });
+
+		    // Hiển thị kết quả dạng bảng chi tiết
+		    monHocMap.forEach((value, key) => {
+		        const { monHoc, chuongTrinhList } = value;
+		        
+		        // Header cho mỗi môn học
+		        container.append(`
+		            <div class="search-result-item mb-4">
+		                <div class="search-result-header bg-light p-3">
+		                    <h5>${monHoc.maHocPhan} - ${monHoc.tenMonHoc}</h5>
+		                    <div class="text-muted">
+		                        <span class="mr-3"><strong>Số tín chỉ:</strong> ${monHoc.soTinChi}</span>
+		                        <span><strong>Số giờ:</strong> ${monHoc.soGio}</span>
+		                    </div>
+		                </div>
+		                <div class="table-responsive">
+		                    <table class="table table-bordered table-hover mon-hoc-table">
+		                        <thead>
+		                            <tr>
+		                                <th>Khóa</th>
+		                                <th>Chuyên ngành</th>
+		                                <th>Loại HP</th>
+		                                <th>Giảng viên</th>
+		                                <th>Mã GV</th>
+		                                <th>ĐK tiên quyết</th>
+		                                <th>Môn thay thế</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		        `);
+
+		        // Thêm các dòng kết quả
+		        const currentItem = container.find('.search-result-item').last();
+		        const tbody = currentItem.find('tbody');
+		        
+		        chuongTrinhList.forEach(ct => {
+		            const monHocDetails = ct.monHocDetails;
+		            tbody.append(`
+		                <tr>
+		                    <td>${ct.khoa}</td>
+		                    <td>${convertChuyenNganh(ct.chuyenNganh)}</td>
+		                    <td>${convertLoaiHocPhan(ct.loaiHocPhan)}</td>
+		                    <td>${monHocDetails.giangVienPhuTrach || 'Chưa có'}</td>
+		                    <td>${monHocDetails.maGiangVien || 'Chưa có'}</td>
+		                    <td>${monHocDetails.dieuKienTienQuyet || 'Không'}</td>
+		                    <td>${monHocDetails.monThayThe || 'Không'}</td>
+		                </tr>
+		            `);
+		        });
+
+		        currentItem.append('</tbody></table></div></div>');
+		    });
+		}		
+		
+		// Gắn sự kiện click cho nút search
+		$('#btnSearchMonHoc').click(function(e) {
+		    e.preventDefault();
+		    searchMonHoc();
+		});
+
+		// Gắn sự kiện enter cho input search
+		$('#searchMonHocInput').keypress(function(e) {
+		    if (e.which === 13) {
+		        e.preventDefault();
+		        searchMonHoc();
+		    }
+		});
     </script>
 </body>
 </html>

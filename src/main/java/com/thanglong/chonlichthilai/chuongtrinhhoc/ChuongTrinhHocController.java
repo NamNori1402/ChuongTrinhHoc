@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import java.util.Collections;
 @RestController
 @RequestMapping("/api/v1/chuongtrinhhoc")
 public class ChuongTrinhHocController {
@@ -43,6 +44,30 @@ public class ChuongTrinhHocController {
             return ResponseEntity.ok("Đã xóa môn học thành công");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage()); // Trả về lỗi cụ thể
+        }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchMonHoc(
+        @RequestParam(required = false) String maHocPhan,
+        @RequestParam(required = false) String tenMonHoc,
+        @RequestParam(required = false) String keyword) {
+        
+        try {
+            List<ChuongTrinhHoc> results;
+            
+            if (keyword != null && !keyword.isEmpty()) {
+                results = service.searchByKeyword(keyword);
+            } else if (maHocPhan != null && !maHocPhan.isEmpty()) {
+                results = service.findByMaHocPhan(maHocPhan);
+            } else if (tenMonHoc != null && !tenMonHoc.isEmpty()) {
+                results = service.findByTenMonHoc(tenMonHoc);
+            } else {
+                return ResponseEntity.badRequest().body("Vui lòng nhập ít nhất một tiêu chí tìm kiếm");
+            }
+            
+            return ResponseEntity.ok(results != null ? results : Collections.emptyList());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Lỗi khi tìm kiếm: " + e.getMessage());
         }
     }
 }

@@ -29,6 +29,34 @@ public class ChuongTrinhHocServiceImpl implements ChuongTrinhHocService {
     }
 
     @Override
+    public List<ChuongTrinhHoc> findByKhoa(String khoaHoc) {
+        // TODO: Triển khai sau nếu cần
+        return null;
+    }
+
+    @Override
+    public List<ChuongTrinhHoc> findByMonHoc(String maHocPhan, String tenMonHoc) {
+        // Triển khai theo nhu cầu hoặc có thể throw UnsupportedOperationException
+        // nếu không sử dụng phương thức này
+        throw new UnsupportedOperationException("Phương thức này chưa được triển khai");
+    }
+
+    @Override
+    public List<ChuongTrinhHoc> searchByKeyword(String keyword) {
+        return chuongTrinhHocRepository.searchByKeyword(keyword);
+    }
+
+    @Override
+    public List<ChuongTrinhHoc> findByMaHocPhan(String maHocPhan) {
+        return chuongTrinhHocRepository.findByMonHocList_MaHocPhanContaining(maHocPhan);
+    }
+
+    @Override
+    public List<ChuongTrinhHoc> findByTenMonHoc(String tenMonHoc) {
+        return chuongTrinhHocRepository.findByMonHocList_TenMonHocContaining(tenMonHoc);
+    }
+
+    @Override
     public void deleteById(Long id) {
         chuongTrinhHocRepository.deleteById(id);
     }
@@ -43,27 +71,19 @@ public class ChuongTrinhHocServiceImpl implements ChuongTrinhHocService {
         }
     }
 
-	@Override
-	public List<ChuongTrinhHoc> findByKhoa(String khoaHoc) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void removeMonHocFromChuongTrinh(Long chuongTrinhHocId, Long monHocId) {
-	    // 1. Tìm chương trình học (dùng orElseThrow như tin nhắn trước)
-	    ChuongTrinhHoc chuongTrinhHoc = chuongTrinhHocRepository.findById(chuongTrinhHocId)
-	        .orElseThrow(() -> new RuntimeException("Không tìm thấy chương trình học"));
+    @Override
+    public void removeMonHocFromChuongTrinh(Long chuongTrinhHocId, Long monHocId) {
+        ChuongTrinhHoc chuongTrinhHoc = chuongTrinhHocRepository.findById(chuongTrinhHocId)
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy chương trình học"));
 
-	    // 2. Xóa môn học bằng removeIf (đơn giản như giải pháp mới)
-	    boolean isRemoved = chuongTrinhHoc.getMonHocList().removeIf(
-	        monHoc -> monHoc.getId().equals(monHocId)
-	    );
-	    
-	    if (!isRemoved) {
-	        throw new RuntimeException("Không tìm thấy môn học trong chương trình");
-	    }
+        boolean isRemoved = chuongTrinhHoc.getMonHocList().removeIf(
+            monHoc -> monHoc.getId().equals(monHocId)
+        );
+        
+        if (!isRemoved) {
+            throw new RuntimeException("Không tìm thấy môn học trong chương trình");
+        }
 
-	    // 3. Lưu lại (không xóa từ MonHocRepository)
-	    chuongTrinhHocRepository.save(chuongTrinhHoc); 
-	}
+        chuongTrinhHocRepository.save(chuongTrinhHoc); 
+    }
 }

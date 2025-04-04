@@ -16,4 +16,10 @@ class MonHoc {
     private String tenMonHoc;
     private Integer soTinChi;
     private String dieuKienTienQuyet;
+    private Integer soGio;
+    private Integer soCa;
+    private Long heSo;
+    private String giangVienPhuTrach;
+    private String maGiangVien;
+    private String monThayThe;
 }
