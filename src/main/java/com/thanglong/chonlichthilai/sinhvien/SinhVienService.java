@@ -1,11 +1,12 @@
 package com.thanglong.chonlichthilai.sinhvien;
 //Importing required classes
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import com.thanglong.chonlichthilai.chuongtrinhhoc.dto.HocPhanDTO;
+import com.thanglong.chonlichthilai.chuongtrinhhoc.entity.ChuongTrinhHoc;
 
-
-
-//Interface
 
 public interface SinhVienService {
 
@@ -28,4 +29,15 @@ public interface SinhVienService {
 		void deleteByMaSinhVien(String maSinhVien);
 
 		List<SinhVien> saveAll(List<SinhVien> sinhVienList);
+		
+		Optional<ChuongTrinhHoc> findChuongTrinhHocCuaSinhVien(String maSinhVien);
+
+	    Set<String> getHocPhanDaQua(String maSinhVien);
+
+	    Set<String> getHocPhanDangHoc(String maSinhVien);
+	    
+	    List<LoaiHocPhanConThieuDTO> getHocPhanConThieu(String maSinhVien);
+
+	    List<HocPhanConThieuDTO> getHocPhanThiLaiHocLai(String maSinhVien); 
+	    
 	}

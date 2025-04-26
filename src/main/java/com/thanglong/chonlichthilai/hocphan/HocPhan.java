@@ -35,7 +35,12 @@ public class HocPhan {
     private String maGiangVien;
     private String moRong;
     private Integer soTinChi;
+        
+    @Column(name = "mon_thay_the")
+    private String monThayThe;          // Tên môn thay thế
     
+    @Column(name = "ma_mon_thay_the")
+    private String maMonThayThe;        // Mã môn thay thế
     
     @Column(name="so_ca", columnDefinition="int(1) default 2")
     private int soCa;

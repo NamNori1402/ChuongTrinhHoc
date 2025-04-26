@@ -20,4 +20,5 @@ import com.thanglong.chonlichthilai.bangdiem.BangDiem;
 public interface HocPhanRepository extends JpaRepository<HocPhan, Long> {
     Optional<HocPhan> findByMaHocPhan(String maHocPhan);
     List<HocPhan> findAllByOrderByMaHocPhanAsc();
+    List<HocPhan> findByMaHocPhanContainingOrTenHocPhanContaining(String maHocPhan, String tenHocPhan);
 }

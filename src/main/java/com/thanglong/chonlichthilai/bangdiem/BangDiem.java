@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thanglong.chonlichthilai.hocphan.HocPhan;
 import com.thanglong.chonlichthilai.tkb.TKB;
 
 import jakarta.persistence.Entity;
@@ -16,7 +17,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 // Annotations 
@@ -25,6 +28,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 // Class 
 public class BangDiem
 {
@@ -39,4 +44,7 @@ public class BangDiem
     private Date time;
     private Integer soTinChi;
     
+    @ManyToOne
+    @JoinColumn(name = "hoc_phan_id")
+    private HocPhan hocPhan;
 }
