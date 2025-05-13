@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Chon lich thi</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+	<script src="js/common.js"></script>
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Đăng nhập</h1>
+                                    </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user"
+                                                id="userName" aria-describedby="emailHelp"
+                                                placeholder="Nhập mã sinh viên hoặc mã giảng viên"
+												>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" 
+                                                id="password" placeholder="Nhập mật khẩu đã gửi vào email"
+												disabled
+												>
+                                        </div>
+										<div class="form-group" align="right">
+											<table border="0">
+												<tr>
+													<td>Năm học</td><td><div id="frm_namHoc" ></div></td>
+												</tr>
+												<tr>
+													<td>Kỳ học</td><td><div id="frm_kyHoc" ></div></td>
+												</tr>
+											</table>
+										</div>
+										<div class="form-group">
+											<div id="loading" style="width: 100%; margin:0 auto"></div>
+										</div>
+                                        <div class="form-group">
+											<button id="login" class="btn btn-primary btn-user btn-block">Lấy mật khẩu</button>
+                                        </div>
+										<div class="form-group">
+											<div id="notify"></div>
+										</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+	<!-- Modal -->
+		<div class="modal fade" id="frm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width: 630px">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title" id="modal-title">Edit Account</h4>
+		      </div>
+		      <div class="modal-body">
+		          <div id="frm-content"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+		        <button type="button" class="btn btn-primary" id="Save" value="">Ghi lại</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+	
+	<script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+	<script src="js/bootstrap-table.min.js"></script>
+
+	
+</body>
+<script>
+	var status = 0;
+</script>
+<script>
+$("#login").click(function(){
+	userName=$('#userName').val();
+	password=$('#password').val();
+	kyHoc = $('#kyHoc').val();
+	namHoc = $('#namHoc').val();
+	if (userName==''){
+		alert('Bạn chưa nhập mã sinh viên hoặc mã giảng viên');
+		$('#userName').focus();
+		return;
+	}
+	userName = userName.toUpperCase();
+	$('#userName').val(userName);
+	if (status == 1){
+		if (password==''){
+			alert('Bạn chưa nhập mật khẩu. Vui lòng lấy mật khẩu để đăng nhập trong email')
+			$('#password').focus();
+			return;
+		}
+		data = {userName: userName, password: password, maKy: kyHoc, namHoc: namHoc}
+		$.ajax({
+				url 		: '/dangnhap',
+				type		: 'POST',
+				dataType	: 'json',
+				data 		:  JSON.stringify(data),
+				contentType : 'application/json; charset=UTF-8',
+				success : function(resp) {
+					mess = resp.content
+					if (resp.code==-1){
+						alert ('Tên đăng nhập hoặc tài khoản không hợp lệ');
+						window.location.replace("login.html");
+						return;
+					} else {		
+						localStorage.setItem('taiKhoan', resp.extent);				
+						if (mess =='quanTri'){
+							window.location.replace("dashboard.html");
+						} else if (mess =='thuKy'){
+							window.location.replace("dashboard.html");
+						} else if (mess =='giangVien'){
+							window.location.replace("dashboard.html");
+						} else {
+							window.location.replace("dashboard.html");
+						}
+						console.log(resp)						
+					}
+				}
+		});	
+	} else if (status == 0){
+		$('#loading').html(loading)
+		$.ajax({
+				url 		: '/dangnhap/'+userName,
+				type		: 'GET',
+				dataType	: 'json',
+				contentType : 'application/json; charset=UTF-8',
+				success : function(resp) {
+					$('#loading').html('')
+					if (resp.code==-1){
+						alert(resp.content);
+						window.location.replace("login.html");
+					} else {						
+						data=JSON.stringify(resp);
+						$('#login').html('Đăng nhập');
+						$("#userName").prop('disabled', true);
+						$("#password").prop('disabled', false);
+						$("#namHoc").prop('disabled', true);
+						$("#kyHoc").prop('disabled', true);
+						alert('Đã gửi mật khẩu đến email: ' + resp.content);
+						$('#password').focus();	
+						status = 1
+					}
+				}
+		});	
+	}
+
+}); 
+</script>
+<script>
+	$(document).ready(function(){
+		frmMacDinh();
+	})
+
+</script>
+<script>
+function frmMacDinh(){
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="kyHoc" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+				if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+					namHoc = CFG_NAM_HOC[i].namHoc;
+					CFG_NAM_HOC_MAC_DINH = namHoc;
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				} else {
+					htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				}
+			}
+		}
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == namHoc){
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_KY_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
+				}
+			}
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
+	}
+</script>
+<script>
+function frmChonTheoNam(ts){
+	CFG_NAM_HOC_MAC_DINH = $('#namHoc').val();
+		var htmlNam = '';
+		var htmlKy = '';
+		var namHoc = '';
+		htmlNam = htmlNam + '<Select type="text" id="namHoc" class="form-control form-control-user" onchange="frmChonTheoNam(this)">';
+		htmlKy = htmlKy + '<Select type="text" id="htmlKy" class="form-control form-control-user">';
+		for(i=0; i < CFG_NAM_HOC.length; i++){
+			if(CFG_NAM_HOC[i].namHoc == CFG_NAM_HOC_MAC_DINH){
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+' selected>'+CFG_NAM_HOC[i].namHoc+'</option>';
+				for(j=0; j < CFG_NAM_HOC[i].kyHoc.length;j++){
+					if(CFG_NAM_HOC[i].kyHoc[j].maKy == CFG_NAM_HOC_MAC_DINH){
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+' selected>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					} else {
+						htmlKy = htmlKy + '<option value='+CFG_NAM_HOC[i].kyHoc[j].maKy+'>'+CFG_NAM_HOC[i].kyHoc[j].tenKy+'</option>';
+					}
+				}
+			} else {
+				htmlNam = htmlNam + '<option value='+CFG_NAM_HOC[i].namHoc+'>'+CFG_NAM_HOC[i].namHoc+'</option>';
+			}
+		}
+		htmlNam = htmlNam + '</Select>';
+		htmlKy = htmlKy + '</Select>';
+
+		$('#frm_namHoc').html(htmlNam);
+		$('#frm_kyHoc').html(htmlKy);
+	}
+</script>
+</html>

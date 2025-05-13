@@ -1,0 +1,3536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Quản lý chương trình học</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="js/common.js"></script>
+	<script src="https://www.w3schools.com/lib/w3.js"></script>
+    <style>
+        .mon-hoc-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .mon-hoc-item:last-child {
+            margin-bottom: 0;
+        }
+        .remove-mon-hoc {
+            color: #e74a3b;
+            cursor: pointer;
+        }
+        .mon-hoc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+            color: #4e73df;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+        .khoa-group {
+            margin-bottom: 30px;
+            border: 1px solid #e3e6f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .khoa-header {
+            background-color: #4e73df;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+        .chuyen-nganh-card {
+            border-left: 4px solid #4e73df;
+            margin-bottom: 10px;
+        }
+        .chuyen-nganh-header {
+            background-color: #f8f9fc;
+            padding: 10px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chuyen-nganh-body {
+            padding: 15px;
+            background-color: white;
+        }
+        .badge-khoa {
+            font-size: 1rem;
+            background-color: #2e59d9;
+        }
+        .loai-hoc-phan {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #e3e6f0;
+            padding-bottom: 10px;
+        }
+        .loai-hoc-phan-title {
+            font-weight: bold;
+            color: #2e59d9;
+            margin-bottom: 10px;
+        }
+		#detailModal .modal-lg {
+		    max-width: 90%;
+		    width: 95%;
+		}
+        .mon-hoc-table {
+            width: 100%;
+			font-size: 14px;
+        }
+		.mon-hoc-table th {
+		    white-space: nowrap;
+		    background-color: #f8f9fc;
+		    padding: 10px 12px;
+		}
+
+		.mon-hoc-table td {
+		    padding: 8px 12px;
+		    vertical-align: top;
+		}
+		/* Cho phép ngắt dòng cho các ô dài */
+		.mon-hoc-table td.wrap-text {
+		    white-space: normal;
+		    word-break: break-word;
+		    max-width: 200px;
+		}
+		/* Tiêu đề loại học phần nổi bật */
+		.loai-hoc-phan-title {
+		    font-weight: bold;
+		    color: #2e59d9;
+		    margin: 15px 0 10px 0;
+		    font-size: 16px;
+		    border-bottom: 1px solid #eee;
+		    padding-bottom: 5px;
+		}
+		/* Modal body scroll nếu nội dung dài */
+		.modal-body {
+		    max-height: 70vh;
+		    overflow-y: auto;
+		}
+		@media (max-width: 992px) {
+		    .mon-hoc-table {
+		        display: block;
+		        overflow-x: auto;
+		    }
+		    
+		    #detailModal .modal-lg {
+		        max-width: 100%;
+		        width: 100%;
+		        margin: 10px;
+		    }
+		    
+		    .mon-hoc-table th, 
+		    .mon-hoc-table td {
+		        min-width: 120px;
+		    }
+		}
+		.search-container {
+		    padding: 0.5rem 1rem;
+		}
+
+		#searchMonHocInput {
+		    min-width: 250px;
+		}
+
+		.search-result-item {
+			border: 1px solid #e3e6f0;
+		    border-radius: 5px;
+		    margin-bottom: 20px;
+		    background-color: #fff;
+		}
+
+		.search-result-header {
+			padding: 15px;
+			border-bottom: 1px solid #e3e6f0;
+			background-color: #f8f9fc !important;
+		}
+		.search-result-header h5 {
+		    color: #2e59d9;
+		    font-weight: bold;
+		    margin-bottom: 5px;
+		}
+
+		.search-monhoc-table {
+		    width: 100%;
+		    font-size: 14px;
+		}
+
+		.search-monhoc-table th {
+		    background-color: #f8f9fc;
+		    padding: 8px 12px;
+		}
+		/* Thêm vào phần style */
+		.search-result-item {
+		    border-left: 4px solid #4e73df;
+		    margin-bottom: 20px;
+		    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+		}
+
+		
+		.badge-khoa {
+		    background-color: #2e59d9;
+		    color: white;
+		    padding: 5px 10px;
+		    border-radius: 15px;
+		    font-size: 0.8rem;
+		}
+
+		.chuyen-nganh-card {
+		    transition: all 0.3s;
+		    border: 1px solid #e3e6f0;
+		}
+
+		.chuyen-nganh-card:hover {
+		    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+		}
+
+		.chuyen-nganh-header {
+		    cursor: pointer;
+		    padding: 10px 15px;
+		    background-color: #f8f9fc;
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		}
+
+		.chuyen-nganh-body {
+		    padding: 15px;
+		    background-color: white;
+		}
+		.mon-hoc-table {
+		    margin-bottom: 0;
+		}
+
+		.mon-hoc-table th {
+		    background-color: #f8f9fc;
+		    white-space: nowrap;
+		}
+
+		.mon-hoc-table td {
+		    vertical-align: middle;
+		}
+
+		.table-responsive {
+		    border: none;
+		}
+		/* Thêm vào phần style */
+		.hoc-phan-card {
+		    transition: all 0.3s;
+		    height: 100%;
+		}
+
+		.hoc-phan-card:hover {
+		    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+		    transform: translateY(-2px);
+		}
+
+		.selected-hoc-phan-item {
+		    display: inline-flex;
+		    align-items: center;
+		    border: 1px solid #d1d3e2;
+		}
+
+		#hocPhanSearchResults {
+		    min-height: 300px;
+			color: #4F4F4F !important;
+		}
+
+		#selectedHocPhanContainer {
+		    min-height: 60px;
+		    border: 1px dashed #d1d3e2;
+		    padding: 10px;
+		    border-radius: 5px;
+		}
+
+		#hocPhanTable {
+		    font-size: 14px;
+		}
+
+		#hocPhanTable th {
+		    white-space: nowrap;
+		}
+		#step3 {
+		    display: block !important; /* Ghi đè nếu cần */
+		}
+		/* CSS cho bảng loại học phần */
+		#loaiHocPhanTable th {
+		    background-color: #f8f9fc;
+		    white-space: nowrap;
+		}
+
+		#loaiHocPhanTable td {
+		    vertical-align: middle;
+		}
+
+		.so-tin-chi {
+		    max-width: 100px;
+		}
+
+		/* CSS cho modal thêm học phần */
+		#addHocPhanModal .modal-body {
+		    max-height: 70vh;
+		    overflow-y: auto;
+		}
+
+		#hocPhanSearchResults {
+		    min-height: 300px;
+		}
+
+		.selected-hoc-phan-item {
+		    display: inline-flex;
+		    align-items: center;
+		    border: 1px solid #d1d3e2;
+		    padding: 5px 10px;
+		    margin: 2px;
+		    border-radius: 4px;
+		    background-color: #f8f9fa;
+		}
+		.table td, .table th {
+		    vertical-align: middle !important;
+			color: #4F4F4F !important;
+		}
+
+		.table td {
+		    font-size: 14px;
+		}
+		.loai-hoc-phan h5 {
+		    font-weight: bold;
+		    border-bottom: 2px solid #007bff;
+		    padding-bottom: 5px;
+		}
+
+		.loai-hoc-phan {
+		    background-color: #f8f9fa;
+		}
+
+		.table th {
+			vertical-align: middle !important;
+		    background-color: #C6E2FF !important;
+		    color: #444444;
+		}
+
+		.thead-dark th {
+		    font-size: 0.875rem;
+		    text-transform: uppercase;
+		}
+		.modal-title, .modal-body {
+			color: #4F4F4F !important;
+		}
+		.form-group, .form-control {
+			color: #5a5c69 !important;
+			font-weight: bold;
+		}
+		
+		
+		.khoa-header {
+		        transition: background-color 0.3s ease;
+	    }
+	    .khoa-header:hover {
+	        background-color: #4876FF;
+	    }
+		.rotate-icon {
+		    transition: transform 0.3s ease;
+		}
+		.fa-chevron-up.rotate-icon {
+		    transform: rotate(180deg);
+		}
+		/* Thêm vào file CSS của bạn */
+		.form-control-sm {
+		    height: calc(1.5em + 0.5rem + 2px);
+		    padding: 0.25rem 0.5rem;
+		    font-size: 0.875rem;
+		    line-height: 1.5;
+		}
+
+		.btn-sm {
+		    padding: 0.25rem 0.5rem;
+		    font-size: 0.875rem;
+		    line-height: 1.5;
+		}
+
+		.btn-sm i {
+		    margin-right: 3px;
+		}
+
+		.mr-1 {
+		    margin-right: 0.25rem !important;
+		}
+
+		/* Highlight row in edit mode */
+		tr.hoc-phan-goc.editing {
+		    background-color: #fff3cd !important;
+		}
+		
+		/* Thêm vào file CSS của bạn */
+		.card-header {
+		    padding: 0.75rem 1.25rem;
+		}
+
+		.input-group {
+		    width: auto;
+		}
+
+		#themHocPhanContainer {
+		    border-bottom: 1px solid #e3e6f0;
+		    padding-bottom: 1rem;
+		    margin-bottom: 1rem;
+		}
+
+		#themHocPhanTable input {
+		    min-width: 100px;
+		}
+
+		.btn-sm {
+		    padding: 0.25rem 0.5rem;
+		    font-size: 0.875rem;
+		}
+
+		.table-responsive {
+		    margin-bottom: 0;
+		}
+		/* Đảm bảo thông báo không bị tràn */
+		.alert-info {
+		    margin: 0 15px 15px 15px;
+		    padding: 10px 15px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		}
+
+		/* Responsive cho mobile */
+		@media (max-width: 768px) {
+		    .alert-info {
+		        flex-direction: column;
+		        align-items: flex-start;
+		    }
+		    .alert-info button {
+		        margin-top: 8px;
+		        margin-left: 0 !important;
+		    }
+		}
+    </style>
+</head>
+
+<body id="page-top">
+	
+	
+	<div id="loadingIndicator" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; text-align: center; padding-top: 20%;">
+	    <div class="spinner-border text-light" role="status">
+	        <span class="sr-only">Loading...</span>
+	    </div>
+	    <p class="text-light mt-2">Đang xử lý...</p>
+	</div>
+	
+	
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+       <div w3-include-html="_menu.html"></div>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Topbar Navbar -->
+					<ul class="navbar-nav ml-auto">
+					    <!-- Nav Item - User Information -->
+					    <li class="nav-item dropdown no-arrow">
+					        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					            <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userID">TK mặc định</span>
+					            <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+					        </a>
+					        <!-- Dropdown - User Information -->
+					        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+					            <a class="dropdown-item" href="#">
+					                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+					                Profile
+					            </a>
+					            <a class="dropdown-item" href="#">
+					                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+					                Settings
+					            </a>
+					            <a class="dropdown-item" href="#">
+					                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+					                Activity Log
+					            </a>
+					            <div class="dropdown-divider"></div>
+					            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+					                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+					                Logout
+					            </a>
+					        </div>
+					    </li>
+					</ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Quản lý chương trình học</h1>
+
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="view-tab" data-toggle="tab" href="#view" role="tab" aria-controls="view" aria-selected="true">Danh sách chương trình học</a>
+                        </li>
+                        <li class="nav-item" id="tab-them-chuong-trinh">
+                            <a class="nav-link" id="add-tab" data-toggle="tab" href="#add" role="tab" aria-controls="add" aria-selected="false">Thêm chương trình học</a>
+                        </li>
+						<li class="nav-item">
+						    <a class="nav-link" id="hocphan-tab" data-toggle="tab" href="#hocphan" role="tab" aria-controls="hocphan" aria-selected="false">Danh sách học phần</a>
+						</li>
+						<li class="nav-item">
+						  <a class="nav-link" id="kiemtra-tab" data-toggle="tab" href="#kiemtra" role="tab" aria-controls="kiemtra" aria-selected="false">
+						    Kiểm tra học phần
+						  </a>
+						</li>
+						<li class="nav-item flex-grow-1 ml-3">
+						  <div class="nav-link p-0 h-100 border-0 bg-transparent">
+						    <div class="input-group">
+						      <input type="text" class="form-control" id="searchMonHocInput" placeholder="Tìm chương trình học theo mã / tên HP">
+						      <div class="input-group-append">
+						        <button class="btn btn-primary" id="btnSearchMonHoc">
+						          <i class="fas fa-search"></i>
+						        </button>
+						      </div>
+						    </div>
+						  </div>
+						</li>
+
+						
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Tab Xem danh sách -->
+                        <div class="tab-pane fade show active" id="view" role="tabpanel" aria-labelledby="view-tab">
+                            <div class="card shadow mb-4 mt-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Danh sách chương trình học theo chuyên ngành và khóa</h6>
+                                </div>
+                                <div class="card-body">
+									<div id="loadingChuongTrinhHoc" class="text-center py-3" style="display: none;">
+									    <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+									    <div>Đang tải dữ liệu chương trình học...</div>
+									</div>
+                                    <div id="chuongTrinhHocContainer">
+                                        <!-- Dữ liệu sẽ được load bằng JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					
+						<!-- Thêm tab nội dung Danh sách học phần -->
+						<div class="tab-pane fade" id="hocphan" role="tabpanel" aria-labelledby="hocphan-tab">
+						    <div class="card shadow mb-4 mt-4">
+						        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+						            <h6 class="m-0 font-weight-bold text-primary">Danh sách tất cả học phần</h6>
+						            <div>
+						                <div class="input-group">
+						                    <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm HP theo mã / tên" style="width: 250px;">
+						                    <div class="input-group-append">
+						                        <button class="btn btn-primary" onclick="timKiemHocPhan(document.getElementById('searchInput').value)">
+						                            <i class="fas fa-search"></i>
+						                        </button>
+						                    </div>
+											
+						                </div>
+						            </div>
+									
+									<!-- Thêm id cho nút để có thể điều khiển bằng JS -->
+						            <button id="btnThemHocPhan" class="btn btn-success ml-2" onclick="toggleThemHocPhan()" style="display: none;">
+						                <i class="fas fa-plus"></i> Thêm học phần mới
+						            </button>
+						        </div>
+								<!-- Thêm vào sau phần search input -->
+								<div id="searchInfoContainer" style="display: none;">
+								    <div class="alert alert-info mb-3">
+								        <span id="searchInfoText"></span>
+								        <button class="btn btn-sm btn-outline-secondary" onclick="resetSearch()">
+								            Quay lại danh sách tất cả học phần
+								        </button>
+								    </div>
+								</div>
+
+						        <div class="card-body">
+						            <!-- Phần thêm học phần mới (ẩn ban đầu) -->
+						            <div id="themHocPhanContainer" style="display: none;">
+						                <div class="table-responsive mb-4">
+						                    <table class="table table-bordered" id="themHocPhanTable">
+						                        <thead>
+						                            <tr class="text-center">
+						                                <th>Mã HP</th>
+														<th>Mã HP hiện tại</th>
+						                                <th>Tên học phần</th>
+						                                <th>Số tín chỉ</th>
+						                                <th>ĐK Tiên quyết</th>
+														<th>Số ca</th>
+														<th>GV phụ trách</th>
+						                                <th>Mã GV</th>														
+						                                <th>Ngành phụ trách</th>
+						                                <th>Thao tác</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody id="themHocPhanTableBody">
+						                            <!-- Dòng mẫu để thêm học phần mới -->
+						                            <tr>
+						                                <td><input type="text" class="form-control form-control-sm" placeholder="Mã HP"></td>
+														<td><input type="text" class="form-control form-control-sm" placeholder="Mã HP hiện tại"></td>
+						                                <td><input type="text" class="form-control form-control-sm" placeholder="Tên học phần"></td>
+						                                <td><input type="number" class="form-control form-control-sm" placeholder="Số tín chỉ"></td>
+						                                <td><input type="text" class="form-control form-control-sm" placeholder="ĐK tiên quyết"></td>
+														<td><input type="number" class="form-control form-control-sm" placeholder="Số ca"></td>
+						                                <td><input type="text" class="form-control form-control-sm" placeholder="Tên GV"></td>
+														<td><input type="text" class="form-control form-control-sm" placeholder="Mã GV"></td>
+						                                <td><input type="text" class="form-control form-control-sm" placeholder="Ngành phụ trách"></td>
+						                                <td class="text-center">
+						                                    <button class="btn btn-danger btn-sm" onclick="xoaDongThemHocPhan(this)">
+						                                        <i class="fas fa-trash-alt"></i>
+						                                    </button>
+						                                </td>
+						                            </tr>
+						                        </tbody>
+						                    </table>
+						                </div>
+						                <div class="text-right mb-3">
+						                    <button class="btn btn-secondary mr-2" onclick="themDongHocPhanMoi()">
+						                        <i class="fas fa-plus-circle"></i> Thêm dòng
+						                    </button>
+						                    <button class="btn btn-primary" onclick="luuHocPhanMoi()">
+						                        <i class="fas fa-save"></i> Lưu tất cả
+						                    </button>
+						                </div>
+						            </div>
+
+						            <!-- Danh sách học phần hiện có -->
+						            <div class="table-responsive">
+						                <table class="table table-bordered" id="hocPhanTable" width="100%" cellspacing="0">
+						                    <thead>
+						                        <tr class="text-center">
+						                            <th>Mã HP</th>
+						                            <th>Tên học phần</th>
+						                            <th>Số tín chỉ</th>
+						                            <th>ĐK Tiên quyết</th>
+													<th>Số ca</th>
+						                            <th>GV phụ trách</th>
+						                            <th>Ngành phụ trách</th>
+						                            <th>HP thay thế</th>
+						                            <th id="hocPhanThaoTacTh">Thao tác</th>
+						                        </tr>
+						                    </thead>
+						                    <tbody id="hocPhanTableBody">
+						                        <!-- Dữ liệu sẽ được load bằng JavaScript -->
+						                    </tbody>
+						                </table>
+						                <div id="loadingDsHp" class="text-center py-3" style="display: none;">
+						                    <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+						                    <div>Đang tải danh sách học phần...</div>
+						                </div>
+						            </div>
+									
+									<!-- modal thêm hp thay thế -->
+									<div class="modal fade" id="themHocPhanThayTheModal" tabindex="-1" role="dialog" aria-labelledby="themHocPhanThayTheModalLabel" aria-hidden="true">
+									    <div class="modal-dialog" role="document">
+									        <div class="modal-content">
+									            <div class="modal-header">
+									                <h5 class="modal-title text-primary" id="themHocPhanThayTheModalLabel">Thêm học phần thay thế</h5>
+									                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									                    <span aria-hidden="true">&times;</span>
+									                </button>
+									            </div>
+									            <div class="modal-body">
+													<form id="formThemHocPhanThayThe">
+													    <input type="hidden" id="maHocPhanGoc">
+													    
+													    <div class="form-group">
+													        <label for="khoaApDungTu">Áp dụng từ khóa</label>
+													        <input type="number" class="form-control" id="khoaApDungTu">
+													    </div>
+													    <div class="form-group">
+													        <label for="khoaApDungDen">Áp dụng đến khóa</label>
+													        <input type="number" class="form-control" id="khoaApDungDen">
+													    </div>
+
+													    <label>Danh sách mã học phần thay thế *</label>
+													    <div id="danhSachThayTheContainer"></div>
+													    <button type="button" class="btn btn-sm btn-secondary my-2" onclick="themDongHocPhanThayThe()">+ Thêm học phần</button>
+													</form>
+
+									            </div>
+									            <div class="modal-footer">
+									                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+									                <button type="button" class="btn btn-primary" onclick="themHocPhanThayThe()">Lưu</button>
+									            </div>
+									        </div>
+									    </div>
+									</div>
+						        </div>
+						    </div>
+						</div>
+						
+                        <!-- Tab Thêm mới -->
+						<div class="tab-pane fade" id="add" role="tabpanel" aria-labelledby="add-tab">
+						    <div class="card shadow mb-4">
+						        <div class="card-header py-3">
+						            <h6 class="m-0 font-weight-bold text-primary">Thêm chương trình học mới</h6>
+						        </div>
+						        <div class="card-body">
+						            <!-- Bước 1: Tạo chương trình học cơ bản -->
+						            <div id="step1">
+						                <form id="createChuongTrinhForm">
+						                    <div class="form-group row">
+						                        <label class="col-sm-2 col-form-label">Chuyên ngành</label>
+						                        <div class="col-sm-10">
+						                            <select class="form-control" id="chuyenNganh" required>
+						                                <option value="">-- Chọn chuyên ngành --</option>
+														<option value="CONG_NGHE_THONG_TIN">Công nghệ thông tin</option>
+														<option value="KHOA_HOC_MAY_TINH">Khoa học máy tính</option>
+														<option value="TRI_TUE_NHAN_TAO">Trí tuệ nhân tạo</option>
+														<option value="HE_THONG_THONG_TIN">Hệ thống thông tin</option>
+														<option value="MANG_MAY_TINH">Mạng máy tính và truyền thông dữ liệu</option>
+														<option value="KE_TOAN">Kế toán</option>
+														<option value="TAI_CHINH_NGAN_HANG">Tài chính - Ngân hàng</option>
+														<option value="LOGISTIC">Logistics</option>
+														<option value="QUAN_TRI_KINH_DOANH">Quản trị kinh doanh</option>
+														<option value="QUAN_TRI_KHACH_SAN">Quản trị khách sạn</option>
+														<option value="MARKETING">Marketing</option>
+														<option value="KINH_TE_QUOC_TE">Kinh tế quốc tế</option>
+														<option value="LUAT_KINH_TE">Luật kinh tế</option>
+														<option value="THUONG_MAI_DIEN_TU">Thương mại điện tử</option>
+														<option value="DICH_VU_DU_LICH_LU_HANH">Dịch vụ du lịch - lữ hành</option>
+														<option value="NGON_NGU_ANH">Ngôn ngữ Anh</option>
+														<option value="NGON_NGU_TRUNG">Ngôn ngữ Trung</option>
+														<option value="NGON_NGU_NHAT">Ngôn ngữ Nhật</option>
+														<option value="NGON_NGU_HAN">Ngôn ngữ Hàn</option>
+														<option value="VIET_NAM_HOC">Việt Nam học</option>
+														<option value="CONG_TAC_XA_HOI">Công tác xã hội</option>
+														<option value="TRUYEN_THONG_DA_PHUONG_TIEN">Truyền thông đa phương tiện</option>
+														<option value="THIET_KE_DO_HOA">Thiết kế đồ họa</option>
+														<option value="DIEU_DUONG">Điều dưỡng</option>
+														<option value="DINH_DUONG">Dinh dưỡng</option>
+														<option value="THANH_NHAC">Thanh nhạc</option>
+						                            </select>
+						                        </div>
+						                    </div>
+
+						                    <div class="form-group row">
+						                        <label class="col-sm-2 col-form-label" >Khóa học</label>
+						                        <div class="col-sm-10">
+						                            <select class="form-control" id="khoa" required>
+						                                <option value="">-- Chọn khóa học --</option>
+														<option value="K30">K30</option>
+														<option value="K31">K31</option>
+														<option value="K32">K32</option>
+														<option value="K33">K33</option>
+														<option value="K34">K34</option>
+														<option value="K35">K35</option>
+														<option value="K36">K36</option>
+														<option value="K37">K37</option>
+														<option value="K38">K38</option>
+														<option value="K39">K39</option>
+														<option value="K40">K40</option>
+														<option value="K41">K41</option>
+													</select>
+						                        </div>
+						                    </div>
+
+						                    <div class="form-group text-right">
+						                        <button type="submit" class="btn btn-primary">
+						                            <i class="fas fa-plus"></i> Tạo chương trình học
+						                        </button>
+						                    </div>
+						                </form>
+						            </div>
+						            
+						            <!-- Bước 2: Quản lý loại học phần -->
+						            <div id="step2" style="display: none;">
+						                <div class="alert alert-success">
+						                    Đã tạo chương trình học thành công! <strong id="createdChuongTrinhInfo"></strong>
+						                </div>
+
+						                <div class="card shadow mb-4">
+						                    <div class="card-header py-3">
+						                        <h6 class="m-0 font-weight-bold text-primary">Quản lý loại học phần</h6>
+						                    </div>
+						                    <div class="card-body">
+						                        <div class="table-responsive">
+						                            <table class="table table-bordered" id="loaiHocPhanTable" width="100%" cellspacing="0">
+						                                <thead>
+						                                    <tr>
+						                                        <th>Loại học phần</th>
+						                                        <th>Số tín chỉ tối thiểu</th>
+																<th>Ghi chú (nếu có)</th>
+						                                        <th>Thao tác</th>
+						                                    </tr>
+						                                </thead>
+						                                <tbody id="loaiHocPhanList">
+						                                    <!-- Danh sách 6 loại học phần mặc định sẽ được thêm vào đây -->
+															
+						                                </tbody>
+						                            </table>
+						                        </div>
+						                    </div>
+											<div id="loadingLoaiHocPhan" class="text-center py-3" style="display: none;">
+											  <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+											  <div>Đang tải loại học phần...</div>
+											</div>
+
+						                </div>
+						            </div>
+						            
+						            <!-- Bước 3: Thêm học phần vào loại học phần (Modal) -->
+						            <div class="modal fade" id="addHocPhanModal" tabindex="-1" role="dialog" aria-hidden="true">
+						                <div class="modal-dialog modal-lg" role="document">
+						                    <div class="modal-content">
+						                        <div class="modal-header">
+						                            <h5 class="modal-title">Thêm học phần vào: <span id="modalLoaiHocPhanTitle"></span></h5>
+						                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                                <span aria-hidden="true">&times;</span>
+						                            </button>
+						                        </div>
+						                        <div class="modal-body">
+						                            <div class="row mb-3">
+						                                <div class="col-md-6">
+						                                    <div class="input-group">
+						                                        <input type="text" class="form-control" id="searchHocPhanInput" 
+						                                               placeholder="Tìm học phần...">
+						                                        <div class="input-group-append">
+						                                            <button class="btn btn-outline-secondary" type="button" id="btnSearchHocPhan">
+						                                                <i class="fas fa-search"></i>
+						                                            </button>
+						                                        </div>
+						                                    </div>
+						                                </div>
+						                            </div>
+						                            
+						                            <div id="selectedHocPhanContainer" class="mb-3">
+						                                <h6>Học phần đã chọn:</h6>
+						                                <div id="selectedHocPhanList" class="d-flex flex-wrap">
+						                                    <!-- Các học phần được chọn sẽ hiển thị ở đây -->
+						                                </div>
+						                            </div>
+						                            
+						                            <div id="hocPhanSearchResults" class="row">
+						                                <!-- Kết quả tìm kiếm học phần sẽ hiển thị ở đây -->
+						                            </div>
+						                        </div>
+						                        <div class="modal-footer">
+						                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+						                            <button type="button" class="btn btn-primary" id="btnSaveHocPhan">Lưu học phần</button>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+									
+									<!-- Modal: Tạo tổ hợp học phần -->
+									<div class="modal fade" id="createToHopModal" tabindex="-1" role="dialog" aria-hidden="true">
+									  <div class="modal-dialog" role="document">
+									    <form id="createToHopForm">
+									      <div class="modal-content">
+									        <div class="modal-header">
+									          <h5 class="modal-title">Tạo tổ hợp học phần cho <span id="modalLoaiTitle"></span></h5>
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									        </div>
+									        <div class="modal-body">
+									          <input type="hidden" id="ctxLoaiId">
+									          <div class="form-group">
+									            <label>Tên tổ hợp</label>
+									            <input type="text" id="toHopTen" class="form-control" required>
+									          </div>
+									          <div class="form-group">
+									            <label>Số tín chỉ tối thiểu</label>
+									            <input type="number" id="toHopTinChi" class="form-control">
+									          </div>
+									          <div class="form-group">
+									            <label>Số lượng môn tối thiểu</label>
+									            <input type="number" id="toHopSoLuong" class="form-control">
+									          </div>
+									          <div class="form-check">
+									            <input type="checkbox" id="toHopBatBuoc" class="form-check-input">
+									            <label class="form-check-label" for="toHopBatBuoc">Bắt buộc học tất cả</label>
+									          </div>
+									        </div>
+									        <div class="modal-footer">
+									          <button class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+									          <button type="submit" class="btn btn-primary">Tạo tổ hợp</button>
+									        </div>
+									      </div>
+									    </form>
+									  </div>
+									</div>
+
+									<!-- Modal: Tạo nhóm môn trong tổ hợp -->
+									<div class="modal fade" id="createNhomModal" tabindex="-1" role="dialog" aria-hidden="true">
+									  <div class="modal-dialog" role="document">
+									    <form id="createNhomForm">
+									      <div class="modal-content">
+									        <div class="modal-header">
+									          <h5 class="modal-title">Tạo nhóm môn cho tổ hợp <span id="modalToHopTitle"></span></h5>
+									          <button type="button" class="close" data-dismiss="modal">&times;</button>
+									        </div>
+									        <div class="modal-body">
+									          <input type="hidden" id="ctxToHopId">
+									          <div class="form-group">
+									            <label>Tên nhóm môn</label>
+									            <input type="text" id="nhomTen" class="form-control" required>
+									          </div>
+									        </div>
+									        <div class="modal-footer">
+									          <button class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+									          <button type="submit" class="btn btn-primary">Tạo nhóm</button>
+									        </div>
+									      </div>
+									    </form>
+									  </div>
+									</div>
+
+						        </div>
+						    </div>
+						</div>
+						<!-- Kiểm tra học phần sinh viên -->						
+						<div class="tab-pane fade" id="kiemtra" role="tabpanel" aria-labelledby="kiemtra-tab">
+						  <div class="card shadow mb-4 p-4">
+
+						    <!-- 🔥 Tiêu đề + Ô nhập nằm cùng 1 dòng -->
+						    <div class="d-flex justify-content-between align-items-center mb-3">
+						      <h5 class="text-dark m-0">🔍 Kiểm tra học phần còn thiếu của sinh viên</h5>
+
+						      <div class="form-inline">
+						        <input type="text" id="maSinhVienInput" class="form-control mr-2" placeholder="Nhập mã sinh viên...">
+						        <button class="btn btn-primary" id="btnCheckHocPhan">Kiểm tra</button>
+						      </div>
+						    </div>
+
+						    <!-- 🎯 Header tên sinh viên -->
+						    <div id="kiemtra-header" class="mb-4"></div>
+
+						    <!-- Loading -->
+						    <div id="loadingKiemTra" class="text-center py-3" style="display: none;">
+						      <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+						      <div>Đang kiểm tra học phần...</div>
+						    </div>
+
+						    <!-- Kết quả -->
+						    <div id="ketQuaHocPhanConThieu" class="mb-5"></div>						    
+						  </div>
+						</div>
+
+
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Trường Đại học Thăng Long 2023</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Modal Xem chi tiết chương trình học -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title " id="detailModalLabel">Chi tiết chương trình học</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="row mb-3">
+	                    <div class="col-md-6">
+	                        <strong>Chuyên ngành:</strong> 
+	                        <span id="detailChuyenNganh"></span>
+	                        <input type="hidden" id="detailChuyenNganhEnum">
+	                    </div>
+	                    <div class="col-md-6">
+	                        <strong>Khóa:</strong> 
+	                        <span id="detailKhoa"></span>
+	                        <input type="hidden" id="detailChuongTrinhId">
+	                    </div>
+	                </div>
+	                
+	                <div id="chiTietChuongTrinhBody">
+	                    <!-- Các loại học phần và môn học sẽ được load vào đây -->
+	                </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	
+	
+	<!-- Thêm modal hiển thị kết quả -->
+	<div class="modal fade" id="searchResultModal" tabindex="-1" role="dialog" aria-hidden="true">
+	    <div class="modal-dialog modal-xl" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Kết quả tìm kiếm môn học</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div id="searchResultsContainer"></div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+		
+		// Đảm bảo các hàm quan trọng tồn tại
+		window.renderDanhSachChuongTrinhHoc = window.renderDanhSachChuongTrinhHoc || function(data) {
+		    console.log("Fallback render function called");
+		    $('#chuongTrinhHocContainer').html(JSON.stringify(data, null, 2));
+		};
+
+		window.convertChuyenNganh = window.convertChuyenNganh || function(value) {
+		    return value; // Fallback đơn giản
+		};
+
+		window.convertLoaiHocPhan = window.convertLoaiHocPhan || function(value) {
+		    return value; // Fallback đơn giản
+		};
+		
+		// Enum tương ứng với Java
+        const ChuyenNganh = {
+            CONG_NGHE_THONG_TIN: 'CONG_NGHE_THONG_TIN',
+            KHOA_HOC_MAY_TINH: 'KHOA_HOC_MAY_TINH',
+            TRI_TUE_NHAN_TAO: 'TRI_TUE_NHAN_TAO',
+            HE_THONG_THONG_TIN: 'HE_THONG_THONG_TIN',
+            MANG_MAY_TINH: 'MANG_MAY_TINH',
+            KE_TOAN: 'KE_TOAN',
+            TAI_CHINH_NGAN_HANG: 'TAI_CHINH_NGAN_HANG',
+            LOGISTIC: 'LOGISTIC',
+            QUAN_TRI_KINH_DOANH: 'QUAN_TRI_KINH_DOANH',
+            QUAN_TRI_KHACH_SAN: 'QUAN_TRI_KHACH_SAN',
+            MARKETING: 'MARKETING',
+            KINH_TE_QUOC_TE: 'KINH_TE_QUOC_TE',
+            LUAT_KINH_TE: 'LUAT_KINH_TE',
+            THUONG_MAI_DIEN_TU: 'THUONG_MAI_DIEN_TU',
+            DICH_VU_DU_LICH_LU_HANH: 'DICH_VU_DU_LICH_LU_HANH',
+            NGON_NGU_ANH: 'NGON_NGU_ANH',
+            NGON_NGU_TRUNG: 'NGON_NGU_TRUNG',
+            NGON_NGU_NHAT: 'NGON_NGU_NHAT',
+            NGON_NGU_HAN: 'NGON_NGU_HAN',
+            VIET_NAM_HOC: 'VIET_NAM_HOC',
+            CONG_TAC_XA_HOI: 'CONG_TAC_XA_HOI',
+            TRUYEN_THONG_DA_PHUONG_TIEN: 'TRUYEN_THONG_DA_PHUONG_TIEN',
+            THIET_KE_DO_HOA: 'THIET_KE_DO_HOA',
+            DIEU_DUONG: 'DIEU_DUONG',
+            DINH_DUONG: 'DINH_DUONG',
+            THANH_NHAC: 'THANH_NHAC'
+        };
+
+        const KhoaHoc = {
+            K30: 'K30',
+            K31: 'K31',
+            K32: 'K32',
+            K33: 'K33',
+            K34: 'K34',
+            K35: 'K35',
+            K36: 'K36',
+            K37: 'K37',
+            K38: 'K38',
+            K39: 'K39',
+            K40: 'K40',
+            K41: 'K41'
+        };
+
+        const LoaiHocPhan = {
+            HOC_PHAN_DAI_CUONG: 'HOC_PHAN_DAI_CUONG',
+            HOC_PHAN_CO_SO_NGANH: 'HOC_PHAN_CO_SO_NGANH',
+            HOC_PHAN_BAT_BUOC_NGANH: 'HOC_PHAN_BAT_BUOC_NGANH',
+            HOC_PHAN_LUA_CHON_NGANH: 'HOC_PHAN_LUA_CHON_NGANH',
+            HOC_PHAN_TU_DO: 'HOC_PHAN_TU_DO',
+            KLTN_CDTN_THUC_TAP: 'KLTN_CĐTN_THUC_TAP'
+        };
+
+        // ===== CÁC HÀM CHUYỂN ĐỔI HIỂN THỊ =====
+        function convertChuyenNganh(enumValue) {
+            const mapping = {
+                'CONG_NGHE_THONG_TIN': 'Công nghệ thông tin',
+                'KHOA_HOC_MAY_TINH': 'Khoa học máy tính',
+                'TRI_TUE_NHAN_TAO': 'Trí tuệ nhân tạo',
+                'HE_THONG_THONG_TIN': 'Hệ thống thông tin',
+                'MANG_MAY_TINH': 'Mạng máy tính và truyền thông dữ liệu',
+                'KE_TOAN': 'Kế toán',
+                'TAI_CHINH_NGAN_HANG': 'Tài chính - Ngân hàng',
+                'LOGISTIC': 'Logistics',
+                'QUAN_TRI_KINH_DOANH': 'Quản trị kinh doanh',
+                'QUAN_TRI_KHACH_SAN': 'Quản trị khách sạn',
+                'MARKETING': 'Marketing',
+                'KINH_TE_QUOC_TE': 'Kinh tế quốc tế',
+                'LUAT_KINH_TE': 'Luật kinh tế',
+                'THUONG_MAI_DIEN_TU': 'Thương mại điện tử',
+                'DICH_VU_DU_LICH_LU_HANH': 'Dịch vụ du lịch - lữ hành',
+                'NGON_NGU_ANH': 'Ngôn ngữ Anh',
+                'NGON_NGU_TRUNG': 'Ngôn ngữ Trung',
+                'NGON_NGU_NHAT': 'Ngôn ngữ Nhật',
+                'NGON_NGU_HAN': 'Ngôn ngữ Hàn',
+                'VIET_NAM_HOC': 'Việt Nam học',
+                'CONG_TAC_XA_HOI': 'Công tác xã hội',
+                'TRUYEN_THONG_DA_PHUONG_TIEN': 'Truyền thông đa phương tiện',
+                'THIET_KE_DO_HOA': 'Thiết kế đồ họa',
+                'DIEU_DUONG': 'Điều dưỡng',
+                'DINH_DUONG': 'Dinh dưỡng',
+                'THANH_NHAC': 'Thanh nhạc'
+            };
+            return mapping[enumValue] || enumValue;
+        }
+        
+        function convertLoaiHocPhan(enumValue) {
+            const mapping = {
+                'HOC_PHAN_DAI_CUONG': 'Học phần đại cương',
+                'HOC_PHAN_CO_SO_NGANH': 'Học phần cơ sở ngành',
+                'HOC_PHAN_BAT_BUOC_NGANH': 'Học phần bắt buộc ngành',
+                'HOC_PHAN_LUA_CHON_NGANH': 'Học phần lựa chọn ngành',
+                'HOC_PHAN_TU_DO': 'Học phần tự do',
+                'KLTN_CDTN_THUC_TAP': 'KLTN - CĐTN - Thực tập'
+            };
+            return mapping[enumValue] || enumValue;
+        }
+		// ===== KHAI BÁO BIẾN VÀ ENUM =====
+		       
+		// Thêm các biến toàn cục
+		let danhSachChuongTrinhHoc = [];
+		let currentChuongTrinhId = null;
+		let currentLoaiHocPhanId = null;
+		let danhSachHocPhan = [];
+		let selectedHocPhanIds = [];
+		let danhSachLoaiHocPhanDaThem = [];
+		let danhSachHocPhanGlobal = []; // Lưu trữ danh sách học phần toàn cục
+		let currentContext = {}; // Lưu trữ ngữ cảnh hiện tại (loai/tohop/nhom)
+		let currentSearchKeyword = ''; // Thêm biến lưu từ khóa tìm kiếm hiện tại
+		let danhSachDangHienThi = []; // Danh sách hiện đang được hiển thị (kết quả tìm kiếm hoặc toàn bộ)
+		let isSearching = false;
+
+	
+		//hàm tiện ích phân quyền FE		
+		function isAdminRole() {
+		    return window.currentUserRole === 'quanTri' || window.currentUserRole === 'thuKy';
+		}
+
+		function isStudentOrTeacher() {
+		    return window.currentUserRole === 'sinhVien' || window.currentUserRole === 'giangVien';
+		}
+
+
+        // ===== CÁC HÀM XỬ LÝ CHƯƠNG TRÌNH HỌC =====
+        $(document).ready(function() {
+            // Load menu
+            includeHTML();
+            
+			const isDevelopment = false; // Hoặc true nếu đang dev
+
+			if (!isDevelopment) {
+			    let tk = JSON.parse(localStorage.getItem('taiKhoan'));
+			    if (!tk || !tk.ten) {
+			        window.location.href = '/login.html';
+			        return;
+			    }
+			    $('#userID').html(tk.ten + ' | ' + tk.userName);
+
+			    window.currentUserRole = tk.dsQuyen;  // lấy từ dsQuyen
+			    console.log('✅ currentUserRole =', window.currentUserRole);
+			} else {
+			    $('#userID').html('Chế độ phát triển - Không cần đăng nhập');
+			    window.currentUserRole = 'quanTri'; // giả lập quyền khi develop
+			}
+			
+			const currentUser = JSON.parse(localStorage.getItem('taiKhoan'));
+			    const currentUserRole = currentUser ? currentUser.dsQuyen : null;
+
+			    console.log('✅ Role người dùng hiện tại:', currentUserRole);
+
+			    if (currentUserRole !== 'quanTri' && currentUserRole !== 'thuKy') {
+			        console.warn('⚠️ Người dùng không phải admin, ẩn tab Thêm chương trình học');
+			        $('#tab-them-chuong-trinh').hide();  // Ẩn tab "Thêm chương trình học"
+			    }
+				if (currentUserRole === 'sinhVien') {
+				    $('#maSinhVienInput').hide();      // Ẩn ô nhập mã
+				    $('#btnCheckHocPhan').hide();       // Ẩn nút "Kiểm tra"
+
+				    // ✅ Tự động kiểm tra học phần của chính mình
+				    const currentUser = JSON.parse(localStorage.getItem('taiKhoan'));
+				    const maSinhVien = currentUser?.userName;
+				    if (maSinhVien) {
+				        autoKiemTraHocPhan(maSinhVien);
+				    }
+				}
+
+            // Load danh sách chương trình học khi trang được tải
+            loadDanhSachChuongTrinhHoc();
+            
+            // Thêm môn học mới
+            $('#btnThemMonHoc').click(function() {
+                themMonHoc();
+            });
+            
+            // Xử lý submit form
+            $('#chuongTrinhHocForm').submit(function(e) {
+                e.preventDefault();
+                luuChuongTrinhHoc();
+            });
+
+            // Xử lý sự kiện tìm kiếm
+            $('#btnSearchMonHoc').click(searchMonHoc);
+            $('#searchMonHocInput').keypress(function(e) {
+                if (e.which === 13) searchMonHoc();
+            });
+			
+			// Load danh sách học phần khi vào tab
+		    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+				console.log('🟢 Tab được mở:', e.target.id);
+		        if (e.target.id === 'hocphan-tab') {
+		            loadDanhSachHocPhan();
+		        }
+		    });
+		    
+		    // Sự kiện tìm kiếm học phần
+		    $('#btnSearchHocPhan').click(function() {
+		        const keyword = $('#searchHocPhanInput').val();
+		        searchHocPhan(keyword);
+		    });
+		    
+		    $('#searchHocPhanInput').keyup(function() {
+		        const keyword = $(this).val();
+		        searchHocPhan(keyword);
+		    });
+		    
+		    // Load danh sách học phần khi vào tab thêm mới
+		    $('#add-tab').on('shown.bs.tab', function() {
+		        if (danhSachHocPhan.length === 0) {
+		            loadDanhSachHocPhan();
+		        } else {
+		            renderHocPhanSearchResults(filterHocPhanSearchResults());
+		        }
+		    });
+		    
+		    // Sự kiện click nút "Lưu tín chỉ"
+			$(document).on('click', '.btn-save-tinchi', function() {
+			    const loaiId = $(this).data('loai-id');
+			    saveSoTinChi(loaiId);
+			});
+			
+			// Gắn sự kiện click vào nút xóa học phần khỏi chương trình học
+			$(document).on('click', '.btn-delete-hocphan', function () {
+			    const hocPhanId = $(this).data('hpid');
+			    const type = $(this).data('type'); // 'loai', 'tohop', 'nhom'
+			    const ctId = $(this).data('ctid'); // nếu type = loai
+			    const toHopId = $(this).data('tohopid'); // nếu type = tohop
+			    const nhomId = $(this).data('nhomid'); // nếu type = nhom
+
+			    if (!confirm('Bạn có chắc chắn muốn xóa học phần này không?')) {
+			        return;
+			    }
+
+			    let url = '';
+			    if (type === 'loai') {
+			        const chuongTrinhId = $('#detailChuongTrinhId').val();
+			        url = `/api/v1/chuongtrinhhoc/${chuongTrinhId}/hocphan/${hocPhanId}`;
+			    } else if (type === 'tohop') {
+			        url = `/api/v1/chuongtrinhhoc/tohop/${toHopId}/hocphan/${hocPhanId}`;
+			    } else if (type === 'nhom') {
+			        url = `/api/v1/chuongtrinhhoc/tohopnhommon/${nhomId}/hocphan/${hocPhanId}`;
+			    } else {
+			        alert('❌ Không xác định được loại xóa.');
+			        return;
+			    }
+
+			    // Gọi API xóa
+			    $.ajax({
+			        url: url,
+			        type: 'DELETE',
+			        success: function () {
+			            alert('✅ Đã xóa học phần thành công.');
+			            // Xóa dòng học phần khỏi bảng ngay lập tức
+			            $(`button[data-hpid="${hocPhanId}"]`).closest('tr').remove();
+			        },
+			        error: function (xhr) {
+			            alert('❌ Lỗi khi xóa: ' + (xhr.responseJSON?.message || xhr.statusText));
+			        }
+			    });
+			});
+			
+			// Gắn sự kiện click vào nút xóa tổ hợp học phần
+			$(document).on('click', '.btn-delete-tohop', function () {
+			    const toHopId = $(this).data('tohopid');
+
+			    if (!confirm('Bạn có chắc chắn muốn xóa tổ hợp học phần này không?')) {
+			        return;
+			    }
+
+			    $.ajax({
+			        url: `/api/v1/chuongtrinhhoc/tohop/${toHopId}`,
+			        type: 'DELETE',
+			        success: function () {
+			            alert('✅ Đã xóa tổ hợp học phần thành công.');
+			            // Xóa khỏi giao diện
+			            $(`button[data-tohopid="${toHopId}"]`).closest('.tohop-container').remove();
+			        },
+			        error: function (xhr) {
+			            alert('❌ Lỗi khi xóa tổ hợp: ' + (xhr.responseJSON?.message || xhr.statusText));
+			        }
+			    });
+			});
+
+			// Gắn sự kiện click vào nút xóa tổ hợp nhóm môn
+			$(document).on('click', '.btn-delete-nhom', function () {
+			    const nhomId = $(this).data('nhomid');
+
+			    if (!confirm('Bạn có chắc chắn muốn xóa nhóm môn này không?')) {
+			        return;
+			    }
+
+			    $.ajax({
+			        url: `/api/v1/chuongtrinhhoc/tohopnhommon/${nhomId}`,
+			        type: 'DELETE',
+			        success: function () {
+			            alert('✅ Đã xóa nhóm môn thành công.');
+			            // Xóa khỏi giao diện
+			            $(`button[data-nhomid="${nhomId}"]`).closest('.nhom-container').remove();
+			        },
+			        error: function (xhr) {
+			            alert('❌ Lỗi khi xóa nhóm môn: ' + (xhr.responseJSON?.message || xhr.statusText));
+			        }
+			    });
+			});
+			if (isAdminRole()) {
+			    $('#btnThemHocPhan').show(); // dùng jQuery để nhất quán
+			    $('#hocphan-tab').text('Quản lý học phần');
+			}
+
+        });
+		
+        
+		const khoaGroup = $(`
+		    <div class="khoa-group mb-3">
+		        <div class="khoa-header px-3 py-2 rounded d-flex justify-content-between align-items-center" 
+		             style="background-color: #6495ED; color: #D7D7D7; cursor: pointer;"
+		             data-toggle="collapse"
+		             data-target="#khoa-body-${khoa}"
+		             aria-expanded="false"
+		             aria-controls="khoa-body-${khoa}">
+		            <strong>Khóa: ${khoa}</strong>
+		            <i class="fas fa-chevron-down"></i>
+		        </div>
+		        <div id="khoa-body-${khoa}" class="collapse mt-2"></div>
+		    </div>
+		`);
+
+		// Hàm load danh sách học phần
+		function loadDanhSachHocPhan() {
+			$('#loadingDsHp').show();
+		    return new Promise((resolve, reject) => {
+		        $.ajax({
+		            url: '/api/v1/hocphan-with-thaythe',
+		            type: 'GET',
+		            success: function(response) {
+		                if (!response) {
+		                    console.error('Dữ liệu trả về rỗng');
+		                    reject('Dữ liệu rỗng');
+		                    return;
+		                }
+						$('#loadingDsHp').hide();
+		                console.log('✅ Dữ liệu học phần nhận được:', response);
+		                danhSachHocPhan = response;
+						danhSachHocPhanGlobal = [...response]; // Lưu vào biến toàn cục
+						// ⛔ Nếu đang tìm kiếm thì không render danh sách đầy đủ
+						                if (!isSearching) {
+						                    renderDanhSachHocPhan(response);
+						                }
+		                resolve(response);
+		            },
+		            error: function(xhr, status, error) {
+		                console.error('❌ Lỗi khi tải danh sách học phần:', error, xhr.responseText);
+		                alert('Có lỗi khi tải danh sách học phần: ' + error);
+		                reject(error);
+		            }
+		        });
+		    });
+		}
+		
+		function renderDanhSachHocPhan(data, editingId = null) {
+			danhSachDangHienThi = [...data];
+		    const container = document.getElementById('hocPhanTableBody');
+		    if (!container) {
+		        console.warn('⚠️ Không tìm thấy phần tử #hocPhanTableBody trong DOM.');
+		        return;
+		    }
+
+		    container.innerHTML = '';
+			const searchInfoContainer = document.getElementById('searchInfoContainer');
+			const searchInfoText = document.getElementById('searchInfoText');
+
+			if (currentSearchKeyword && searchInfoContainer && searchInfoText) {
+			    searchInfoText.innerText = `Đang hiển thị kết quả tìm kiếm cho: "${currentSearchKeyword}"`;
+			    searchInfoContainer.style.display = 'block';
+			} else if (searchInfoContainer) {
+			    searchInfoContainer.style.display = 'none';
+			}
+
+		    const currentUser = JSON.parse(localStorage.getItem('taiKhoan'));
+		    const currentUserRole = currentUser ? currentUser.dsQuyen : null;
+		    const isAdmin = currentUserRole === 'quanTri' || currentUserRole === 'thuKy';
+
+		    // Ẩn/hiện cột Thao tác
+		    const thaoTacTh = document.getElementById('hocPhanThaoTacTh');
+		    if (thaoTacTh) {
+		        thaoTacTh.style.display = isAdmin ? '' : 'none';
+		    }
+
+		    data.forEach(hp => {
+		        const isEditing = hp.id === editingId;
+		        const row = document.createElement('tr');
+		        row.className = 'hoc-phan-goc';
+		        row.id = `hocphan-row-${hp.id}`;
+		        
+		        const accordionId = `thaythe-${hp.maHocPhan.replace(/\s+/g, '-')}`;
+
+		        if (isEditing) {
+		            // Chế độ chỉnh sửa - luôn hiển thị cột thao tác
+		            row.innerHTML = `
+		                <td class="text-center"><input type="text" class="form-control form-control-sm" value="${hp.maHocPhan || ''}" id="edit-maHocPhan"></td>
+		                <td><input type="text" class="form-control form-control-sm" value="${hp.tenHocPhan || ''}" id="edit-tenHocPhan"></td>
+		                <td class="text-center"><input type="number" class="form-control form-control-sm" value="${hp.soTinChi || ''}" id="edit-soTinChi"></td>
+		                <td class="text-center"><input type="text" class="form-control form-control-sm" value="${hp.tienQuyet || ''}" id="edit-tienQuyet"></td>
+		                <td class="text-center"><input type="number" class="form-control form-control-sm" value="${hp.soCa || ''}" id="edit-soCa"></td>
+		                <td class="text-center"><input type="text" class="form-control form-control-sm" value="${hp.maGiangVien || ''}" id="edit-maGiangVien"></td>
+		                <td class="text-center"><input type="text" class="form-control form-control-sm" value="${hp.nganhPhuTrach || ''}" id="edit-nganhPhuTrach"></td>
+		                <td class="text-center">
+		                    ${hp.danhSachThayThe && hp.danhSachThayThe.length > 0 ? 
+		                        `<button class="btn btn-sm btn-info" type="button" disabled>
+		                            Xem (${hp.danhSachThayThe.length})
+		                        </button>` : 
+		                        'Không có'}
+		                </td>
+		                <td class="text-center">
+		                    <button class="btn btn-success btn-sm mr-1" onclick="luuHocPhan(${hp.id})">
+		                        <i class="fas fa-save"></i> Lưu
+		                    </button>
+		                    <button class="btn btn-secondary btn-sm" onclick="huySuaHocPhan(${hp.id})">
+		                        <i class="fas fa-times"></i> Hủy
+		                    </button>
+		                </td>
+		            `;
+		        } else {
+		            // Chế độ xem thông thường
+		            row.innerHTML = `
+		                <td class="text-center">${hp.maHocPhan || ''}</td>
+		                <td>${hp.tenHocPhan || ''}</td>
+		                <td class="text-center">${hp.soTinChi || ''}</td>
+		                <td>${hp.tienQuyet || ''}</td>
+		                <td class="text-center">${hp.soCa || ''}</td>
+		                <td class="text-center">${hp.maGiangVien ? `${hp.maGiangVien} - ${hp.lienLac || ''}` : ''}</td>
+		                <td class="text-center">${hp.nganhPhuTrach || ''}</td>
+		                <td class="text-center">
+		                    ${hp.danhSachThayThe && hp.danhSachThayThe.length > 0 ? 
+		                        `<button class="btn btn-sm btn-info" type="button" data-toggle="collapse" data-target="#${accordionId}" aria-expanded="false" aria-controls="${accordionId}">
+		                            Xem (${hp.danhSachThayThe.length})
+		                        </button>` : 
+		                        'Không có'}
+		                    ${isAdmin ? 
+		                        `<button class="btn btn-sm btn-success ml-2" onclick="showThemHocPhanThayTheModal('${hp.maHocPhan}')">
+		                            <i class="fas fa-plus"></i> Thêm
+		                        </button>` : 
+		                        ''}
+		                </td>
+		                ${isAdmin ? `
+		                    <td class="text-center">
+		                        <button class="btn btn-primary btn-sm mr-1" onclick="batDauSuaHocPhan(${hp.id})">
+		                            <i class="fas fa-edit"></i> Sửa
+		                        </button>
+		                        <button class="btn btn-danger btn-sm" onclick="xoaHocPhan(${hp.id}, this)">
+		                            <i class="fas fa-trash-alt"></i> Xóa
+		                        </button>
+		                    </td>
+		                ` : ''}
+		            `;
+		        }
+
+		        container.appendChild(row);
+
+		        // Phần accordion cho học phần thay thế
+		        if (!isEditing && hp.danhSachThayThe && hp.danhSachThayThe.length > 0) {
+		            const accordionRow = document.createElement('tr');
+		            accordionRow.className = 'bg-light';
+		            
+		            accordionRow.innerHTML = `
+		                <td colspan="${isAdmin ? '9' : '8'}" class="p-0 border-top-0">
+		                    <div class="collapse" id="${accordionId}">
+		                        <div class="p-3">
+		                            <h6 class="font-weight-bold mb-3">Danh sách học phần thay thế cho ${hp.maHocPhan}</h6>
+		                            <table class="table table-sm table-bordered">
+		                                <thead class="thead-light">
+		                                    <tr class="text-center">
+		                                        <th>Mã HP thay thế</th>
+		                                        <th>Tên HP thay thế</th>
+												<th>Số tín chỉ</th>
+		                                        <th>Áp dụng từ khóa</th>
+		                                        <th>Áp dụng đến khóa</th>
+		                                        ${isAdmin ? '<th>Thao tác</th>' : ''}
+		                                    </tr>
+		                                </thead>
+		                                <tbody>
+		                                    ${hp.danhSachThayThe.map(thayThe => `
+		                                        <tr class="text-center">
+		                                            <td>${thayThe.maHocPhanThayThe || ''}</td>
+		                                            <td>${thayThe.tenHocPhanThayThe || ''}</td>
+													<td>${thayThe.soTinChi || ''}</td>
+		                                            <td>${thayThe.khoaApDungTu || ''}</td>
+		                                            <td>${thayThe.khoaApDungDen || ''}</td>
+		                                            ${isAdmin ? `
+		                                                <td>
+		                                                    <button class="btn btn-sm btn-danger" onclick="xoaHocPhanThayThe('${hp.maHocPhan}', '${thayThe.maHocPhanThayThe}', this)">
+		                                                        <i class="fas fa-trash-alt"></i> Xóa
+		                                                    </button>
+		                                                </td>
+		                                            ` : ''}
+		                                        </tr>
+		                                    `).join('')}
+		                                </tbody>
+		                            </table>
+		                        </div>
+		                    </div>
+		                </td>
+		            `;
+		            container.appendChild(accordionRow);
+		        }
+		    });
+		}
+				
+		function resetSearch() {
+		    currentSearchKeyword = '';
+		    $('#loadingDsHp').show(); // Hiển thị loading
+		    
+		    // Gọi API load lại danh sách đầy đủ
+		    fetch('/api/v1/hocphan-with-thaythe')
+		        .then(response => {
+		            if (!response.ok) throw new Error('Tải danh sách thất bại');
+		            return response.json();
+		        })
+		        .then(data => {
+		            $('#loadingDsHp').hide();
+		            document.getElementById('searchInfoContainer').style.display = 'none';
+		            danhSachHocPhanGlobal = data; // Cập nhật danh sách global
+		            renderDanhSachHocPhan(data);
+		        })
+		        .catch(error => {
+		            console.error('Lỗi khi tải danh sách:', error);
+		            alert('Có lỗi xảy ra: ' + error.message);
+		            $('#loadingDsHp').hide();
+		        });
+		}
+		
+		function batDauSuaHocPhan(id) {
+		    renderDanhSachHocPhan(danhSachDangHienThi, id);
+		}
+
+		function huySuaHocPhan(id) {
+		    renderDanhSachHocPhan(danhSachDangHienThi);
+		}
+
+	//lưu học phần sau khi sửa
+		function luuHocPhan(id) {
+		    const hocPhan = danhSachHocPhanGlobal.find(hp => hp.id === id);
+		    if (!hocPhan) return;
+
+		    // Lấy giá trị từ các input
+		    const updatedHocPhan = {
+		        ...hocPhan,
+		        maHocPhan: document.getElementById('edit-maHocPhan').value,
+		        tenHocPhan: document.getElementById('edit-tenHocPhan').value,
+		        soTinChi: parseInt(document.getElementById('edit-soTinChi').value),
+		        tienQuyet: document.getElementById('edit-tienQuyet').value,
+				soCa: document.getElementById('edit-soCa').value,
+		        maGiangVien: document.getElementById('edit-maGiangVien').value,
+		        nganhPhuTrach: document.getElementById('edit-nganhPhuTrach').value
+		    };
+
+		    // Gọi API cập nhật
+		    fetch(`/api/v1/hocphan/${id}`, {
+		        method: 'PUT',
+		        headers: {
+		            'Content-Type': 'application/json',
+		        },
+		        body: JSON.stringify(updatedHocPhan)
+		    })
+		    .then(response => {
+		        if (!response.ok) throw new Error('Cập nhật thất bại');
+		        return response.json();
+		    })
+		    .then(data => {
+		        alert('Cập nhật thành công');
+		        
+		        // Cập nhật dữ liệu trong danh sách global
+		        const index = danhSachHocPhanGlobal.findIndex(hp => hp.id === id);
+		        if (index !== -1) {
+		            danhSachHocPhanGlobal[index] = data;
+		        }
+
+		        // Nếu đang trong chế độ tìm kiếm
+		        if (currentSearchKeyword) {
+		            // Cập nhật lại danh sách tìm kiếm
+		            const updatedSearchResults = danhSachHocPhanGlobal.filter(hp => 
+		                hp.maHocPhan.toLowerCase().includes(currentSearchKeyword.toLowerCase()) || 
+		                hp.tenHocPhan.toLowerCase().includes(currentSearchKeyword.toLowerCase())
+		            );
+		            renderDanhSachHocPhan(updatedSearchResults);
+		        } else {
+		            // Nếu không phải chế độ tìm kiếm
+		            renderDanhSachHocPhan(danhSachHocPhanGlobal);
+		        }
+		    })
+		    .catch(error => {
+		        console.error('Lỗi khi cập nhật:', error);
+		        alert('Có lỗi xảy ra: ' + error.message);
+		    });
+		}
+		
+		// Hiển thị/ẩn phần thêm học phần mới
+		function toggleThemHocPhan() {
+		    const container = document.getElementById('themHocPhanContainer');
+		    if (container.style.display === 'none') {
+		        container.style.display = 'block';
+		    } else {
+		        container.style.display = 'none';
+		    }
+		}
+
+		// Thêm dòng mới để nhập học phần
+		function themDongHocPhanMoi() {
+		    const tbody = document.getElementById('themHocPhanTableBody');
+		    const newRow = document.createElement('tr');
+		    newRow.innerHTML = `
+			<td><input type="text" class="form-control form-control-sm" placeholder="Mã HP"></td>
+				<td><input type="text" class="form-control form-control-sm" placeholder="Mã HP hiện tại"></td>
+                <td><input type="text" class="form-control form-control-sm" placeholder="Tên học phần"></td>
+                <td><input type="number" class="form-control form-control-sm" placeholder="Số tín chỉ"></td>
+                <td><input type="text" class="form-control form-control-sm" placeholder="ĐK tiên quyết"></td>
+				<td><input type="number" class="form-control form-control-sm" placeholder="Số ca"></td>
+                <td><input type="text" class="form-control form-control-sm" placeholder="GV phụ trách"></td>
+				<td><input type="text" class="form-control form-control-sm" placeholder="Mã GV"></td>
+                <td><input type="text" class="form-control form-control-sm" placeholder="Ngành phụ trách"></td>
+		        <td class="text-center">
+		            <button class="btn btn-danger btn-sm" onclick="xoaDongThemHocPhan(this)">
+		                <i class="fas fa-trash-alt"></i>
+		            </button>
+		        </td>
+		    `;
+		    tbody.appendChild(newRow);
+		}
+
+		// Xóa dòng thêm học phần
+		function xoaDongThemHocPhan(button) {
+		    const row = button.closest('tr');
+		    row.remove();
+		}
+
+		// Lưu tất cả học phần mới
+		function luuHocPhanMoi() {
+		    const rows = document.querySelectorAll('#themHocPhanTableBody tr');
+		    const hocPhanList = [];
+		    
+		    rows.forEach(row => {
+		        const inputs = row.querySelectorAll('input');
+		        const hocPhan = {
+		            maHocPhan: inputs[0].value,
+					maHocPhanHienTai: inputs[1].value,
+		            tenHocPhan: inputs[2].value,
+		            soTinChi: inputs[3].value ? parseInt(inputs[3].value) : null,
+		            tienQuyet: inputs[4].value,
+					soCa: inputs[5].value,
+					lienLac:inputs[6].value,
+		            maGiangVien: inputs[7].value,
+		            nganhPhuTrach: inputs[8].value
+		        };
+		        
+		        if (hocPhan.maHocPhan) {
+		            hocPhanList.push(hocPhan);
+		        }
+		    });
+		    
+		    if (hocPhanList.length === 0) {
+		        alert('Vui lòng nhập ít nhất một học phần hợp lệ');
+		        return;
+		    }
+		    
+			fetch('/api/v1/hocphan/batch', {
+			    method: 'POST',
+			    headers: {
+			        'Content-Type': 'application/json',
+			    },
+			    body: JSON.stringify(hocPhanList)
+			})
+			.then(response => {
+			    if (!response.ok) throw new Error('Lưu học phần thất bại');
+			    return response.json();
+			})
+			.then(data => {
+			    try {
+			        const savedCount = data.saved?.length || 0;
+			        const skippedCount = data.skipped?.length || 0;
+			        const skippedMaHocPhan = data.skipped?.map(hp => hp.maHocPhan).join(', ') || 'Không có';
+
+			        let message = `✅ Đã thêm ${savedCount} học phần mới.\n`;
+			        if (skippedCount > 0) {
+			            message += `⚠️ Bỏ qua ${skippedCount} học phần bị trùng mã:\n${skippedMaHocPhan}`;
+			        }
+
+			        alert(message);
+			        toggleThemHocPhan();
+			        loadDanhSachHocPhan(); // Tải lại danh sách
+			    } catch (e) {
+			        console.error('Lỗi xử lý dữ liệu trả về:', e);
+			        alert('❌ Đã xảy ra lỗi khi xử lý kết quả từ server.');
+			    }
+			})
+			.catch(error => {
+			    console.error('Lỗi khi lưu học phần:', error);
+			    alert('❌ Đã xảy ra lỗi khi lưu học phần. Vui lòng thử lại.\nChi tiết: ' + error.message);
+			});
+
+
+		}
+		
+		// Hiển thị modal thêm học phần thay thế
+		function showThemHocPhanThayTheModal(maHocPhanGoc) {
+		    $('#maHocPhanGoc').val(maHocPhanGoc);
+		    $('#khoaApDungTu').val('');
+		    $('#khoaApDungDen').val('');
+		    $('#danhSachThayTheContainer').html('');
+		    themDongHocPhanThayThe(); // mặc định có 1 dòng
+		    $('#themHocPhanThayTheModal').modal('show');
+		}
+
+		
+		function themDongHocPhanThayThe() {
+		    const container = document.getElementById('danhSachThayTheContainer');
+
+		    const html = `
+		        <div class="form-row mb-2 thay-the-item">
+		            <div class="col">
+		                <input type="text" class="form-control" placeholder="Mã học phần thay thế" name="maHocPhanThayThe">
+		            </div>
+		            <div class="col-auto">
+		                <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.thay-the-item').remove()">Xóa</button>
+		            </div>
+		        </div>
+		    `;
+
+		    container.insertAdjacentHTML('beforeend', html);
+		}
+		
+		// Gửi yêu cầu thêm học phần thay thế
+		function themHocPhanThayThe() {
+		    const maHocPhanGoc = $('#maHocPhanGoc').val();
+		    const khoaApDungTu = $('#khoaApDungTu').val();
+		    const khoaApDungDen = $('#khoaApDungDen').val();
+
+		    const items = document.querySelectorAll('#danhSachThayTheContainer .thay-the-item');
+		    const dsThayThe = [];
+
+		    items.forEach(item => {
+		        const ma = item.querySelector('[name="maHocPhanThayThe"]').value.trim();
+		        if (ma) {
+		            dsThayThe.push({
+		                maHocPhanGoc: maHocPhanGoc,
+		                maHocPhanThayThe: ma,
+		                khoaApDungTu: khoaApDungTu || null,
+		                khoaApDungDen: khoaApDungDen || null
+		            });
+		        }
+		    });
+
+		    if (dsThayThe.length === 0) {
+		        alert('Vui lòng nhập ít nhất một mã học phần thay thế');
+		        return;
+		    }
+
+			fetch('/api/v1/hocphan-thaythe/batch', {
+			    method: 'POST',
+			    headers: { 'Content-Type': 'application/json' },
+			    body: JSON.stringify(dsThayThe)
+			})
+			.then(async response => {
+			    if (!response.ok) {
+			        const contentType = response.headers.get('content-type');
+			        if (contentType && contentType.includes('application/json')) {
+			            const errData = await response.json();
+			            throw new Error(errData.message || 'Lỗi khi thêm học phần thay thế');
+			        } else {
+			            const errText = await response.text();
+			            throw new Error(errText || 'Lỗi không rõ từ server');
+			        }
+			    }
+			    return response.json();
+			})
+			.then(data => {
+			    alert('Thêm học phần thay thế thành công');
+			    $('#themHocPhanThayTheModal').modal('hide');
+			    //loadDanhSachHocPhan();
+			})
+			.catch(error => {
+			    console.error('Lỗi khi gửi API:', error);
+			    alert('Có lỗi: Không tìm thấy HP thay thế / thêm HP thay thế bị lặp' );
+			});
+		}
+
+		// Hàm xóa học phần thay thế
+		function xoaHocPhanThayThe(maHocPhanGoc, maHocPhanThayThe, buttonElement) {
+		    if (!confirm(`Bạn chắc chắn muốn xóa học phần thay thế ${maHocPhanThayThe}?`)) {
+		        return;
+		    }
+
+		    fetch(`/api/v1/hocphan-thaythe?maHocPhanGoc=${encodeURIComponent(maHocPhanGoc)}&maHocPhanThayThe=${encodeURIComponent(maHocPhanThayThe)}`, {
+		        method: 'DELETE',
+		        headers: {
+		            'Accept': 'application/json',
+		        }
+		    })
+		    .then(async response => {
+		        const data = await response.text();
+		        if (!response.ok) {
+		            throw new Error(data || 'Xóa học phần thay thế thất bại');
+		        }
+		        return data;
+		    })
+		    .then(message => {
+		        alert(message || 'Xóa học phần thay thế thành công');
+		        const row = buttonElement.closest('tr');
+		        row.remove();
+		    })
+		    .catch(error => {
+		        console.error('Lỗi khi xóa học phần thay thế:', error);
+		        alert(error.message);
+		    });
+		}
+		//tìm kiếm học phần trong ds all hp
+		function timKiemHocPhan(keyword) {
+			isSearching = true;
+		    currentSearchKeyword = keyword;
+		    $('#loadingDsHp').show();
+		    
+		    fetch(`/api/v1/hocphan-with-thaythe/search?keyword=${encodeURIComponent(keyword)}`)
+		        .then(response => {
+		            if (!response.ok) throw new Error('Tìm kiếm thất bại');
+		            return response.json();
+		        })
+		        .then(data => {
+		            $('#loadingDsHp').hide();
+		            document.getElementById('searchInfoContainer').style.display = 'block';
+		            document.getElementById('searchInfoText').textContent = 
+		                `Đang hiển thị kết quả tìm kiếm cho: ${keyword}`;
+		            renderDanhSachHocPhan(data);
+		        })
+		        .catch(error => {
+		            console.error('Lỗi khi tìm kiếm:', error);
+		            alert('Có lỗi xảy ra: ' + error.message);
+		        });
+		}
+		
+		// Hàm hiển thị kết quả tìm kiếm học phần để thêm vào ct
+		function renderHocPhanSearchResults(results) {
+		    const container = $('#hocPhanSearchResults');
+		    container.empty();
+		    
+		    if (results.length === 0) {
+		        container.append('<div class="col-12"><div class="alert alert-info">Không tìm thấy học phần phù hợp</div></div>');
+		        return;
+		    }
+		    
+		    results.forEach(hocPhan => {
+		        const isSelected = selectedHocPhanIds.includes(hocPhan.id);
+		        
+		        container.append(`
+		            <div class="col-md-4 mb-3">
+		                <div class="card hoc-phan-card ${isSelected ? 'border-success' : ''}">
+		                    <div class="card-body">
+		                        <h5 class="card-title">${hocPhan.maHocPhan} - ${hocPhan.tenHocPhan}</h5>
+		                        <p class="card-text">
+		                            <strong>Số tín chỉ:</strong> ${hocPhan.soTinChi}<br>
+		                            <strong>Mã HP mới:</strong> ${hocPhan.maHocPhanHienTai}<br>
+									<strong>ĐK tiên quyết:</strong> ${hocPhan.tienQuyet|| 'Không'}<br>
+									<strong>GV phụ trách:</strong> ${hocPhan.maGiangVien}-${hocPhan.lienLac}<br>
+		                        </p>
+		                        <button class="btn btn-${isSelected ? 'danger' : 'primary'}" 
+		                                onclick="${isSelected ? 'removeHocPhanFromSelection' : 'addHocPhanToSelection'}(${hocPhan.id})">
+		                            ${isSelected ? 'Bỏ chọn' : 'Chọn'}
+		                        </button>
+		                    </div>
+		                </div>
+		            </div>
+		        `);
+		    });
+		}
+		
+		$(document).ready(function() {
+		    // Bước 1: Tạo chương trình học
+		    $('#createChuongTrinhForm').submit(function(e) {
+		        e.preventDefault();
+		        createChuongTrinhHoc();
+		    });
+
+		    // Bước 2: Thêm loại học phần
+		    $('#addLoaiHocPhanForm').submit(function(e) {
+		        e.preventDefault();
+		        addLoaiHocPhan();
+		    });
+
+		    // Bước 3: Thêm học phần vào loại
+			// ===============================================
+			// ========== LƯU HỌC PHẦN ========================
+			// ===============================================
+
+			$('#btnSaveHocPhan').click(function () {
+			  if (selectedHocPhanIds.length === 0) {
+			    alert('Vui lòng chọn học phần');
+			    return;
+			  }
+
+			  const { source, id } = currentContext || {};
+
+			  let url = '';
+			  if (source === 'loai') {
+			    url = `/api/v1/chuongtrinhhoc/ctlhp/${id}/hocphan`;
+			  } else if (source === 'tohop') {
+			    url = `/api/v1/chuongtrinhhoc/tohop/${id}/hocphan`;
+			  } else if (source === 'nhom') {
+			    url = `/api/v1/chuongtrinhhoc/tohopnhommon/${id}/hocphan`;
+			  } else {
+			    alert('❌ Không xác định được nguồn thêm học phần');
+			    return;
+			  }
+
+			  $.ajax({
+			    url: url,
+			    type: 'POST',
+			    contentType: 'application/json',
+			    data: JSON.stringify(selectedHocPhanIds),
+			    success() {
+			      $('#addHocPhanModal').modal('hide');
+			      alert(`✅ Đã thêm ${selectedHocPhanIds.length} học phần`);
+
+			      if (source === 'loai') {
+			        loadToHopForLoai(id);
+			      } else if (source === 'tohop') {
+			        loadNhomForToHop(id);
+			      } else if (source === 'nhom') {
+			        loadDanhSachChuongTrinhHoc();
+			      }
+			    },
+			    error(xhr) {
+			      alert('❌ Lỗi khi thêm học phần: ' + (xhr.responseJSON?.message || xhr.statusText));
+			    }
+			  });
+			});
+		    // Sự kiện tìm kiếm học phần
+		    $('#btnSearchHocPhan').click(function() {
+		        const keyword = $('#searchHocPhanInput').val();
+		        searchHocPhan(keyword);
+		    });
+			// ✅ Load danh sách ngay khi trang mở
+			fetchDanhSachChuongTrinhHoc(); 
+			
+			
+			// Toggle collapse để hiện/ẩn danh sách tổ hợp
+			$(document).on('click', '.toggle-collapse', function() {
+			  const tgt = $(this).data('target');
+			  $(tgt).toggle();
+			  $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+			});
+
+			// Mở modal Tạo tổ hợp
+			$(document).on('click', '.btn-create-tohop', function() {
+			  const loaiId = $(this).data('loai-id'),
+			        loaiName = $(this).data('loai-name');
+			  $('#ctxLoaiId').val(loaiId);
+			  $('#modalLoaiTitle').text(loaiName);
+			  $('#createToHopModal').modal('show');
+			});
+
+			// Xử lý submit Tạo tổ hợp
+			$('#createToHopForm').submit(function(e) {
+			  e.preventDefault();
+			  const payload = {
+			    chuongTrinhHocLoaiHocPhanId: $('#ctxLoaiId').val(),
+			    tenToHop: $('#toHopTen').val(),
+			    soTinChiToiThieu: $('#toHopTinChi').val()||null,
+			    soLuongMonToiThieu: $('#toHopSoLuong').val()||null,
+			    batBuocHocTatCa: $('#toHopBatBuoc').is(':checked')
+			  };
+			  $.ajax({
+			    url: '/api/v1/chuongtrinhhoc/tohop',
+			    type: 'POST',
+			    contentType: 'application/json',
+			    data: JSON.stringify(payload),
+			    success() {
+			      $('#createToHopModal').modal('hide');
+			      loadToHopForLoai(payload.chuongTrinhHocLoaiHocPhanId);
+			    }
+			  });
+			  
+			});
+			// Hàm load danh sách tổ hợp cho 1 loại
+
+			// Mở modal Tạo nhóm
+			$(document).on('click', '.btn-create-nhom', function() {
+			  const hopId = $(this).data('hop-id'),
+			        hopName = $(this).data('hop-name');
+			  $('#ctxToHopId').val(hopId);
+			  $('#modalToHopTitle').text(hopName);
+			  $('#createNhomModal').modal('show');
+			});
+
+			// Submit tạo nhóm
+			$('#createNhomForm').submit(function(e) {
+			  e.preventDefault();
+
+			  const payload = {
+			    tenNhom: $('#nhomTen').val(),
+			    toHopHocPhan: {
+			      id: parseInt($('#ctxToHopId').val())
+			    }
+			  };
+
+			  $.ajax({
+			    url: '/api/v1/chuongtrinhhoc/tohopnhommon',
+			    type: 'POST',
+			    contentType: 'application/json',
+			    data: JSON.stringify(payload),
+			    success() {
+			      $('#createNhomModal').modal('hide');
+			      loadNhomForToHop(payload.toHopHocPhan.id); // nạp lại danh sách nhóm
+			    },
+			    error(xhr) {
+			      alert('❌ Lỗi khi tạo nhóm môn: ' + (xhr.responseJSON?.message || xhr.statusText));
+			    }
+			  });
+			});
+			
+			
+			//xử lí lọc học phần
+			$(document).on('click', '#btnCheckHocPhan', function() {
+			  const maSinhVien = $('#maSinhVienInput').val().trim();
+
+			  if (!maSinhVien) {
+			    alert('Vui lòng nhập mã sinh viên');
+			    return;
+			  }
+			  $('#loadingKiemTra').show();
+			  $('#ketQuaHocPhanConThieu').html('');			  
+				
+			  // 🎯 Thêm API lấy tên sinh viên
+		      $.get(`/api/v1/sinhvien/${maSinhVien}/thong-tin`, function(data) {
+		          if (data && data.ten) {
+		              $('#kiemtra-header').html(`<h5 class="text-primary">👨‍🎓 Kết quả học phần của: <strong>${data.ten} (${maSinhVien})</strong></h5>`);
+		          } else {
+		              $('#kiemtra-header').html(`<h5 class="text-primary">👨‍🎓 Kết quả học phần của mã sinh viên: <strong>${maSinhVien}</strong></h5>`);
+		          }
+		      }).fail(function() {
+		          $('#kiemtra-header').html(`<h5 class="text-primary">👨‍🎓 Kết quả học phần của mã sinh viên: <strong>${maSinhVien}</strong></h5>`);
+		      });
+				  
+			  // 🌀 API học phần còn thiếu
+			  $.get(`/api/v1/sinhvien/${maSinhVien}/hocphan-conthieu`, function(data) {
+			    renderHocPhanConThieu(data);
+			  }).fail(function() {
+			    $('#ketQuaHocPhanConThieu').html('<div class="text-danger">❌ Không tìm thấy dữ liệu học phần còn thiếu.</div>');
+			  }).always(function() {
+			  					   
+			    $('#loadingKiemTra').hide();
+			    
+			  });			  
+			});			
+		});
+		// Render học phần còn thiếu
+		// Render học phần còn thiếu với accordion học phần thay thế
+		function renderHocPhanConThieu(list) {
+		    if (list.length === 0) {
+		        $('#ketQuaHocPhanConThieu').html('<div class="text-success">✅ Không còn học phần nào thiếu!</div>');
+		        return;
+		    }
+
+		    let html = '<h5 class="text-primary mb-3"></h5>';
+		    
+		    list.forEach((loai, index) => {
+		        html += `
+		            <div class="card mb-4">
+		                <div class="card-header bg-light">
+		                    <h6 class="m-0 font-weight-bold text-dark">${index + 1}. ${loai.tenLoaiHocPhan}</h6>
+		                </div>
+		                <div class="card-body p-0">
+		                    <div class="table-responsive">
+		                        <table class="table table-bordered table-sm mb-0">
+		                            <thead class="thead-light text-center">
+		                                <tr>
+		                                    <th>STT</th>
+		                                    <th>Nội dung</th>
+		                                    <th>Mã HP</th>
+		                                    <th>Mã HP hiện tại</th>
+		                                    <th>ĐK tiên quyết</th>
+		                                    <th>Số tín chỉ</th>
+		                                    <th>GV phụ trách</th>
+		                                    <th>HP thay thế</th>
+		                                    <th>Ghi chú</th>
+		                                </tr>
+		                            </thead>
+		                            <tbody>
+		        `;
+		        
+		        loai.hocPhansConThieu.forEach((hp, idx) => {
+		            const accordionId = `thaythe-${hp.maHocPhan ? hp.maHocPhan.replace(/\s+/g, '-') : ''}-${idx}`;
+		            const hasThayThe = hp.danhSachThayThe && hp.danhSachThayThe.length > 0;
+		            
+		            html += `
+		                <tr class="hoc-phan-goc">
+		                    <td class="text-center">${idx + 1}</td>
+		                    <td>${hp.noiDung}</td>
+		                    <td class="text-center">${hp.maHocPhan || ''}</td>
+		                    <td class="text-center">${hp.maHocPhanHienTai || ''}</td>
+		                    <td class="text-center">${hp.tienQuyet || ''}</td>
+		                    <td class="text-center">${hp.soTinChi || ''}</td>
+		                    <td class="text-center">${hp.maGiangVien || ''}${hp.lienLac ? ' - ' + hp.lienLac : ''}</td>
+		                    <td class="text-center">
+		                        ${hasThayThe ? 
+		                            `<button class="btn btn-sm btn-info" type="button" data-toggle="collapse" 
+		                                data-target="#${accordionId}" aria-expanded="false" aria-controls="${accordionId}">
+		                                Xem (${hp.danhSachThayThe.length})
+		                            </button>` : 
+		                            'Không có'}
+		                    </td>
+		                    <td class="text-center">${hp.ghiChu || ''}</td>
+		                </tr>
+		            `;
+		            
+		            // Thêm hàng accordion cho học phần thay thế
+		            if (hasThayThe) {
+		                html += `
+		                    <tr class="bg-light">
+		                        <td colspan="9" class="p-0 border-top-0">
+		                            <div class="collapse" id="${accordionId}">
+		                                <div class="p-3">
+		                                    <h6 class="font-weight-bold mb-3">Danh sách học phần thay thế cho ${hp.maHocPhan || hp.noiDung}</h6>
+		                                    <table class="table table-sm table-bordered">
+		                                        <thead class="thead-light">
+		                                            <tr class="text-center">
+		                                                <th>Mã HP thay thế</th>
+		                                                <th>Tên HP thay thế</th>
+		                                                <th>Số tín chỉ</th>
+		                                                <th>Áp dụng từ khóa</th>
+		                                                <th>Áp dụng đến khóa</th>
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody>
+		                                            ${hp.danhSachThayThe.map(thayThe => `
+		                                                <tr class="text-center">
+		                                                    <td>${thayThe.maHocPhanThayThe || ''}</td>
+		                                                    <td>${thayThe.tenHocPhanThayThe || ''}</td>
+		                                                    <td>${thayThe.soTinChi || ''}</td>
+		                                                    <td>${thayThe.khoaApDungTu || ''}</td>
+		                                                    <td>${thayThe.khoaApDungDen || ''}</td>
+		                                                </tr>
+		                                            `).join('')}
+		                                        </tbody>
+		                                    </table>
+		                                </div>
+		                            </div>
+		                        </td>
+		                    </tr>
+		                `;
+		            }
+		        });
+		        
+		        html += `
+		                            </tbody>
+		                        </table>
+		                    </div>
+		                </div>
+		            </div>
+		        `;
+		    });
+
+		    $('#ketQuaHocPhanConThieu').html(html);
+		    
+		    // Khởi tạo tooltip nếu có
+		    if ($('[data-toggle="tooltip"]').length) {
+		        $('[data-toggle="tooltip"]').tooltip();
+		    }
+		}
+		
+		function autoKiemTraHocPhan(maSinhVien) {		    
+		    $('#loadingKiemTra').show();
+		    $('#ketQuaHocPhanConThieu').html('');
+			// 🎯 Thêm: Hiển thị tên sinh viên đang kiểm tra
+		    const currentUser = JSON.parse(localStorage.getItem('taiKhoan'));
+		    if (currentUser && currentUser.userName === maSinhVien) {
+		        const hoTen = currentUser.ten || '';
+		        $('#kiemtra-header').html(`<h5 class="text-primary">👨‍🎓 Kết quả kiểm tra học phần của: <strong>${hoTen} (${currentUser.userName})</strong></h5>`);
+		    }
+			
+		    $.get(`/api/v1/sinhvien/${maSinhVien}/hocphan-conthieu`, function(data) {
+		        renderHocPhanConThieu(data);
+		    }).fail(function() {
+		        $('#ketQuaHocPhanConThieu').html('<div class="text-danger">❌ Không tìm thấy dữ liệu học phần còn thiếu.</div>');
+		    }).always(function() {
+		    
+		    $('#loadingKiemTra').hide();
+		    });
+		}
+
+		function loadToHopForLoai(loaiId) {
+		  $.get(`/api/v1/chuongtrinhhoc/ctlhp/${loaiId}/tohop`, function(toHops) {
+		    const $ul = $(`#toHopList_${loaiId}`).empty();
+		    
+		    if (toHops.length === 0) {
+		      $ul.append('<li class="list-group-item text-muted">Chưa có tổ hợp nào</li>');
+		      return;
+		    }
+	
+		    toHops.forEach(hop => {
+		      const $li = $(`
+		        <li class="list-group-item">
+		          <div class="d-flex justify-content-between align-items-center">
+		            <div>
+		              <strong>${hop.tenToHop}</strong>
+		              ${hop.soTinChiToiThieu ? `<small class="text-muted ml-2">(Tối thiểu: ${hop.soTinChiToiThieu} tín chỉ)</small>` : ''}
+		            </div>
+		            <div>
+		              <button class="btn btn-sm btn-primary btn-add-hocphan-tohop" data-hop-id="${hop.id}" data-hop-name="${hop.tenToHop}">
+		                <i class="fas fa-plus"></i> Thêm HP
+		              </button>
+		              <button class="btn btn-sm btn-secondary btn-create-nhom" data-hop-id="${hop.id}" data-hop-name="${hop.tenToHop}">
+		                <i class="fas fa-layer-group"></i> Tạo nhóm
+		              </button>
+		            </div>
+		          </div>
+		          <ul class="mt-2 list-unstyled" id="nhomList_${hop.id}"></ul>
+		        </li>
+		      `);
+		      
+		      $ul.append($li);
+		      loadNhomForToHop(hop.id);
+		    });
+		  });
+		}
+		function loadNhomForToHop(hopId) {
+		  $.get(`/api/v1/chuongtrinhhoc/tohop/${hopId}/tohopnhommon`, function(nhoms) {
+		    const $ul = $(`#nhomList_${hopId}`).empty();
+		    
+		    if (nhoms.length === 0) {
+		      $ul.append('<li class="text-muted small">Chưa có nhóm môn nào</li>');
+		      return;
+		    }
+	
+		    nhoms.forEach(n => {
+		      $ul.append(`
+		        <li class="mb-2">
+		          <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded">
+		            <span>${n.tenNhom}</span>
+		            <button class="btn btn-sm btn-primary btn-add-hocphan-tonhom" data-nhom-id="${n.id}" data-nhom-name="${n.tenNhom}">
+		              <i class="fas fa-plus"></i> Thêm HP
+		            </button>
+		          </div>
+		        </li>
+		      `);
+		    });
+		  });
+		}
+		
+		function fetchDanhSachChuongTrinhHoc() {
+		    $.ajax({
+		        url: '/api/v1/chuongtrinhhoc',
+		        type: 'GET',
+		        success: function (data) {
+		            const list = $('#chuongTrinhHocList');
+		            list.empty();
+		            data.forEach(ct => {
+		                list.append(`
+		                    <tr>
+		                        <td>${convertChuyenNganh(ct.chuyenNganh)}</td>
+		                        <td>${ct.khoa}</td>
+		                        <td>${ct.id}</td>
+		                    </tr>
+		                `);
+		            });
+		        },
+		        error: function () {
+		            $('#chuongTrinhHocList').html('<tr><td colspan="3">Lỗi khi tải danh sách</td></tr>');
+		        }
+		    });
+		}
+
+		// Hàm tạo chương trình học mới
+		function createChuongTrinhHoc() {
+		    const chuyenNganh = $('#chuyenNganh').val();
+		    const khoa = $('#khoa').val();
+
+		    if (!chuyenNganh || !khoa) {
+		        alert('Vui lòng chọn đầy đủ chuyên ngành và khóa học');
+		        return;
+		    }
+
+		    $('#loadingIndicator').show();
+
+		    $.ajax({
+		        url: '/api/v1/chuongtrinhhoc/full',
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify({
+		            chuyenNganh: chuyenNganh,
+		            khoa: khoa
+		        }),
+		        success: function (response) {
+		            const ct = response.data;
+		            currentChuongTrinhId = ct.id;
+
+		            $('#createdChuongTrinhInfo').text(`${convertChuyenNganh(ct.chuyenNganh)} - Khóa ${ct.khoa}`);
+
+		            // ✅ Hiện bước 2
+		            $('#step1').hide();
+		            $('#step2').show();
+					// 👉 Show loading trước khi load
+					  $('#loadingLoaiHocPhan').show();
+					  $('#loaiHocPhanList').empty();
+		            // ✅ Hiện danh sách loại học phần luôn
+		            //renderLoaiHocPhanFromResponse(ct.cacLoaiHocPhan);
+					// 👉 GỌI API LẤY DANH SÁCH LOẠI HỌC PHẦN SAU KHI TẠO
+			        $.get(`/api/v1/chuongtrinhhoc/${currentChuongTrinhId}/loaihocphan`, function(loaiList) {
+			            renderLoaiHocPhanFromResponse(loaiList);
+						}).always(function() {
+							$('#loadingLoaiHocPhan').hide();
+			        });
+					
+		            // ✅ Load học phần cho chức năng thêm học phần
+		            loadDanhSachHocPhan();
+					
+		            // Sau khi tạo chương trình học thành công
+					loadDanhSachChuongTrinhHoc();
+
+		        },
+		        error: function (xhr) {
+		            alert('Lỗi khi tạo chương trình học: ' + (xhr.responseJSON?.message || xhr.statusText));
+		        },
+		        complete: function () {
+		            $('#loadingIndicator').hide();
+		        }
+		    });
+		}
+		// Xử lý khi click tạo một chương trình học cũ trong danh sách  để cập nhật
+		$(document).on('click', '#chuongTrinhHocList tbody tr', function () {
+		  const chuongTrinhId = $(this).data('id');
+		  const chuyenNganh = $(this).find('td:eq(0)').text().trim();
+		  const khoa = $(this).find('td:eq(1)').text().trim();
+
+		  if (!chuongTrinhId) return;
+
+		  currentChuongTrinhId = chuongTrinhId;
+
+		  $('#createdChuongTrinhInfo').text(`${chuyenNganh} - Khóa ${khoa}`);
+
+		  // Chuyển sang bước 2
+		  $('#step1').hide();
+		  $('#step2').show();
+
+		  // 👉 Show loading trước khi load
+		  $('#loadingLoaiHocPhan').show();
+		  $('#loaiHocPhanList').empty();
+
+		  // Gọi API lấy danh sách loại học phần
+		  $.get(`/api/v1/chuongtrinhhoc/${chuongTrinhId}/loaihocphan`, function (loaiList) {
+		    console.log('🧾 Dữ liệu loại học phần từ chương trình có sẵn:', loaiList);
+		    renderLoaiHocPhanFromResponse(loaiList);
+		  }).fail(function() {
+		    alert('❌ Lỗi khi tải loại học phần.');
+		  }).always(function() {
+		    $('#loadingLoaiHocPhan').hide(); // 👉 Ẩn loading dù thành công hay thất bại
+		  });
+
+		  // Gọi load danh sách học phần cho modal
+		  loadDanhSachHocPhan();
+		});
+		
+
+
+		// ===== CÁC HÀM XỬ LÝ MỚI =====
+
+		// Hàm hiển thị danh sách loại học phần mặc định khi tạo chương trình học mới
+		function renderLoaiHocPhanFromResponse(cacLoaiHocPhan) {
+		  console.log("🧾 Số loại học phần:", cacLoaiHocPhan.length, cacLoaiHocPhan);
+
+		  const $list = $('#loaiHocPhanList').empty();
+
+		  cacLoaiHocPhan.forEach((loai, index) => {
+		    try {
+		      console.log(`🔹 Đang render loại ${index + 1}:`, loai);
+
+		      $list.append(`
+			  <tr id="loaiRow_${loai.id}">
+			      <td>
+			        ${convertLoaiHocPhan(loai.loaiHocPhan)}
+			        <button class="btn btn-sm btn-link toggle-collapse" data-target="#collapse_${loai.id}">
+			          <i class="fas fa-chevron-down"></i>
+			        </button>
+			      </td>
+			      <td>
+			        <input type="number" class="form-control so-tin-chi" id="soTinChi_${loai.id}" value="${loai.soTinChiToiThieu ?? ''}">
+			      </td>
+			      <td>
+			        <input type="text" class="form-control chu-thich" id="chuThich_${loai.id}" placeholder="Ghi chú..." value="${loai.chuThich || ''}">
+			        <input type="text" class="form-control mt-1 ma-bat-dau" id="maBatDau_${loai.id}" placeholder="Mã bắt đầu được tính VD: CS,IS,MA" value="${loai.maBatDauDuocTinh || ''}">
+			      </td>
+			      <td>			        
+					<button class="btn btn-primary btn-sm btn-save-tinchi"
+					        data-loai-enum="${loai.loaiHocPhan}" 
+					        data-loai-id="${loai.id}">
+							<i class="fas fa-save"></i> Cập nhật loại HP
+					</button>	
+			        <button class="btn btn-info btn-sm btn-add-hocphan" data-loai-id="${loai.id}" data-loai-name="${convertLoaiHocPhan(loai.loaiHocPhan)}">
+			          <i class="fas fa-plus"></i> Thêm HP
+			        </button>
+					<button class="btn btn-success btn-sm btn-create-tohop" data-loai-id="${loai.id}" data-loai-name="${convertLoaiHocPhan(loai.loaiHocPhan)}">
+						<i class="fas fa-plus"></i> Tạo tổ hợp
+					</button>
+			      </td>
+			    </tr>
+		        <tr class="collapse-row" id="collapse_${loai.id}" style="display:none;">
+		          <td colspan="4" class="p-0">
+		            <div class="card card-body">
+		              <ul class="list-group mb-2" id="toHopList_${loai.id}"></ul>
+		            </div>
+		          </td>
+		        </tr>
+		      `);
+
+		      loadToHopForLoai(loai.id); // ⚠ Có thể lỗi tại đây nếu dữ liệu tổ hợp bị null
+
+		    } catch (err) {
+		      console.error(`❌ Lỗi khi render loại học phần index ${index}:`, err);
+		    }
+		  });
+		}
+
+		
+		// Xử lý mở modal thêm học phần từ các nguồn khác nhau
+		function openAddHocPhanModal(source, id, name) {
+		console.log('🧩 Mở modal từ nguồn:', source, 'id:', id, 'name:', name);
+		  currentContext = { source, id, name };
+		  $('#modalLoaiHocPhanTitle').text(name || 'Thêm học phần');
+		  
+		  // Reset danh sách chọn
+		  selectedHocPhanIds = [];
+		  updateSelectedHocPhanList();
+		  
+		  // Hiển thị modal
+		  $('#addHocPhanModal').modal('show');
+		}
+
+		// Xử lý khi click nút thêm học phần từ các nguồn
+		$(document).on('click', '.btn-add-hocphan', function() {
+		  const loaiId = $(this).data('loai-id');
+		  const loaiName = $(this).data('loai-name');
+		  openAddHocPhanModal('loai', loaiId, loaiName);
+		});
+
+		$(document).on('click', '.btn-add-hocphan-tohop', function() {
+		  const hopId = $(this).data('hop-id');
+		  if (!hopId) {
+		     console.warn('⚠ Không tìm thấy hopId từ button:', this);
+		     return;
+		   }
+		  const hopName = $(this).data('hop-name');
+		  openAddHocPhanModal('tohop', hopId, hopName);
+		});
+
+		$(document).on('click', '.btn-add-hocphan-tonhom', function() {
+		  const nhomId = $(this).data('nhom-id');
+		  const nhomName = $(this).data('nhom-name');
+		  openAddHocPhanModal('nhom', nhomId, nhomName);
+		});
+
+
+		// Hàm cập nhật loại học phần(số tín tối thiểu, ghi chú, mã bắt đầu)
+		function saveSoTinChi(loaiId) {
+		    const soTinChi = $(`#soTinChi_${loaiId}`).val();
+		    const chuThich = $(`#chuThich_${loaiId}`).val();
+		    const maBatDau = $(`#maBatDau_${loaiId}`).val();
+
+		    $.ajax({
+		        url: `/api/v1/chuongtrinhhoc/${currentChuongTrinhId}/loaihocphan/${loaiId}`,
+		        type: 'PUT',
+		        contentType: 'application/json',
+		        data: JSON.stringify({
+		            soTinChiToiThieu: soTinChi || null,
+		            chuThich: chuThich || null,
+		            maBatDauDuocTinh: maBatDau || null
+		        }),
+		        success: function() {
+		            alert('✅ Đã lưu thông tin loại học phần');
+		            loadDanhSachChuongTrinhHoc(); // Load lại danh sách nếu cần
+		        },
+		        error: function(xhr) {
+		            alert('❌ Lỗi khi lưu: ' + (xhr.responseJSON?.message || xhr.statusText));
+		        }
+		    });
+		}
+
+
+		// Hàm thêm loại học phần vào chương trình
+		function addLoaiHocPhan() {
+		    const chuongTrinhId = $('#chuongTrinhHocId').val();
+		    const loaiHocPhan = $('#loaiHocPhan').val();
+		    const soTinChiToiThieu = $('#soTinChiToiThieu').val();
+
+		    if (!loaiHocPhan ) {
+		        alert('Vui lòng chọn loại học phần');
+		        return;
+		    }
+
+		    $('#loadingIndicator').show();
+
+			// Tạo payload đúng cấu trúc
+		    const payload = {
+		        loaiHocPhan: loaiHocPhan,
+		        soTinChiToiThieu: parseInt(soTinChiToiThieu)
+		    };
+
+		    console.log("Gửi dữ liệu:", payload); // Kiểm tra dữ liệu trước khi gửi
+
+		    $.ajax({
+		        url: `/api/v1/chuongtrinhhoc/${chuongTrinhId}/loaihocphan`,
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify(payload),
+		        success: function(response) {
+		            console.log("Phản hồi từ server:", response); // Kiểm tra phản hồi
+		            
+		            // Thêm vào danh sách hiển thị
+		            addLoaiHocPhanToTable({
+		                id: response.id || Date.now(), // Tạm thời sử dụng timestamp nếu không có id
+		                loaiHocPhan: loaiHocPhan,
+		                soTinChiToiThieu: soTinChiToiThieu
+		            });
+		            
+		            // Reset form
+		            $('#loaiHocPhan').val('');
+		            $('#soTinChiToiThieu').val('');
+		            
+		            // Kích hoạt nút thêm học phần
+		            $('#btnAddHocPhan').prop('disabled', false);
+		        },
+		        error: function(xhr) {
+		            console.error("Lỗi chi tiết:", xhr.responseJSON); // Log lỗi chi tiết
+		            alert('Lỗi khi thêm loại học phần: ' + 
+		                 (xhr.responseJSON?.message || xhr.statusText || 'Unknown error'));
+		        },
+		        complete: function() {
+		            $('#loadingIndicator').hide();
+		        }
+		    });
+		}
+
+		// Hàm thêm loại học phần vào bảng
+		function addLoaiHocPhanToTable(loaiHocPhan) {
+		    danhSachLoaiHocPhanDaThem.push(loaiHocPhan);
+		    
+		    $('#loaiHocPhanList').append(`
+		        <tr id="loaiHocPhanRow_${loaiHocPhan.id}">
+		            <td>${convertLoaiHocPhan(loaiHocPhan.loaiHocPhan)}</td>
+		            <td>${loaiHocPhan.soTinChiToiThieu}</td>
+		            <td>
+		                <button class="btn btn-primary btn-sm" onclick="addHocPhanToLoai('${loaiHocPhan.id}', '${loaiHocPhan.loaiHocPhan}')">
+		                    <i class="fas fa-plus"></i> Thêm HP
+		                </button>
+		                <button class="btn btn-danger btn-sm" onclick="deleteLoaiHocPhan('${loaiHocPhan.id}')">
+		                    <i class="fas fa-trash"></i> Xóa
+		                </button>
+		            </td>
+		        </tr>
+		    `);
+		}
+
+		// Hàm xóa loại học phần
+		function deleteLoaiHocPhan(loaiHocPhanId) {
+		    if (!confirm('Bạn có chắc chắn muốn xóa loại học phần này?')) return;
+
+		    $('#loadingIndicator').show();
+
+		    $.ajax({
+		        url: `/api/v1/chuongtrinhhoc/loaihocphan/${loaiHocPhanId}`,
+		        type: 'DELETE',
+		        success: function(response) {
+		            $(`#loaiHocPhanRow_${loaiHocPhanId}`).remove();
+		            danhSachLoaiHocPhanDaThem = danhSachLoaiHocPhanDaThem.filter(item => item.id !== loaiHocPhanId);
+		            
+		            if (danhSachLoaiHocPhanDaThem.length === 0) {
+		                $('#btnAddHocPhan').prop('disabled', true);
+		            }
+		        },
+		        error: function(xhr) {
+		            alert('Lỗi khi xóa loại học phần: ' + (xhr.responseJSON?.message || xhr.statusText));
+		        },
+		        complete: function() {
+		            $('#loadingIndicator').hide();
+		        }
+		    });
+		}
+
+		// Hàm chuyển sang bước thêm học phần vào loại
+		function addHocPhanToLoai(loaiHocPhanId, loaiHocPhan) {
+			console.log('Bắt đầu thêm HP vào loại', loaiHocPhanId, loaiHocPhan);
+		    currentLoaiHocPhanId = loaiHocPhanId;
+		    $('#selectedLoaiHocPhan').text(convertLoaiHocPhan(loaiHocPhan));
+		    
+		    // Reset danh sách học phần đã chọn
+		    selectedHocPhanIds = [];
+		    updateSelectedHocPhanList();
+		    
+		    // Tải lại danh sách học phần trước khi hiển thị
+		    loadDanhSachHocPhan().then(() => {
+		        // Hiển thị bước 3 sau khi tải xong
+		        $('#step2').hide();
+		        $('#step3').show();
+		        
+		        // Hiển thị kết quả tìm kiếm ban đầu (tất cả học phần)
+		        renderHocPhanSearchResults(danhSachHocPhan);
+		    });
+		}
+
+		// Hàm quay lại từ bước 3 sang bước 2
+		function backToLoaiHocPhan() {
+		    $('#step3').hide();
+		    $('#step2').show();
+		}
+
+		// Hàm lưu học phần vào loại học phần
+		function saveHocPhanToLoai() {
+		    if (selectedHocPhanIds.length === 0) {
+		        alert('Vui lòng chọn ít nhất một học phần');
+		        return;
+		    }
+		
+		    $('#loadingIndicator').show();
+		
+		    // Tạo payload dạng danh sách với loại học phần đã chọn
+		    const payload = selectedHocPhanIds.map(hocPhanId => ({
+		        hocPhanId: hocPhanId,
+		        loaiHocPhan: currentLoaiHocPhanId // Sử dụng loại học phần hiện tại
+		    }));
+		
+		    $.ajax({
+		        url: `/api/v1/chuongtrinhhoc/${currentChuongTrinhId}/hocphans`,
+		        type: 'POST',
+		        contentType: 'application/json',
+		        data: JSON.stringify(payload),
+		        success: function(response) {
+		            alert(`Đã thêm ${selectedHocPhanIds.length} học phần vào loại học phần`);
+		            $('#addHocPhanModal').modal('hide');
+		            
+		            // Load lại danh sách chương trình học để cập nhật
+		            loadDanhSachChuongTrinhHoc();
+		        },
+		        error: function(xhr) {
+		            alert('Lỗi khi thêm học phần: ' + (xhr.responseJSON?.message || xhr.statusText));
+		        },
+		        complete: function() {
+		            $('#loadingIndicator').hide();
+		        }
+		    });
+		}		
+		// Hàm thêm học phần vào danh sách chọn
+		function addHocPhanToSelection(hocPhanId) {
+		    if (!selectedHocPhanIds.includes(hocPhanId)) {
+		        selectedHocPhanIds.push(hocPhanId);
+		        updateSelectedHocPhanList();
+		        renderHocPhanSearchResults(filterHocPhanSearchResults());
+		    }
+		}
+
+		// Hàm xóa học phần khỏi danh sách chọn
+		function removeHocPhanFromSelection(hocPhanId) {
+		    selectedHocPhanIds = selectedHocPhanIds.filter(id => id !== hocPhanId);
+		    updateSelectedHocPhanList();
+		    renderHocPhanSearchResults(filterHocPhanSearchResults());
+		}
+
+		// Hàm cập nhật danh sách học phần đã chọn
+		function updateSelectedHocPhanList() {
+		    const container = $('#selectedHocPhanList');
+		    container.empty();
+		    
+		    if (selectedHocPhanIds.length === 0) {
+		        container.append('<div class="text-muted">Chưa có học phần nào được chọn</div>');
+		        return;
+		    }
+		    
+		    selectedHocPhanIds.forEach(hocPhanId => {
+		        const hocPhan = danhSachHocPhan.find(hp => hp.id === hocPhanId);
+		        if (hocPhan) {
+		            container.append(`
+		                <div class="selected-hoc-phan-item bg-light p-2 m-1 rounded">
+		                    ${hocPhan.maHocPhan} - ${hocPhan.tenHocPhan}
+		                    <span class="text-danger ml-2" style="cursor:pointer" 
+		                          onclick="removeHocPhanFromSelection(${hocPhan.id})">
+		                        <i class="fas fa-times"></i>
+		                    </span>
+		                </div>
+		            `);
+		        }
+		    });
+		}
+
+		// Hàm lọc kết quả tìm kiếm (loại bỏ các học phần đã chọn)
+		function filterHocPhanSearchResults() {
+		    const keyword = $('#searchHocPhanInput').val().toLowerCase() || '';
+		    return danhSachHocPhan.filter(hp => 
+		        !selectedHocPhanIds.includes(hp.id) &&
+		        (hp.maHocPhan.toLowerCase().includes(keyword) || 
+		         hp.tenHocPhan.toLowerCase().includes(keyword))
+		    );
+		}
+		
+		function loadDanhSachChuongTrinhHoc() {
+		    $('#loadingChuongTrinhHoc').show();
+		    $('#chuongTrinhHocContainer').hide();
+
+		    $.ajax({
+		        url: '/api/v1/chuongtrinhhoc',
+		        type: 'GET',
+		        cache: false,
+		        success: function(response) {
+		            window.danhSachChuongTrinhHoc = response;
+		            renderDanhSachChuongTrinhHoc(response);
+		        },
+		        error: function(xhr) {
+		            console.error('Lỗi API:', xhr.responseJSON || xhr.statusText);
+		            $('#chuongTrinhHocContainer').html(
+		                '<div class="alert alert-danger">Không thể tải dữ liệu. ' + 
+		                (xhr.responseJSON?.message || xhr.statusText) + '</div>'
+		            );
+		        },
+		        complete: function () {
+		            $('#loadingChuongTrinhHoc').hide();
+		            $('#chuongTrinhHocContainer').show();
+		        }
+		    });
+		}
+	    
+		
+		// Hàm hiển thị danh sách chương trình học theo khóa và chuyên ngành
+		function renderDanhSachChuongTrinhHoc(data) {
+		    const container = $('#chuongTrinhHocContainer');
+		    container.empty();
+
+		    if (data.length === 0) {
+		        container.append('<div class="alert alert-info">Không có dữ liệu chương trình học</div>');
+		        return;
+		    }
+
+		    // Nhóm theo khóa
+		    const groupedByKhoa = {};
+		    data.forEach(item => {
+		        if (!groupedByKhoa[item.khoa]) {
+		            groupedByKhoa[item.khoa] = [];
+		        }
+		        groupedByKhoa[item.khoa].push(item);
+		    });
+
+		    const sortedKhoas = Object.keys(groupedByKhoa).sort();
+
+		    sortedKhoas.forEach(khoa => {
+		        const khoaId = `khoa-body-${khoa}`;
+		        const khoaGroup = $(`
+		            <div class="khoa-group mb-3">
+		                <div class="khoa-header bg-primary px-3 py-2 rounded d-flex justify-content-between align-items-center"
+		                     style="color: #F5F5F5; cursor: pointer;"
+		                     data-toggle="collapse"
+		                     data-target="#${khoaId}"
+		                     aria-expanded="false"
+		                     aria-controls="${khoaId}">
+		                    <strong>Khóa: ${khoa}</strong>
+		                    <i class="fas fa-chevron-down rotate-icon"></i>
+		                </div>
+		                <div id="${khoaId}" class="collapse mt-2"></div>
+		            </div>
+		        `);
+
+		        const khoaBody = khoaGroup.find(`#${khoaId}`);
+
+		        // Nhóm chương trình học theo chuyên ngành
+		        const groupedByChuyenNganh = {};
+		        groupedByKhoa[khoa].forEach(item => {
+		            const chuyenNganhRaw = item.chuyenNganh;
+		            if (!groupedByChuyenNganh[chuyenNganhRaw]) {
+		                groupedByChuyenNganh[chuyenNganhRaw] = [];
+		            }
+		            groupedByChuyenNganh[chuyenNganhRaw].push(item);
+		        });
+
+		        Object.keys(groupedByChuyenNganh).forEach(chuyenNganhRaw => {
+		            const chuongTrinhList = groupedByChuyenNganh[chuyenNganhRaw];
+		            const chuongTrinh = chuongTrinhList[0];
+		            const chuyenNganhLabel = convertChuyenNganh(chuyenNganhRaw);
+
+		            let totalHocPhan = 0;
+		            chuongTrinhList.forEach(ct => {
+		                if (ct.hocPhans && ct.hocPhans.length > 0) {
+		                    totalHocPhan += ct.hocPhans.length;
+		                }
+		            });
+					const chuyenNganhCard = $(`
+					    <div class="card chuyen-nganh-card mb-2" style="margin-bottom: 3px !important;">
+					        <div class="card-body d-flex justify-content-between align-items-center p-1">
+					            <!-- Trái: Tên chuyên ngành -->
+					            <div class="flex-shrink-0" style="color: #5a5c69; font-weight: bold; white-space: nowrap;margin-left: 20px;">
+					                ${chuyenNganhLabel}
+					            </div>
+
+
+					            <!-- Phải: Nút -->
+					            <div class="text-nowrap">
+					                <button class="btn btn-info btn-sm mr-2" onclick="xemChiTietTheoChuyenNganh('${khoa}', '${chuyenNganhRaw}')">
+					                    <i class="fas fa-eye"></i> Xem chi tiết 
+					                </button>
+									${isAdminRole() ? `
+					                <button class="btn btn-danger btn-sm" onclick="xoaChuongTrinhHocTheoChuyenNganh('${khoa}', '${chuyenNganhRaw}')">
+					                    <i class="fas fa-trash"></i> Xóa
+					                </button>` : ''}
+					            </div>
+					        </div>
+					    </div>
+					`);
+
+		            khoaBody.append(chuyenNganhCard);
+		        });
+
+		        container.append(khoaGroup);
+
+		        // Xử lý hiệu ứng mũi tên quay lên/xuống
+		        khoaGroup.find('.khoa-header').on('click', function () {
+		            const icon = $(this).find('i');
+		            icon.toggleClass('fa-chevron-down fa-chevron-up');
+		        });
+		    });
+		}
+		
+		function toggleChuyenNganhTheoKhoa(khoa) {
+		    const body = $(`#khoa-body-${khoa}`);
+		    const icon = $(`.card-header[onclick="toggleChuyenNganhTheoKhoa('${khoa}')"] i`);
+
+		    if (!body.hasClass('d-none')) {
+		        body.addClass('d-none');
+		        icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+		        return;
+		    }
+
+		    // Đổi icon
+		    icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+
+		    // Nếu đã render thì chỉ show/hide
+		    if (body.children().length > 0) {
+		        body.removeClass('d-none');
+		        return;
+		    }
+
+		    const chuongTrinhList = window.groupedChuongTrinhByKhoa[khoa];
+		    const groupedByChuyenNganh = {};
+
+		    chuongTrinhList.forEach(item => {
+		        if (!groupedByChuyenNganh[item.chuyenNganh]) {
+		            groupedByChuyenNganh[item.chuyenNganh] = [];
+		        }
+		        groupedByChuyenNganh[item.chuyenNganh].push(item);
+		    });
+
+		    Object.keys(groupedByChuyenNganh).forEach(chuyenNganhRaw => {
+		        const chuyenNganhList = groupedByChuyenNganh[chuyenNganhRaw];
+		        const chuyenNganhLabel = convertChuyenNganh(chuyenNganhRaw);
+
+		        let totalHocPhan = 0;
+		        chuyenNganhList.forEach(ct => {
+		            if (ct.hocPhans && ct.hocPhans.length > 0) {
+		                totalHocPhan += ct.hocPhans.length;
+		            }
+		        });
+
+				const html = $(`
+				    <div class="card chuyen-nganh-card mb-2">
+				        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between flex-wrap">
+				            <div class="font-weight-bold text-primary">
+				                ${chuyenNganhLabel}
+				            </div>
+				            <div class="d-flex align-items-center gap-2 flex-wrap">
+				                
+				                <button class="btn btn-sm btn-info" onclick="xemChiTietTheoChuyenNganh('${khoa}', '${chuyenNganhRaw}')">
+				                    <i class="fas fa-eye"></i> Xem chi tiết
+				                </button>
+								${isAdminRole() ? `
+				                <button class="btn btn-danger btn-sm" onclick="xoaChuongTrinhHocTheoChuyenNganh('${khoa}', '${chuyenNganhRaw}')">
+				                    <i class="fas fa-trash"></i> Xóa
+				                </button>` : ''}
+				            </div>
+				            <ul id="hocphan-list-${khoa}-${chuyenNganhRaw}" class="list-group mt-2 w-100 d-none"></ul>
+				        </div>
+				    </div>
+				`);
+
+
+		        body.append(html);
+		    });
+
+		    body.removeClass('d-none');
+		}
+		//hàm xóa học phần ở danh sách tất cả học phần
+		function xoaHocPhan(hocPhanId, buttonElement) {
+		    if (!confirm('Bạn có chắc chắn muốn xóa học phần này không?')) return;
+
+		    $.ajax({
+		        url: `/api/v1/hocphan/${hocPhanId}`,
+		        type: 'DELETE',
+		        success: function() {
+		            alert('✅ Đã xóa học phần thành công');
+		            // Xóa dòng khỏi bảng nếu cần
+		            if (buttonElement) {
+		                $(buttonElement).closest('tr').remove();
+		            }
+		        },
+		        error: function(xhr) {
+		            alert('❌ Lỗi khi xóa học phần: ' + (xhr.responseJSON?.message || xhr.statusText));
+		            console.error(xhr);
+		        }
+		    });
+		}
+		
+
+		function convertChuyenNganhToEnum(chuyenNganhText) {
+		    const mapping = {
+		        'Công nghệ thông tin': 'CONG_NGHE_THONG_TIN',
+		        'Khoa học máy tính': 'KHOA_HOC_MAY_TINH',
+		        'Trí tuệ nhân tạo': 'TRI_TUE_NHAN_TAO',
+		        'Hệ thống thông tin': 'HE_THONG_THONG_TIN',
+		        'Mạng máy tính và truyền thông dữ liệu': 'MANG_MAY_TINH',
+		        'Kế toán': 'KE_TOAN',
+		        'Tài chính - Ngân hàng': 'TAI_CHINH_NGAN_HANG',
+		        'Logistics': 'LOGISTIC',
+		        'Quản trị kinh doanh': 'QUAN_TRI_KINH_DOANH',
+		        'Quản trị khách sạn': 'QUAN_TRI_KHACH_SAN',
+		        'Marketing': 'MARKETING',
+		        'Kinh tế quốc tế': 'KINH_TE_QUOC_TE',
+		        'Luật kinh tế': 'LUAT_KINH_TE',
+		        'Thương mại điện tử': 'THUONG_MAI_DIEN_TU',
+		        'Dịch vụ du lịch - lữ hành': 'DICH_VU_DU_LICH_LU_HANH',
+		        'Ngôn ngữ Anh': 'NGON_NGU_ANH',
+		        'Ngôn ngữ Trung': 'NGON_NGU_TRUNG',
+		        'Ngôn ngữ Nhật': 'NGON_NGU_NHAT',
+		        'Ngôn ngữ Hàn': 'NGON_NGU_HAN',
+		        'Việt Nam học': 'VIET_NAM_HOC',
+		        'Công tác xã hội': 'CONG_TAC_XA_HOI',
+		        'Truyền thông đa phương tiện': 'TRUYEN_THONG_DA_PHUONG_TIEN',
+		        'Thiết kế đồ họa': 'THIET_KE_DO_HOA',
+		        'Điều dưỡng': 'DIEU_DUONG',
+		        'Dinh dưỡng': 'DINH_DUONG',
+		        'Thanh nhạc': 'THANH_NHAC'
+		    };
+		    
+		    return mapping[chuyenNganhText] || chuyenNganhText;
+		}
+		function xoaHocPhanKhoiChuongTrinh(hocPhanId, loaiHocPhan, buttonElement) {
+		  if (!confirm('Bạn có chắc chắn muốn xóa học phần này khỏi chương trình học?')) {
+		    return;
+		  }
+
+		  const chuongTrinhId = $('#detailChuongTrinhId').val();
+		  
+		  $('#loadingIndicator').show();
+
+		  $.ajax({
+		    url: `/api/v1/chuongtrinhhoc/${chuongTrinhId}/hocphan/${hocPhanId}`,
+		    type: 'DELETE',
+		    data: { loaiHocPhan: loaiHocPhan },
+		    success: function() {
+		      alert('✅ Đã xóa học phần thành công');
+		      $(buttonElement).closest('tr').remove();
+
+		      const tableBody = $(buttonElement).closest('tbody');
+		      if (tableBody.find('tr').length === 0) {
+		        tableBody.html('<tr><td colspan="10" class="text-center">Không có học phần</td></tr>');
+		      }
+
+		      loadDanhSachChuongTrinhHoc();
+
+		      // Đồng bộ window.danhSachChuongTrinhHoc
+		      const chuongTrinhIndex = window.danhSachChuongTrinhHoc.findIndex(ct => ct.id == chuongTrinhId);
+		      if (chuongTrinhIndex >= 0) {
+		        window.danhSachChuongTrinhHoc[chuongTrinhIndex].hocPhans =
+		          (window.danhSachChuongTrinhHoc[chuongTrinhIndex].hocPhans || []).filter(
+		            hp => hp.id != hocPhanId
+		          );
+		      }
+		    },
+		    error: function(xhr) {
+		      alert('❌ Lỗi khi xóa học phần: ' + (xhr.responseJSON?.message || xhr.statusText));
+		    },
+		    complete: function() {
+		      $('#loadingIndicator').hide();
+		    }
+		  });
+		}
+
+		
+		//Hàm toggle hiển thị body của chuyên ngành
+        function toggleChuyenNganhBody(khoa, chuyenNganh) {
+            $(`#chuyen-nganh-${khoa}-${chuyenNganh}`).slideToggle();
+        }
+		
+		
+		function xemChiTietTheoChuyenNganh(khoa, chuyenNganhEnum) {
+		    const chuongTrinh = window.danhSachChuongTrinhHoc.find(ct =>
+		        ct.khoa === khoa && ct.chuyenNganh === chuyenNganhEnum
+		    );
+		    
+		    if (!chuongTrinh) {
+		        alert("Không tìm thấy chương trình học");
+		        return;
+		    }
+
+		    $('#detailChuyenNganh').text(convertChuyenNganh(chuongTrinh.chuyenNganh));
+		    $('#detailKhoa').text(chuongTrinh.khoa);
+		    $('#detailChuongTrinhId').val(chuongTrinh.id);
+
+		    $('#chiTietChuongTrinhBody').html('<div class="text-center py-3"><i class="fas fa-spinner fa-spin text-primary"></i> Đang tải dữ liệu...</div>');
+
+		    $('#detailModal').modal('show');
+
+		    // Gọi API mới để lấy chi tiết
+		    $.get(`/api/v1/chuongtrinhhoc/${chuongTrinh.id}/full-dto`, function(data) {
+		        renderChiTietChuongTrinh(data);
+		    }).fail(function() {
+		        $('#chiTietChuongTrinhBody').html('<div class="text-danger text-center py-3">❌ Lỗi khi tải chi tiết chương trình học.</div>');
+		    });
+		}
+		function renderChiTietChuongTrinh(data) {
+		    let html = '';
+		
+		    if (!data || !data.loaiHocPhans || data.loaiHocPhans.length === 0) {
+		        html = '<div class="text-center text-muted py-3">Chưa có loại học phần.</div>';
+		    } else {
+		        data.loaiHocPhans.forEach(loai => {
+		            html += `
+		                <div class="card mb-4">
+		                    <div class="card-header bg-primary text-white">
+		                        ${convertLoaiHocPhan(loai.loaiHocPhan)}
+		                        ${loai.soTinChiToiThieu ? ` - Tối thiểu ${loai.soTinChiToiThieu} tín chỉ` : ''}
+								${loai.chuThich ? ` <br><small> ${loai.chuThich}</small>` : ''}
+
+		                    </div>
+		                    <div class="card-body">
+		            `;
+		
+					// Nếu là học phần ngoài tổ hợp
+					if (loai.hocPhansNgoaiToHop && loai.hocPhansNgoaiToHop.length > 0) {
+					    html += renderBangHocPhan(loai.hocPhansNgoaiToHop, {
+					        type: 'loai',
+					        ctId: loai.id
+					    });
+					}
+
+					if (loai.toHops && loai.toHops.length > 0) {
+					    loai.toHops.forEach(toHop => {
+					        let dieuKien = [];
+
+					        if (toHop.soTinChiToiThieu != null) {
+					            dieuKien.push(`Tối thiểu ${toHop.soTinChiToiThieu} tín chỉ`);
+					        }
+					        if (toHop.soLuongMonToiThieu != null) {
+					            dieuKien.push(`Tối thiểu ${toHop.soLuongMonToiThieu} môn`);
+					        }
+					        if (toHop.batBuocHocTatCa) {
+					            dieuKien.push(`Bắt buộc học tất cả`);
+					        }
+
+					        const moTaDieuKien = dieuKien.length > 0 ? ` <small>(${dieuKien.join(', ')})</small>` : '';
+
+							html += `
+							    <div class="tohop-container mt-3 border p-2 rounded">
+							        <div class="d-flex justify-content-between align-items-center">
+							            <h6 class="bold text-dark mb-0">
+							                Tổ hợp: ${toHop.tenToHop}${moTaDieuKien}
+							            </h6>
+										${isAdminRole() ? `
+										<button class="btn btn-sm btn-danger btn-delete-tohop" data-tohopid="${toHop.id}">
+										  <i class="fas fa-trash"></i> Xóa tổ hợp
+										</button>
+										` : ''}
+
+							        </div>
+							`;
+
+							// 🔥 Nếu tổ hợp không có nhóm môn thì mới render bảng học phần
+							if (!toHop.toHopNhomMons || toHop.toHopNhomMons.length === 0) {
+								html += renderBangHocPhan(toHop.hocPhans, {
+								        type: 'tohop',
+								        toHopId: toHop.id
+								    });
+							}
+
+							// Sau đó render nhóm môn (nếu có)
+							if (toHop.toHopNhomMons && toHop.toHopNhomMons.length > 0) {
+							    toHop.toHopNhomMons.forEach(nhom => {
+							        html += `
+							            <div class="nhom-container ml-4 mt-3 p-2 border rounded">
+							                <div class="d-flex justify-content-between align-items-center">
+							                    <h6 class="text-dark mb-0">Nhóm môn: ${nhom.tenNhom}</h6>
+							                    
+												${isAdminRole() ? `
+													<button class="btn btn-sm btn-danger btn-delete-nhom" data-nhomid="${nhom.id}">
+								                        <i class="fas fa-trash"></i> Xóa nhóm
+								                    </button>
+												` : ''}
+
+							                </div>
+											${renderBangHocPhan(nhom.hocPhans, {
+											                    type: 'nhom',
+											                    nhomId: nhom.id
+											                })}
+							            </div>
+							        `;
+							    });
+							}
+
+							html += `</div>`; 
+					    });
+					}
+
+		            html += `</div></div>`; // đóng card
+		        });
+		    }
+		
+		    $('#chiTietChuongTrinhBody').html(html);
+		}
+				
+		function renderBangHocPhan(hocPhans = [], context = {}) {
+		    let rows = hocPhans.map(hp => {
+		        let btnDelete = '';
+
+		        if (isAdminRole()) {
+		            if (context.type === 'loai') {
+		                btnDelete = `<button class="btn btn-sm btn-danger btn-delete-hocphan" data-type="loai" data-ctid="${context.ctId}" data-hpid="${hp.id}"><i class="fas fa-trash"></i> Xóa</button>`;
+		            } else if (context.type === 'tohop') {
+		                btnDelete = `<button class="btn btn-sm btn-danger btn-delete-hocphan" data-type="tohop" data-tohopid="${context.toHopId}" data-hpid="${hp.id}"><i class="fas fa-trash"></i> Xóa</button>`;
+		            } else if (context.type === 'nhom') {
+		                btnDelete = `<button class="btn btn-sm btn-danger btn-delete-hocphan" data-type="nhom" data-nhomid="${context.nhomId}" data-hpid="${hp.id}"><i class="fas fa-trash"></i> Xóa</button>`;
+		            }
+		        }
+
+		        const accordionId = `thaythe-${hp.maHocPhan.replace(/\s+/g, '-')}`;
+		        const currentUser = JSON.parse(localStorage.getItem('taiKhoan'));
+		        const currentUserRole = currentUser ? currentUser.dsQuyen : null;
+		        const isAdmin = currentUserRole === 'quanTri' || currentUserRole === 'thuKy';
+
+		        return `
+		            <tr class="hoc-phan-goc">
+		                <td class="text-center">${hp.maHocPhan || ''}</td>
+		                <td>${hp.tenHocPhan || ''}</td>
+		                <td class="text-center">${hp.soTinChi != null ? hp.soTinChi : ''}</td>
+		                <td>${hp.tienQuyet || ''}</td>
+		                <td class="text-center">${hp.soCa != null ? hp.soCa : ''}</td>
+		                <td>
+		                    ${hp.maGiangVien ? hp.maGiangVien : ''}${hp.maGiangVien && hp.lienLac ? ' - ' : ''}${hp.lienLac ? hp.lienLac : ''}
+		                </td>		                
+		                <td class="text-center">
+		                    ${hp.danhSachThayThe && hp.danhSachThayThe.length > 0 ? 
+		                        `<button class="btn btn-sm btn-info" type="button" data-toggle="collapse" data-target="#${accordionId}" aria-expanded="false" aria-controls="${accordionId}">
+		                            Xem (${hp.danhSachThayThe.length})
+		                        </button>` : 
+		                        'Không có'}
+		                    ${isAdmin ? 
+		                        `<button class="btn btn-sm btn-success ml-2" onclick="showThemHocPhanThayTheModal('${hp.maHocPhan}')">
+		                            <i class="fas fa-plus"></i> Thêm
+		                        </button>` : 
+		                        ''}
+		                </td>
+		                ${isAdminRole() ? `<td class="text-center">${btnDelete}</td>` : ''}
+		            </tr>
+		            ${hp.danhSachThayThe && hp.danhSachThayThe.length > 0 ? `
+		            <tr class="bg-light">
+		                <td colspan="${isAdminRole() ? '8' : '7'}" class="p-0 border-top-0">
+		                    <div class="collapse" id="${accordionId}">
+		                        <div class="p-3">
+		                            <h6 class="font-weight-bold mb-3">Danh sách học phần thay thế cho ${hp.maHocPhan}</h6>
+		                            <table class="table table-sm table-bordered">
+		                                <thead class="thead-light">
+		                                    <tr class="text-center">
+		                                        <th>Mã HP thay thế</th>
+		                                        <th>Tên HP thay thế</th>
+												<th>Số tín chỉ</th>
+		                                        <th>Áp dụng từ khóa</th>
+		                                        <th>Áp dụng đến khóa</th>
+		                                        ${isAdmin ? '<th>Thao tác</th>' : ''}
+		                                    </tr>
+		                                </thead>
+		                                <tbody>
+		                                    ${hp.danhSachThayThe.map(thayThe => `
+		                                        <tr class="text-center">
+		                                            <td>${thayThe.maHocPhanThayThe || ''}</td>
+		                                            <td>${thayThe.tenHocPhanThayThe || ''}</td>
+													<td>${thayThe.soTinChi || ''}</td>
+		                                            <td>${thayThe.khoaApDungTu || ''}</td>
+		                                            <td>${thayThe.khoaApDungDen || ''}</td>
+		                                            ${isAdmin ? `
+		                                            <td>
+		                                                <button class="btn btn-sm btn-danger" onclick="xoaHocPhanThayThe('${hp.maHocPhan}', '${thayThe.maHocPhanThayThe}', this)">
+		                                                    <i class="fas fa-trash-alt"></i> Xóa
+		                                                </button>
+		                                            </td>
+		                                            ` : ''}
+		                                        </tr>
+		                                    `).join('')}
+		                                </tbody>
+		                            </table>
+		                        </div>
+		                    </div>
+		                </td>
+		            </tr>
+		            ` : ''}
+		        `;
+		    }).join('');
+
+		    return `
+		    <div class="table-responsive">
+		        <table class="table table-bordered table-sm">
+		            <thead>
+		                <tr class="text-center">
+		                    <th>Mã HP</th>
+		                    <th>Tên học phần</th>
+		                    <th>Số tín chỉ</th>
+		                    <th>ĐK tiên quyết</th>
+		                    <th>Số ca</th>
+		                    <th>GV phụ trách</th>		                    
+		                    <th>HP thay thế</th>		                    
+		                    ${isAdminRole() ? '<th>Thao tác</th>' : ''} 
+		                </tr>
+		            </thead>
+		            <tbody>
+		                ${rows}
+		            </tbody>
+		        </table>
+		    </div>
+		    `;
+		}
+
+		// Hàm xóa chương trình học theo chuyên ngành và khóa				
+        function xoaChuongTrinhHoc(id, buttonElement, showAlert = true) {
+            $.ajax({
+                url: `/api/v1/chuongtrinhhoc/${id}`,
+                type: 'DELETE',
+                success: function(response) {
+                    if (showAlert) {
+                        alert('Xóa chương trình học thành công');
+                    }
+                    if (buttonElement) {
+                        $(buttonElement).closest('tr').remove();
+                    }
+                    loadDanhSachChuongTrinhHoc();
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi khi xóa chương trình học: ' + (xhr.responseJSON?.message || error));
+                    console.error('Error:', xhr.responseJSON);
+                }
+            });
+        }
+		
+		function xoaChuongTrinhHocTheoChuyenNganh(khoa, chuyenNganhRaw) {
+		    const confirmDelete = confirm(`Bạn có chắc muốn xóa chương trình học: ${khoa} - ${convertChuyenNganh(chuyenNganhRaw)}?`);
+		    if (!confirmDelete) return;
+
+		    // Kiểm tra danh sách chương trình học có dữ liệu chưa
+		    if (!window.danhSachChuongTrinhHoc || window.danhSachChuongTrinhHoc.length === 0) {
+		        console.warn('⚠️ danhSachChuongTrinhHoc chưa được load');
+		        alert('Dữ liệu chưa sẵn sàng. Vui lòng tải lại trang.');
+		        return;
+		    }
+
+		    const chuongTrinh = window.danhSachChuongTrinhHoc.find(ct =>
+		        ct.khoa === khoa && ct.chuyenNganh === chuyenNganhRaw
+		    );
+
+		    if (!chuongTrinh) {
+		        alert(`Không tìm thấy chương trình học để xóa (${khoa} - ${chuyenNganhRaw})`);
+		        console.error('Không tìm thấy với:', khoa, chuyenNganhRaw);
+		        return;
+		    }
+
+		    // Gọi hàm xóa với id tìm được
+		    xoaChuongTrinhHoc(chuongTrinh.id);
+		}
+
+       
+
+		// Cập nhật hàm resetForm
+		function resetForm() {
+		    $('#chuongTrinhHocForm')[0].reset();
+		    selectedHocPhanIds = [];
+		    updateSelectedHocPhanList();
+		    renderHocPhanSearchResults(danhSachHocPhan);
+		}
+		
+		// ===== CÁC HÀM XỬ LÝ TÌM KIẾM =====
+
+		// Hàm tìm kiếm học phần
+		function searchHocPhan(keyword) {
+		    if (!keyword) {
+		        renderHocPhanSearchResults(danhSachHocPhan);
+		        return;
+		    }
+		    
+		    const results = danhSachHocPhan.filter(hp => 
+		        hp.maHocPhan.toLowerCase().includes(keyword.toLowerCase()) || 
+		        hp.tenHocPhan.toLowerCase().includes(keyword.toLowerCase())
+		    );
+		    
+		    renderHocPhanSearchResults(results);
+		}
+		function searchMonHoc() {
+		    const keyword = $('#searchMonHocInput').val().trim();
+
+		    if (!keyword) {
+		        alert('Vui lòng nhập mã hoặc tên môn học');
+		        return;
+		    }
+
+		    // Hiển thị loading
+		    $('#searchResultsContainer').html('<div class="text-center py-3"><i class="fas fa-spinner fa-spin"></i> Đang tìm kiếm...</div>');
+		    $('#searchResultModal').modal('show');
+
+		    $.ajax({
+		        url: '/api/v1/chuongtrinhhoc/search',
+		        type: 'GET',
+		        data: { 
+		            keyword: keyword 
+		        },
+		        success: function(response) {
+					console.log('👉 KẾT QUẢ TỪ BACKEND:', response); 
+		            if (!response || response.length === 0) {
+		                $('#searchResultsContainer').html('<div class="alert alert-info">Không tìm thấy kết quả nào phù hợp</div>');
+		                return;
+		            }
+
+		            displaySearchResults(response, keyword);
+		        },
+		        error: function(xhr) {
+		            let errorMsg = 'Có lỗi khi tìm kiếm';
+		            if (xhr.responseJSON?.message) {
+		                errorMsg = xhr.responseJSON.message;
+		            }
+		            $('#searchResultsContainer').html(`<div class="alert alert-danger">${errorMsg}</div>`);
+		            console.error('Lỗi tìm kiếm:', xhr.responseJSON);
+		        }
+		    });
+		}
+
+		function displaySearchResults(results, keyword) {
+		    const container = $('#searchResultsContainer');
+		    container.empty();
+
+		    if (!results || results.length === 0) {
+		        container.html('<div class="alert alert-info">Không tìm thấy kết quả nào phù hợp</div>');
+		        return;
+		    }
+
+		    const keywordLower = keyword.toLowerCase();
+		    const monHocMap = new Map();
+
+		    results.forEach(ct => {
+		        if (ct.loaiHocPhans && ct.loaiHocPhans.length > 0) {
+		            ct.loaiHocPhans.forEach(loai => {
+		                // 1. Học phần ngoài tổ hợp
+		                if (loai.hocPhansNgoaiToHop && loai.hocPhansNgoaiToHop.length > 0) {
+		                    loai.hocPhansNgoaiToHop.forEach(hp => {
+		                        processHocPhan(hp, ct, `Loại: ${convertLoaiHocPhan(loai.loaiHocPhan)}`, monHocMap, keywordLower);
+		                    });
+		                }
+		                // 2. Các tổ hợp
+		                if (loai.toHops && loai.toHops.length > 0) {
+		                    loai.toHops.forEach(toHop => {
+		                        // 2.1 Học phần trong tổ hợp
+		                        if (toHop.hocPhans && toHop.hocPhans.length > 0) {
+		                            toHop.hocPhans.forEach(hp => {
+		                                processHocPhan(hp, ct, `Tổ hợp: ${toHop.tenToHop} (${convertLoaiHocPhan(loai.loaiHocPhan)})`, monHocMap, keywordLower);
+		                            });
+		                        }
+		                        // 2.2 Học phần trong nhóm môn
+		                        if (toHop.toHopNhomMons && toHop.toHopNhomMons.length > 0) {
+		                            toHop.toHopNhomMons.forEach(nhom => {
+		                                if (nhom.hocPhans && nhom.hocPhans.length > 0) {
+		                                    nhom.hocPhans.forEach(hp => {
+		                                        processHocPhan(hp, ct, `Nhóm môn: ${nhom.tenNhom} (Tổ hợp: ${toHop.tenToHop})`, monHocMap, keywordLower);
+		                                    });
+		                                }
+		                            });
+		                        }
+		                    });
+		                }
+		            });
+		        }
+		    });
+
+		    if (monHocMap.size === 0) {
+		        container.html('<div class="alert alert-info">Không tìm thấy học phần phù hợp trong chương trình học</div>');
+		        return;
+		    }
+
+		    monHocMap.forEach((value, key) => {
+		        const { hocPhan, chuongTrinhInfos } = value;
+
+		        const chuongTrinhListHTML = chuongTrinhInfos.map(info => {
+		            return `<li><i class="fas fa-check text-success"></i> Khóa <strong>${info.khoa}</strong> - ${info.chuyenNganh} - <em>${info.loaiHocPhan}</em></li>`;
+		        }).join('');
+
+		        container.append(`
+		            <div class="card shadow mb-4 border-left-success">
+		                <div class="card-body">
+		                    <h4 class="text-success font-weight-bold">
+		                        ${hocPhan.maHocPhan} - ${hocPhan.tenHocPhan}
+		                    </h4>
+		                    <p><strong>Số tín chỉ:</strong> ${hocPhan.soTinChi ?? 'Chưa rõ'}</p>
+		                    <hr>
+		                    <p class="mb-1 font-weight-bold">Thuộc các chương trình học:</p>
+		                    <ul class="mb-0">
+		                        ${chuongTrinhListHTML}
+		                    </ul>
+		                </div>
+		            </div>
+		        `);
+		    });
+		}
+
+		// Cập nhật lại hàm này cũng
+		function processHocPhan(hp, chuongTrinh, moTaLoai, monHocMap, keywordLower) {
+		    if (!hp || !hp.maHocPhan || !hp.tenHocPhan) return;
+
+		    const matchMa = hp.maHocPhan.toLowerCase().includes(keywordLower);
+		    const matchTen = hp.tenHocPhan.toLowerCase().includes(keywordLower);
+
+		    if (!matchMa && !matchTen) return;
+
+		    const key = `${hp.maHocPhan}_${hp.tenHocPhan}_${hp.soTinChi}`;
+
+		    if (!monHocMap.has(key)) {
+		        monHocMap.set(key, {
+		            hocPhan: hp,
+		            chuongTrinhInfos: []
+		        });
+		    }
+
+		    monHocMap.get(key).chuongTrinhInfos.push({
+		        khoa: chuongTrinh.khoa,
+		        chuyenNganh: convertChuyenNganh(chuongTrinh.chuyenNganh),
+		        loaiHocPhan: moTaLoai
+		    });
+		}
+
+		// Gắn sự kiện click cho nút search
+		$('#btnSearchMonHoc').click(function(e) {
+		    e.preventDefault();
+		    searchMonHoc();
+		});
+		// Gắn sự kiện enter cho input search
+		$('#searchMonHocInput').keypress(function(e) {
+		    if (e.which === 13) {
+		        e.preventDefault();
+		        searchMonHoc();
+		    }
+		});
+		document.getElementById('searchInput').addEventListener('keydown', function(event) {
+		        if (event.key === 'Enter') {
+		            event.preventDefault(); // Ngăn form submit nếu có
+		            timKiemHocPhan(this.value);
+		        }
+		    });
+		
+		
+    </script>
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="exampleModalLabel">Đăng xuất?</h5>
+	                <button class="close" type="button" data-dismiss="modal" aria-label="Đóng">
+	                    <span aria-hidden="true">×</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">Bạn có chắc chắn muốn đăng xuất khỏi phiên làm việc?</div>
+	            <div class="modal-footer">
+	                <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+	                <a class="btn btn-primary" href="login.html" onclick="logout()">Đăng xuất</a>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</body>
+</html>

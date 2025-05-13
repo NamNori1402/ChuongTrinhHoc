@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Chọn lịch thi</title>
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<script src="js/common.js"></script>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+		<!-- Sidebar -->
+
+		<div w3-include-html="_menu.html"></div> 
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
+
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-bkhoa form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter">7</span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Message Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div class="font-weight-bold">
+                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
+                                            problem I've been having.</div>
+                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                            alt="...">
+                                        <div class="status-indicator"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">I have the photos that you ordered last month, how
+                                            would you like them sent to you?</div>
+                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-warning"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                                            the progress so far, keep up the good work!</div>
+                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                            told me that people say this to all dogs, even if they aren't good...</div>
+                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-bkhoa"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userID">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+								<table width="100%" border="0"><tr><td>Kỳ học</td>
+								<td align="right" id="btn_InsertUpdate">
+									
+								</td>
+								</tr></table>
+							</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Modal -->
+		<div class="modal fade" id="frm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width: 630px">
+		    <div class="modal-content">
+		      <div class="modal-header">
+				<table width=100%">
+					<tr>
+						<td>
+							<h4 class="modal-title" id="modal-title">Edit Account</h4>
+						</td>
+						<td style="text-align: right;">						
+							  <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+							  <button type="button" class="btn btn-primary" id="Save1" value="">Ghi lại</button>
+						</td>
+					</tr>
+				</table>
+		      </div>
+		      <div class="modal-body">
+		          <div id="frm-content"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+		        <button type="button" class="btn btn-primary" id="Save2" value="">Ghi lại</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+	<script src="js/bootstrap-table.min.js"></script>
+
+</body>
+<script>
+	var DATA
+	var action
+</script>
+<script>
+function list() {
+	$.ajax({
+		url 		: URL + '/ky',
+		type		: 'GET',
+		data 		: {action: 'list'},
+		success : function(resp) {
+			checkResponse(resp)
+			DATA = resp;
+			var cols = [];
+			cols.push({ 
+			    title: 'STT',
+			    valign: 'middle',
+			    align: 'center',
+			    formatter: function(value, row, index) {
+			        return index + 1;
+			    }
+			});
+			// Cot 1
+			cols.push({ 
+				field: 'maKy',
+				title: 'Mã Kỳ',
+				valign: 'middle',
+				align: 'center',
+			});
+			// Cot 2
+			cols.push({ 
+				field: 'maNam',
+				title: 'Năm học',
+				valign: 'middle',
+				align: 'center',
+			});
+			// Cot 3
+			cols.push({ 
+				field: 'batDauKyHoc',
+				title: 'Thời gian học',
+				valign: 'middle',
+				align: 'center',
+				formatter : function(value,row,index) {
+					batDau  = row.batDauKyHoc.split(" 00:00:00").join("");
+					ketThuc = row.ketThucKyHoc.split(" 00:00:00").join("");
+					txt = '';
+					if (row.macDinh == 1){
+						txt +='<font color=red>'
+					}
+					txt += 'Bắt đầu : ' + batDau + '<br/>';
+					txt += 'Kết thúc: ' + ketThuc;
+					if (row.macDinh == 1){
+						txt += '</font>'
+					}					
+					return txt
+				}
+			});
+			// Cot 4
+			cols.push({ 
+				field: 'batDauLapLich',
+             	title: 'Giảng viên lập lịch thi',
+             	valign: 'left',
+             	align: 'center',
+				formatter : function(value,row,index) {
+					batDau  = row.batDauLapLich.split(" 00:00:00").join("");
+					ketThuc = row.ketThucLapLich.split(" 00:00:00").join("");
+					txt  = 'Bắt đầu : ' + batDau + '<br/>';
+					txt += 'Kết thúc: ' + ketThuc;
+					return txt
+				}
+			});
+			// Cot 5
+			cols.push({ 
+				field: 'batDauChonLich',
+				title: 'Sinh viên chọn lịch thi',
+				align: 'center',
+				valign: 'center',
+					formatter : function(value,row,index) {
+						batDau  = row.batDauChonLich.split(" 00:00:00").join("");
+						ketThuc = row.ketThucChonLich.split(" 00:00:00").join("");
+						txt  = 'Bắt đầu : ' + batDau + '<br/>';
+						txt += 'Kết thúc: ' + ketThuc;
+						return txt
+					}
+			});
+			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+				cols.push({ 
+					field: 'B',
+					title: 'Sửa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+							return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+					   }
+					}
+				});
+				cols.push({ 
+					field: 'X',
+					title: 'Xóa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						return '<button id="'+row.id+'" class="btn btn-danger btn-xs"  title="'+row.id+'" onclick="del(this)">x</button>';
+					}							
+				});
+			}
+			$('#dataTable').bootstrapTable("destroy");
+			$('#dataTable').bootstrapTable({
+				columns: cols,
+			    data: DATA,
+			    exportTypes: ['txt', 'sql', 'excel'],
+			    pageSize: 15,
+			    search: true
+			});			
+		}
+	});
+}
+</script>
+<script>
+function del(ts) {
+	if (!confirm("Are you sure to delete this record?") == true) {
+		return;
+	}
+	$.ajax({
+		url 		: URL + '/ky/'+ts.id,
+		type		: 'DELETE',
+		data 		: {action: 'list'},
+		success : function(resp) {
+			data = resp;
+			list();
+			}
+	});
+}
+</script>
+<script>
+
+</script>
+<script>
+$('#Save1,#Save2').click(function() {
+	id 		= $('#id').val();
+	maKy 	= $('#maKy').val();
+	tenKy 	= $('#tenKy').val();
+	maNam 	= $('#maNam').val();
+	batDauKyHoc 		= $('#batDauKyHoc').val();
+	ketThucKyHoc		= $('#ketThucKyHoc').val();
+	batDauLapLich		= $('#batDauLapLich').val();
+	ketThucLapLich 		= $('#ketThucLapLich').val();
+	batDauChonLich 		= $('#batDauChonLich').val();	
+	ketThucChonLich 	= $('#ketThucChonLich').val();
+
+	batDauKyHoc  		= batDauKyHoc +' 00:00:00'
+	ketThucKyHoc 		= ketThucKyHoc +' 00:00:00'
+	
+	batDauLapLich  		= batDauLapLich +' 00:00:00'
+	ketThucLapLich 		= ketThucLapLich +' 00:00:00'
+		
+	batDauChonLich  	= batDauChonLich +' 00:00:00'
+	ketThucChonLich 	= ketThucChonLich +' 00:00:00'
+	
+	let macDinh = $('#macDinh').is(':checked') ? 1 : 0;
+
+	
+	api  = ''
+
+	if (action == 'update') {
+		id = $('#id').val();
+		data = 		{	
+			id   				:id        ,
+			maKy 				:maKy  ,
+			tenKy 				:tenKy  ,
+			maNam 				:maNam ,
+
+			batDauKyHoc			: batDauKyHoc,
+			ketThucKyHoc		: ketThucKyHoc  ,
+			
+			batDauLapLich 		:batDauLapLich     ,
+			ketThucLapLich  	:ketThucLapLich    ,
+
+			batDauChonLich 		:batDauChonLich    ,
+			ketThucChonLich  	:ketThucChonLich  ,
+			macDinh				: macDinh
+					}
+		api  = '/ky/'+id;
+		type = 'PUT'
+	} else {
+		data = 		{
+			maKy 				:maKy  ,
+			tenKy 				:tenKy  ,
+			maNam 				:maNam ,
+			
+			batDauKyHoc 		:batDauKyHoc,
+			ketThucKyHoc		:ketThucKyHoc  ,
+			
+			batDauLapLich 		:batDauLapLich     ,
+			ketThucLapLich  	:ketThucLapLich    ,
+			
+			batDauChonLich  	:batDauChonLich    ,
+			ketThucChonLich  	:ketThucChonLich ,
+			macDinh				: macDinh
+			}	
+		api  = '/ky';
+		type = 'POST'
+	}
+	console.log(data)
+	$.ajax({
+		url 		: URL + api,
+		type		: type,
+		dataType	: 'json',
+		contentType : 'application/json; charset=UTF-8',
+		data 		:  JSON.stringify(data),
+		success : function(resp) {
+			data = resp;
+//			alert(data.code + ': ' +data.message);
+//			if (data.code==1000){
+				$('#frm').modal('hide');
+				list();
+//			}
+		}
+	});	
+});
+</script>
+<script>list()</script>
+<script>
+	function frmInsertUpdate(act) {
+		var record = {};
+		if (act == 'insert') {
+			action = 'insert';
+		    let today = formatDate(new Date(), 0);
+		    let t7 = formatDate(new Date(), 30);
+
+		    record.maKy = '2425K1';
+		    record.tenKy = 'Kỳ 1';
+		    record.ma_nam = '2024-2025';
+		    record.mac_dinh = 0;
+
+		    record.batDauKyHoc = today;
+		    record.ketThucKyHoc = t7;
+
+		    record.batDauLapLich = today;
+		    record.ketThucLapLich = t7;
+
+		    record.batDauChonLich = today;
+		    record.ketThucChonLich = t7;
+		} else {
+			action = 'update';
+		    for (let i = 0; i < DATA.length; i++) {
+		        if (act.id == DATA[i].id) {
+		            record = DATA[i];
+					record.batDauKyHoc 		= record.batDauKyHoc?.split(" 00:00:00").join("") || "";
+					record.ketThucKyHoc 	= record.ketThucKyHoc?.split(" 00:00:00").join("") || "";
+					record.batDauLapLich 	= record.batDauLapLich?.split(" 00:00:00").join("") || "";
+					record.ketThucLapLich	= record.ketThucLapLich?.split(" 00:00:00").join("") || "";
+					record.batDauChonLich 	= record.batDauChonLich?.split(" 00:00:00").join("") || "";
+					record.ketThucChonLich 	= record.ketThucChonLich?.split(" 00:00:00").join("") || "";
+					record.macDinh			= record.macDinh == 1 ? "checked" : "";
+		        }
+		    }
+		}
+		html = '';
+		html = '<table>';
+		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
+		html = html + '<tr><td>Mã kỳ học </td><td><input type="text" id="maKy" value="'+record.maKy+'"/></td><tr>'
+		html = html + '<tr><td>Tên đầy đủ</td><td><input type="text" id="tenKy" value="'+record.tenKy+'"/></td><tr>'
+		html = html + '<tr><td>Năm học</td><td>'
+		html = html + '		<Select id="maNam">'
+		html = html + '			<option value="2023-2024">2023-2024</option>'
+		html = html + '			<option value="2024-2025">2024-2025</option>'	
+		html = html + '			<option value="2025-2026">2025-2026</option>'	
+		html = html + '			<option value="2026-2027">2026-2027</option>'	
+		html = html + '			<option value="2027-2028">2027-2028</option>'	
+		html = html + '		</Select>'
+		html = html + '</td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'		
+		html = html + '<tr><td>Thời gian bắt đầu kỳ học</td><td><input type="date" id="batDauKyHoc" value="'+record.batDauKyHoc+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc kỳ học</td><td><input type="date" id="ketThucKyHoc" value="'+record.ketThucKyHoc+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'
+		html = html + '<tr><td>Thời gian bắt đầu lập lịch</td><td><input type="date" id="batDauLapLich" value="'+record.batDauLapLich+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc lập lịch</td><td><input type="date" id="ketThucLapLich" value="'+record.ketThucLapLich+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'			
+		html = html + '<tr><td>Thời gian bắt đầu chọn lịch</td><td><input type="date" id="batDauChonLich" value="'+record.batDauChonLich+'"/></td><tr>'
+		html = html + '<tr><td>Thời gian kết thúc chọn lịch</td><td><input type="date" id="ketThucChonLich" value="'+record.ketThucChonLich+'"/></td><tr>'
+		html = html + '<tr><td colspan=2><hr/></td></tr>'			
+		html = html + '<tr><td>Chọn làm kỳ mặc định</td><td><input type="checkbox" id="macDinh" '+record.macDinh+'/></td><tr>'
+
+		$('#modal-title').html("Kỳ học");
+		$('#frm-content').html(html);
+		$('#frm').modal('show');
+		
+	}
+	
+</script>
+
+
+<script>includeHTML();</script> 
+<script>
+	tk=JSON.parse(localStorage.getItem('taiKhoan'));
+	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy') {
+		$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
+	}
+	$('#userID').html(tk.ten +' | '+ tk.userName)
+</script>
+</html

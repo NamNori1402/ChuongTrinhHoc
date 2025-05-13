@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<script src="js/common.js"></script>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+		<!-- Sidebar -->
+
+		<div w3-include-html="_menu.html"></div> 
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
+
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-bkhoa form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Alerts Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Messages -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <!-- Counter - Messages -->
+                                <span class="badge badge-danger badge-counter">7</span>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Message Center
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div class="font-weight-bold">
+                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
+                                            problem I've been having.</div>
+                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
+                                            alt="...">
+                                        <div class="status-indicator"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">I have the photos that you ordered last month, how
+                                            would you like them sent to you?</div>
+                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
+                                            alt="...">
+                                        <div class="status-indicator bg-warning"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                                            the progress so far, keep up the good work!</div>
+                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="...">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                            told me that people say this to all dogs, even if they aren't good...</div>
+                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-bkhoa"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userID">Douglas McGee</span>
+                                <img class="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+								<table width="100%" border="0">
+									<tr><td ><span id="tkbText"></span></td>
+										<td align="right">
+											<span>Chọn kỳ</span>
+											<span>
+												<Select id="ky" onchange="list()"></Select>
+											</span>
+										</td>
+								<td align="right" id="btn_InsertUpdate">
+									
+								</td>
+								</tr></table>
+							</h6>
+                        </div>
+						<div class="form-group">
+							<div id="loading" style="width: 40%; margin:0 auto"></div>
+						</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="tableData" width="100%" cellspacing="0">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<!-- Modal -->
+		<div class="modal fade" id="frm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width: 630px">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title" id="modal-title">Edit Account</h4>
+		      </div>
+		      <div class="modal-body">
+		          <div id="frm-content"></div>
+				  <div id="frm-extent1"></div>
+				  <div id="frm-extent2"></div>
+		      <div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Bỏ qua</button>
+		        <button type="button" class="btn btn-primary" id="Save2" value="">Ghi lại</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+	<script src="js/bootstrap-table.min.js"></script>
+
+</body>
+<script>
+	var DATA
+	var action
+	var crd
+	var rUpdate;
+	const trangThaiArray = ['Mở', 'Đóng', 'Khóa'];	
+
+</script>
+<script>
+function list() {
+	$('#loading').html(loading)
+	maKy = $('#ky').val();
+	$('#tkbText').html('Thời khóa biểu <font color="red"> ' + getTenKy(maKy).tenKy) + '</font>';
+	if (maKy === ''){
+		maKy = getKyMacDinh().maKy;
+	}
+	data = {maKy : maKy}
+	$.ajax({
+		url 		: URL + '/tkb/ky',
+		type		: 'POST',
+		contentType	: 'application/json',
+		data		: JSON.stringify(data),
+		success : function(resp) {
+			checkResponse(resp);
+			$('#loading').html('')
+			DATA = resp.map(item => {
+			    return Object.fromEntries(
+			        Object.entries(item).map(([key, value]) => [key, value === null ? '' : value])
+			    );
+			});
+			var cols = [];
+			cols.push({ 
+			    title: 'TT',
+			    valign: 'middle',
+			    align: 'center',
+			    formatter: function(value, row, index) {
+			        return (index + 1);
+			    }
+			});
+			cols.push({ 
+			    title: 'TT_TKB',
+			    valign: 'middle',
+			    align: 'center',
+			    formatter: function(value, row, index) {
+			        return row.ttTkbTruong
+			    }
+			});
+			cols.push({ 
+				field: 'maLopHocPhan',
+				title: 'Mã Lớp HP',
+				valign: 'middle',
+				formatter : function(value,row,index) {
+					var txt='';
+					trangThai = row.trangThai == 0? 'Mở' : row.trangThai == 1 ? '<font color="blue">Đóng</font>' : '<font color="red">Khóa</font>';
+					var obj = getHocPhan(row.maHocPhan);
+					let skdk = row.sldk +'/'+row.sucChua;
+					if (row.sldk < 35) {
+					    skdk = `<span style="background: yellow">${row.sldk}/${row.sucChua}</span>`;
+					}
+					txt = row.maLopHocPhan + '('+trangThai+')<br/> '+obj.tenHocPhan+'<br/>Đăng ký: ' + skdk +' sinh viên';
+					return txt
+				}
+			});
+			cols.push({ 
+				field: 'tt',
+				title: 'Ca học',
+				valign: 'middle',
+				formatter : function(value,row,index) {
+					var txt = '';
+					for (i=0; i < row.tkbChiTietList.length; i++){
+						oi = row.tkbChiTietList[i];
+						let t = oi.thu;
+						if (oi.thu == 0 || oi.batDau  == 0 || oi.ketThuc ==0) {
+							t = `<span style="background: yellow">${oi.thu}</span>`;
+						}
+						txt += 'T'+ t + '('+oi.batDau+'-'+oi.ketThuc+') '+oi.phong+'.'+oi.loaiHocPhan+'<br/>';
+					}
+					return txt;
+				}
+			});
+			cols.push({ 
+			    field: 'maGiangVien',
+			    title: 'Mã GV',
+			    valign: 'middle',
+			    align: 'center',
+				formatter: function(value, row, index) {
+				    var x1 = getGiangVien(row.maGiangVien);
+				    if (!x1) {
+				        return `<span style="color: red;">`+row.maGiangVien+`</span>`;
+				    }
+
+				    var txt = row.maGiangVien + '<br/>' + x1.ten + '<br/>' + x1.dienThoai;
+
+				    if (x1.ten === 'BoMon') {  
+				        txt = `<span style="background: yellow">${row.maGiangVien}<br/>${x1.ten}</span>`;
+				    }                    
+				    return txt;
+				}
+			});
+
+			cols.push({ 
+				field: 'tt',
+				title: 'Ngày thi',
+				valign: 'middle',
+				align: 'center',
+				formatter : function(value,row,index) {
+					var txt = 'Chưa có';
+					if (row.caThi !=0 && row.ngayThi !=''){
+						txt = 'Ca '+ row.caThi +'<br/>' + row.ngayThi;	
+					}					
+					return txt;
+				}
+			});			
+			if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
+				cols.push({ 
+					field: 'B',
+					title: 'Sửa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == row.maGiangVien) {
+							return '<button id="'+row.id+'" class="btn btn-info btn-xs" title="'+row.id+'" onclick="frmInsertUpdate(this)">o</button>';
+					   	}
+					}
+				});
+				cols.push({ 
+					field: 'X',
+					title: 'Xóa',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.userName == row.maGiangVien) {
+							return '<button id="'+row.id+'" class="btn btn-danger btn-xs"  title="'+row.id+'" onclick="del(this)">x</button>';
+						}
+					}					
+				});
+			} else {
+				cols.push({ 
+					field: 'Chọn lịch thi',
+					title: 'Chọn lịch thi',
+					align: 'center',
+					valign: 'middle',
+					clickToSelect: false,
+					formatter : function(value,row,index) {
+						if (tk.dsQuyen == 'sinhVien') {
+							return '<button id="'+row.id+'" class="btn btn-primary btn-xs"  title="'+row.id+'" onclick="frmInsertUpdate(this)">x</button>';
+						}
+					}					
+				});	
+			}
+			$('#tableData').bootstrapTable("destroy");
+			$('#tableData').bootstrapTable({
+				columns: cols,
+			    data: DATA,
+			    exportTypes: ['txt', 'sql', 'excel'],
+			    pageSize: 15,
+			    search: true
+			});			
+		}
+	});
+}
+</script>
+<script>
+function del(ts) {
+	if (!confirm("Are you sure to delete this record?") == true) {
+		return;
+	}
+	$.ajax({
+		url 		: URL + '/tkb/'+ts.id,
+		type		: 'DELETE',
+		data 		: {action: 'list'},
+		success : function(resp) {
+			data = resp;
+			list();
+			}
+	});
+}
+</script>
+<script>
+	$('#Save1,#Save2').click(function() {
+		id 				= $('#id').val();
+		tt				= $('#tt').val();
+		maKy 			= $('#maKy').val();
+		maHocPhan 		= $('#maHocPhan').val();
+		maLopHocPhan 	= $('#maLopHocPhan').val();
+		maGiangVien 	= $('#maGiangVien').val();
+		ttTkbTruong		= $('#ttTkbTruong').val();
+		tenLop			= $('#tenLop').val();
+		ttTkbTruong		= $('#ttTkbTruong').val();
+		trangThai		= $('#trangThai').val();
+		ghiChu			= $('#ghiChu').val();
+		
+		
+		if (tt =='') {
+			alert('Bạn chưa nhập số thứ tự');
+			$('#tt').focus();
+			return;
+		}
+		if (maKy =='') {
+				alert('Bạn chưa nhập mã kỳ');
+				$('#maKy').focus();
+				return;
+		}
+		if (maHocPhan =='') {
+				alert('Bạn chưa chọn học phần');
+				$('#maHocPhan').focus();
+				return;
+		}
+		if (ttTkbTruong =='') {
+				alert('Bạn chưa nhập số thứ tự môn học này trong tkb Trường');
+				$('#ttTkbTruong').focus();
+				return;
+		}
+		if (tenLop =='') {
+			alert('Bạn chưa nhập tên lớp');
+			$('#tenLop').focus();
+			return;
+		}
+			
+		var tkbChiTietList =  [];
+		for(i = 1 ; i <= crd.soCa; i++){
+			let batDau = ($('#batDau'+i).val()) * 1;
+			let ketThuc= ($('#ketThuc'+i).val()) * 1;
+			if (batDau >= ketThuc ) {
+				alert('Kiểm tra lại Thời gian bắt đầu và thời gian kết thúc của (Ca học số '+i +')');
+				$('#batDau').focus();
+				return;
+			}
+			tkbChiTietList.push({ 
+				id		: $('#id'+i).val(),
+				ca		: i,
+				thu		: $('#thu'+i).val(),
+				batDau	: batDau,
+				ketThuc	: ketThuc,
+				phong	: $('#phong'+i).val(),
+				loaiHocPhan: $('#loaiHocPhan'+i).val()
+			});
+		}
+		console.log(tkbChiTietList)
+		for(i = 0; i < DATA.length; i++){
+			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
+				alert('Đã có Lớp học phần '+maLopHocPhan+ ' này rồi');
+				$('#maLopHocPhan').focus();
+				return;
+			}
+			if (action == 'insert' && ttTkbTruong == DATA[i].ttTkbTruong){
+				alert('Đã có STT ('+ttTkbTruong+') này trong Thời khóa biểu trường');
+				$('#ttTkbTruong').focus();
+				return;
+			}
+			if (action == 'insert' && maLopHocPhan == DATA[i].maLopHocPhan){
+				alert('Đã có Mã lớp học phần '+ maLopHocPhan+' rồi');
+				$('#tenLop').focus();
+				return;
+			}
+		}
+		api  = ''
+		if (tk.dsQuyen == 'sinhVien'){
+			data = {tkbId : id};
+			api  = '/dangkylichthilai';
+			type = 'POST'
+		} else {
+			if (action == 'update') {
+				id = $('#id').val();
+				ngayThi			= $('#ngayThi').val();
+				caThi			= $('#caThi').val();
+				phongThi 		= $('#phongThi').val();
+				hinhThucThi 	= $('#hinhThucThi').val();
+				maNguoiCoiThi 	= $('#maNguoiCoiThi').val();
+				ghiChuLichThi 	= $('#ghiChuLichThi').val();
+				data = 		{	
+					id   			: id        ,
+					maKy 			: maKy  ,
+					maHocPhan 		: maHocPhan  ,
+					maLopHocPhan	: maLopHocPhan ,
+					tkbChiTietList	: tkbChiTietList,
+					maGiangVien		: maGiangVien,
+					tenLop			: tenLop,
+					ttTkbTruong		: ttTkbTruong,
+					trangThai		: trangThai,
+					ghiChu			: ghiChu,
+					
+					ngayThi			: ngayThi,
+					caThi			: caThi,
+					phongThi		: phongThi,
+					hinhThucThi		: hinhThucThi,
+					maNguoiCoiThi	: maNguoiCoiThi,
+					ghiChuLichThi	: ghiChuLichThi,
+					sldk: $('#sldk').val(),
+					sucChua: $('#sucChua').val()
+					}
+				api  = '/tkb/'+id;
+				type = 'PUT'
+			} else {
+				data = 		{
+					maKy 			: maKy  ,
+					maHocPhan 		: maHocPhan  ,
+					maLopHocPhan	: maLopHocPhan ,
+					tkbChiTietList	: tkbChiTietList,
+					maGiangVien		: maGiangVien,
+					tenLop			: tenLop,
+					ttTkbTruong		: ttTkbTruong,
+					trangThai		: trangThai,
+					ghiChu			: ghiChu,
+					sldk: $('#sldk').val(),
+					sucChua: $('#sucChua').val()
+					}	
+				api  = '/tkb';
+				type = 'POST'
+			}
+		}
+		$.ajax({
+			url 		: URL + api,
+			type		: type,
+			dataType	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			data 		:  JSON.stringify(data),
+			success : function(resp) {
+				if (resp == -9){
+					alert("Phiên truy cập không hợp lệ")
+					window.location.replace("login.html");
+					return;
+				} else if (resp == -8){
+					alert("Bạn không có quyền này")
+					window.location.replace("login.html");
+					return;
+				}
+				data = resp;
+				$('#frm').modal('hide');
+				list();
+	//			}
+			}
+		});	
+	});
+
+</script>
+
+
+<script>
+	function frmInsertUpdate(act) {
+		$('#frm-extent1').html('');
+		$('#frm-extent2').html('');
+		var record = {};
+		var disable = ''
+		if (tk.dsQuyen == 'sinhVien') {
+			disable = 'disabled'
+		}
+		if (act == 'insert') {
+			action = 'insert';
+			record.maKy 		= getKyMacDinh().maKy;
+			record.maHocPhan 	= '';	// CS100
+			record.maLopHocPhan	= '';  	// 242_CS100_01
+			record.trangThai 	= 1;
+			record.ttTkbTruong	= 1;
+			record.sldk			= 0;
+			record.sucChua		= 0;
+			record.tenLop		= '';
+			record.ghiChu 		= '';
+		} else {
+			action = 'update';
+		    for (let i = 0; i < DATA.length; i++) {
+		        if (act.id == DATA[i].id) {
+		            record = DATA[i];
+		        }
+		    }
+		}		
+		html = '';
+		html = '<table>';
+		html = html + '<input type="hidden" id="id" value="'+record.id+'"/>'
+		html = html + '<tr><td>STT trong TKB Trường</td><td><input '+disable+' type="text" id="ttTkbTruong" value="'+record.ttTkbTruong+'"/></td><tr>'
+		html = html + '<tr><td>Mã kỳ học </td>'
+		html = html + '	   <td> '
+		html = html + '	<Select id="maKy" style="width: 250px" '+disable+' > '
+		for(i = 0; i < TKY.length; i++){
+			var selected='';
+			if (action == 'update' && record.maKy==TKY[i].maKy) {
+				selected = 'Selected'
+			}
+			html = html + '<option value="'+TKY[i].maKy+'" '+selected+'>'+TKY[i].maKy+'</option>'	
+		}	
+		html = html + '</td>'
+		html = html + '</tr>'
+		html = html + '<tr>'
+		html = html + '   <td>Mã học phần</td>'
+		html = html + '   <td>'
+		html = html + '			<Select id="maHocPhan" style="width: 250px" onchange=lichHoc() '+disable+' > '
+		html = html + '				<option value="">--------- Chọn học phần ---------</option>'
+		for(i = 0; i < THP.length; i++){
+			var selected='';
+			if (action == 'update' && record.maHocPhan==THP[i].maHocPhan) {
+				selected = 'Selected'
+			}
+			html = html + '				<option value="'+THP[i].maHocPhan+'" '+selected+'>'+THP[i].maHocPhan+' - '+THP[i].tenHocPhan+'</option>'	
+		}	
+		html = html + '			</Select> '
+		html = html + '   </td>'
+		html = html + '</tr>'
+		html = html + '<tr><td>Tên lớp (lớp thứ)</td><td><input  '+disable+' type="text" id="tenLop" value="'+record.tenLop+'" onchange=lichHoc() /></td><tr>'
+		html = html + '<tr><td>Lớp học phần</td><td><input  '+disable+' type="text" id="maLopHocPhan" value="'+record.maLopHocPhan+'"/></td><tr>'
+		html = html + '<tr>'
+		html = html + '   <td>Giảng viên</td>'
+		html = html + '   <td>'
+		var disabled = ''
+		if (tk.dsQuyen == 'giangVien') {
+			disabled = 'disabled'
+		}
+		html = html + '			<Select  '+disable+' id="maGiangVien" style="width: 250px" '+disabled+'> '
+		for(i = 0; i < TGV.length; i++){
+			var selected='';
+			if (action == 'update' && record.maGiangVien==TGV[i].maGiangVien) {
+				selected = 'Selected'
+			} else if (tk.dsQuyen == 'giangVien' && TGV[i].maGiangVien == tk.userName) {
+				selected = 'Selected'
+			}			
+			html = html + '	<option '+selected+' value="'+TGV[i].maGiangVien+'">'+TGV[i].maGiangVien+' - '+TGV[i].hoTenDem+' '+TGV[i].ten+'</option>'	
+		}
+		html = html + '			</Select> '
+		html = html + '   </td>'
+		html = html + '</tr>'
+		html = html + '<tr>'
+		html = html + '   <td>Trạng thái</td>'	
+		html = html + '   <td>'
+		html = html + '   		<Select '+disable+'  id="trangThai">'
+		
+		for(i = 0; i < trangThaiArray.length; i++) {
+			var trangThai = ''
+			if (action == 'update' && record.trangThai==i) {
+				trangThai = 'Selected'
+			}
+			html = html + ' <option value='+i+' '+trangThai+'>'+trangThaiArray[i]+'</option>'	
+		}
+		html = html + '   		</Select>'
+		html = html + '   </td>'
+		html = html + '</tr>'
+		html += '<tr><td>Số lượng đăng Ký</td><td><span><input ' + disable + ' type="number" min="0" max="150" id="sldk" value="' + (record.sldk || 0) + '"/></span>';
+		html += '&nbsp;&nbsp;&nbsp;&nbsp;<span>Sức chứa</span><input ' + disable + ' type="number" min="0" max="150" id="sucChua" value="' + (record.sucChua || 0) + '"/></td></tr>';
+
+		html += '<tr><td>Ghi chú</td>';
+		html += '<td><textarea '+disable+' class="form-control bg-light border-1" height=50 width=70 id="ghiChu">'+record.ghiChu+'</textarea>';
+		html += '</td>';
+		html += '</select>';
+		html += '</td>';
+		html += '</tr>';				
+		
+		html = html + '</table>'
+		$('#frm-content').html(html);
+
+		if (action == 'update') {
+			$('#modal-title').html("Sửa học phần");
+			rUpdate = record.tkbChiTietList
+			lichHoc();
+		} else {
+			$('#modal-title').html("Thêm học phần");
+		}
+		if (action =='update'){
+			lichThi(record);
+		}
+		if (tk.dsQuyen =='sinhVien'){
+			$('#Save1').html('Đăng ký chọn lịch thi này');
+			$('#Save2').html('Đăng ký chọn lịch thi này');
+			$('#modal-title').html("Đăng ký chon lịch thi");
+		}
+		$('#frm').modal('show');		
+	}
+</script>
+<script>
+function lichHoc(){
+	let disable = '';
+	if (tk.dsQuyen == 'sinhVien') {
+		disable = 'disabled'
+	}
+	maHocPhan = $('#maHocPhan').val();
+	for(i = 0; i < THP.length; i++){
+		if (maHocPhan == THP[i].maHocPhan){
+			crd = THP[i]
+		}
+	}
+	var txt  = '<hr/>'
+		txt += '<center>Lịch học</center>'
+	 	txt += '<table border=0 align="center" style="padding: 3px">';
+		txt += '<tr><td>Ca</td><td>Thứ</td><td>Bắt đầu</td><td>Kết thúc</td><td>Phòng</td><td>Ghi chú</td></tr>'
+		for (k = 1; k <= crd.soCa; k++){
+			if (action =='update'){
+				txt += '<input '+disable+' type="hidden" id="id' + k + '" value="' + rUpdate[k-1].thu + '"/>';
+			}
+			txt += '<tr>';
+			txt += '	<td align="right">'+k+'</td>';
+			txt += ' 	<td>'
+			txt += ' 		<select  '+disable+' id="thu'+k+'">'		
+			for (i=2 ; i<=8; i++){
+				var thu = ''
+				if (action =='update' && rUpdate[k-1].thu == i){
+					thu = 'Selected'
+				}
+				txt += '<option value="'+i+'" '+thu+'>Thứ '+i+'</option>'
+			}
+			txt += ' 		</select>'	
+			txt += '	</td>'
+			txt += ' 	<td>'
+			txt += ' 		<select  '+disable+' id="batDau'+k+'">'
+			for (i=1 ; i<=13; i++){
+				var batDau = ''
+				if (action =='update' && rUpdate[k-1].batDau == i){
+					batDau = 'Selected'
+				}
+				txt += '<option value='+i+' '+batDau+'>Tiết '+i+'</option>'
+			}
+			txt += ' 		</select>'	
+			txt += '	</td>'
+			txt += ' 	<td>'
+			txt += ' 		<select  '+disable+' id="ketThuc'+k+'">'
+			for (i=1 ; i<=13; i++){
+				var ketThuc = ''
+				if (action =='update' && rUpdate[k-1].ketThuc == i){
+					ketThuc = 'Selected'
+				}
+				txt += '<option value='+i+' '+ketThuc+'>Tiết '+i+'</option>'
+			}
+			txt += ' 		</select>'	
+			txt += '	</td>'
+			
+			txt += ' 	<td>'
+			txt += ' 		<select '+disable+'  id="phong'+k+'">'
+			for (i=0 ; i< PHONG_HOC.length; i++){
+				var phong = ''
+				if (action =='update' && rUpdate[k-1].phong == 'A70'+i){
+					phong = 'Selected'
+				}
+				txt += '<option value="'+PHONG_HOC[i].tenPhong+'">'+PHONG_HOC[i].tenPhong+'</option>'
+			}
+			txt += ' 		</select>'	
+			txt += '	</td>'
+			txt += '   <td>'
+			txt += '   		<Select  '+disable+'  id="loaiHocPhan'+k+'">'
+			if (action =='update' && rUpdate[k-1].loaiHocPhan == 'LT'){
+				txt += '   			<option value="LT" selected>LT</option>'
+				txt += '   			<option value="BT" >BT</option>'
+			} else {
+				txt += '   			<option value="BT" selected>BT</option>'	
+				txt += '   			<option value="LT" >LT</option>'
+			}
+			txt += '		</Select> '
+			txt += '   </td>'
+			txt += '</tr>';			
+		}
+		txt += '</table>';
+	$('#frm-extent1').html(txt);
+	txt = '242' + crd.maHocPhan + '' + $('#tenLop	').val();
+	$('#maLopHocPhan').val(txt);	
+}
+</script>
+<script>
+	function lichThi(rds) {
+		let disable = ''
+		if (tk.dsQuyen == 'sinhVien') {
+			disable = 'disabled'
+		}
+		let today = formatDate(new Date(), 0);
+		if (rds.ngayThi != null){
+			today = rds.ngayThi
+		}
+	    var txt  = '<hr/>';
+	    txt += '<center>Lịch thi</center>';
+	    txt += '<table border="0" align="center" style="padding: 3px">';
+	    txt += '<tr><td>Ngày thi</td><td><input '+disable+' type="date" id="ngayThi" value="'+today+'"/></td></tr>';
+	    txt += '<tr><td>Ca thi</td>'
+		txt += '<td><Select '+disable+' id="caThi">'
+		for (let i = 0; i < CA_THI.length; i++) {
+		    let select = '';
+			let a1 = CA_THI[i].id;
+			let a2 = rds.caThi
+		    if (a1 == a2) {
+		        select = 'selected'; // Properly format selected attribute
+		    }
+		    txt += `<option ${select} value="${CA_THI[i].id}">${CA_THI[i].tenCa} (${CA_THI[i].gioBatDau}-${CA_THI[i].gioKetThuc})</option>`;
+		}
+		txt += '<tr><td>Phòng thi</td>'
+		txt += '<td><Select '+disable+' id="phongThi">'
+		for(i = 0; i < PHONG_HOC.length; i++){
+			let select = '';
+			if (rds.phongThi == PHONG_HOC[i].id){
+				select = 'Selected'
+			}
+			txt += '<option '+select+' value='+PHONG_HOC[i].id+'>'+PHONG_HOC[i].tenPhong+'</option>'
+		}
+		txt += '<tr><td>Hình thức thi</td>'
+		txt += '<td><Select '+disable+' id="hinhThucThi">'
+		for(i = 0; i < HINH_THUC_THI.length; i++){
+			var select = '';
+			if (HINH_THUC_THI[i].id == rds.hinhThucThi){
+				select = 'Selected'
+			}
+			txt += '<option '+select+' value='+HINH_THUC_THI[i].id+'>'+HINH_THUC_THI[i].tenHinhThucThi+'</option>'
+		}
+	    txt += '<tr><td>Giảng viên coi thi</td>';
+	    txt += '<td>';
+	    txt += '<select '+disable+' id="maNguoiCoiThi" style="width: 250px">';
+	    
+	    // Kiểm tra nếu rds tồn tại và có mã giảng viên
+        for (var i = 0; i < TGV.length; i++) {
+            var selected = '';
+            if (rds.maNguoiCoiThi !=null && rds.maNguoiCoiThi.length > 3){
+				if (rds.maNguoiCoiThi == TGV[i].maGiangVien) {
+					selected = 'Selected'
+				}		
+			} else {
+				if (TGV[i].maGiangVien === tk.userName) {
+					selected = 'selected';
+				}
+			}
+            txt += '<option ' + selected + ' value="' + TGV[i].maGiangVien + '">' + TGV[i].maGiangVien + ' - ' + TGV[i].hoTenDem + ' ' + TGV[i].ten + '</option>';
+        }
+	    
+		txt += '<tr><td>Ghi chú</td>';
+		txt += '<td><textarea class="form-control bg-light border-1" height=50 width=70 id="ghiChuLichThi" '+disable+'>'+rds.ghiChuLichThi+'</textarea>';
+		txt += '</td>';
+	    txt += '</select>';
+	    txt += '</td>';
+	    txt += '</tr>';
+	    txt += '</table>';
+
+	    $('#frm-extent2').html(txt);
+	}
+</script>
+<script>includeHTML();</script> 
+<script>
+	if (tk.dsQuyen == 'quanTri' || tk.dsQuyen == 'thuKy' || tk.dsQuyen == 'giangVien') {
+		$('#btn_InsertUpdate').html('<button class="btn btn-primary btn-icon-split" onclick="frmInsertUpdate(\'insert\');"><span class="text">Thêm mới</span></button>');
+	}
+	$('#userID').html(tk.ten +' | '+ tk.userName)
+</script>
+<script>
+	$(document).ready(function(){
+		let txt = ''
+		for(i = 0; i < TAB_KY.length; i++){
+			txt += '<option '+TAB_KY[i].maKy+'>'+TAB_KY[i].maKy+'</option>';
+		}
+		$('#ky').html(txt);
+		$('#tkbText').html('Thời khóa biểu <font color="red"> ' + getKyMacDinh().tenKy + '</font>');
+		list();
+	})
+</script>
+</html

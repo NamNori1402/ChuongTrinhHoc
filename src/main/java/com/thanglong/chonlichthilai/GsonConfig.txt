@@ -1,0 +1,17 @@
+package com.thanglong.chonlichthilai;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableAutoConfiguration(exclude = JacksonAutoConfiguration.class)
+public class GsonConfig {
+    @Bean
+    public Gson gson() {
+        return new GsonBuilder().setPrettyPrinting().create();
+    }
+}
