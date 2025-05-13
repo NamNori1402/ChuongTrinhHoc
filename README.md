@@ -1,8 +1,10 @@
 📘 QUẢN LÝ CHƯƠNG TRÌNH HỌC
-📝 GIỚI THIỆU
-Hệ thống quản lý chương trình học theo chuyên ngành, khóa học, và các loại học phần. Hỗ trợ xây dựng, tìm kiếm và kiểm tra chương trình đào tạo một cách linh hoạt, thuận tiện cho nhà trường và sinh viên.
+
+📝 GIỚI THIỆU:
+  Hệ thống quản lý chương trình học theo chuyên ngành, khóa học, và các loại học phần. Hỗ trợ xây dựng, tìm kiếm và kiểm tra chương trình đào tạo một cách linh hoạt, thuận tiện cho nhà trường và sinh viên.
 
 🚀 CÁC TÍNH NĂNG CHÍNH XÂY DỰNG
+
 I. Phân quyền: 
   - Quyền admin:
     + Quản trị
