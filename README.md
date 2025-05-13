@@ -66,7 +66,7 @@ Logic xử lý lọc học phần còn thiếu:
   - Với mỗi học phần yêu cầu trong loại này, nếu chưa học => đưa vào danh sách thiếu.
 
 🏗️ CÔNG NGHỆ SỬ DỤNG
-Backend:  Java Spring Boot (REST API)	
+Backend: Java Spring Boot (REST API)	
 Frontend: HTML/CSS/JS thuần (jQuery)	
 Database: MySQL / H2 (demo)
 
