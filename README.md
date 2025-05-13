@@ -72,12 +72,14 @@ Database: MySQL / H2 (demo)
 
 🗃️ CẤU TRÚC DỰ ÁN
 src/main/java/com/thanglong/chonlichthilai/chuongtrinhhoc
+
 ├── controller        // Các controller xử lý request
 ├── dto              // Định nghĩa các lớp truyền dữ liệu
 ├── entity           // Các entity ánh xạ database
 ├── mapper           // Các lớp ánh xạ giữa entity và DTO
 ├── repository       // Các interface JPA repository
 └── service          // Logic xử lý và nghiệp vụ
+
 src/main/java/com/thanglong/chonlichthilai/hocphan
 src/main/java/com/thanglong/chonlichthilai/sinhvien
 src/main/resources/static
