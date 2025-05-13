@@ -29,9 +29,9 @@ III. Quản lý chương trình học (Đối với quyền Admin)
   5. Phân loại tổ hợp theo nhóm môn: Điều kiện nhóm môn: Bắt buộc học tất cả
 
 IV. Hiển thị danh sách chương trình học (Cho mọi quyền)
-  Hiển thị các chương trình học theo chuyên ngành và khóa
-  Hiển thị mỗi chương trình học theo loại học phần, tổ hợp, nhóm môn kèm các điều kiện
-  Hiển thị kèm thao tác xử lí (CRUD) đối với quyền Admin
+Hiển thị các chương trình học theo chuyên ngành và khóa
+Hiển thị mỗi chương trình học theo loại học phần, tổ hợp, nhóm môn kèm các điều kiện
+Hiển thị kèm thao tác xử lí (CRUD) đối với quyền Admin
 
 V. Tìm kiếm (Cho mọi quyền)
 1. Tìm kiếm học phần theo Mã học phần / Tên học phần / Keyword
